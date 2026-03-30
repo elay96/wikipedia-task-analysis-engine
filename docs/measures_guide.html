@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מדדי Explore / Exploit — M1 עד M9</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --explore: #2b6cb0;
+    --exploit: #c05621;
+    --explore-light: #ebf4ff;
+    --exploit-light: #fff5eb;
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --text-secondary: #5a5a5a;
+    --border: #e8e5e1;
+    --accent: #b45309;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
+    --radius: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 40px 24px 80px;
+  }
+
+  .container {
+    max-width: 880px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 56px;
+    padding-bottom: 40px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  header h1 {
+    font-family: 'Rubik', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  header .subtitle {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+
+  header .legend {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 24px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+  }
+
+  .legend-dot.explore { background: var(--explore); }
+  .legend-dot.exploit { background: var(--exploit); }
+
+  /* Measure Cards */
+  .measure-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+    transition: box-shadow 0.2s;
+  }
+
+  .measure-card:hover {
+    box-shadow: var(--shadow-lg);
+  }
+
+  .measure-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .measure-id {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 48px;
+  }
+
+  .measure-title {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .measure-type {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 2px 10px;
+    border-radius: 20px;
+    background: #f0eee9;
+    color: var(--text-secondary);
+    margin-right: auto;
+  }
+
+  .measure-logic {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ee-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+
+  .ee-box {
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 0.92rem;
+  }
+
+  .ee-box.explore {
+    background: var(--explore-light);
+    border-right: 4px solid var(--explore);
+  }
+
+  .ee-box.exploit {
+    background: var(--exploit-light);
+    border-right: 4px solid var(--exploit);
+  }
+
+  .ee-label {
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .ee-box.explore .ee-label { color: var(--explore); }
+  .ee-box.exploit .ee-label { color: var(--exploit); }
+
+  .meta-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .meta-item strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* Descriptive card (M6) */
+  .measure-card.descriptive {
+    border-right: 4px solid #718096;
+  }
+
+  .desc-note {
+    background: #f7f7f5;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    margin-bottom: 14px;
+  }
+
+  /* Composite card (M7) */
+  .measure-card.composite {
+    border-right: 4px solid var(--accent);
+  }
+
+  .scoring-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  .score-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: white;
+  }
+
+  .score-chip.s0 { background: var(--explore); }
+  .score-chip.s1 { background: #5a8ab5; }
+  .score-chip.s2 { background: #b07a3e; }
+  .score-chip.s3 { background: var(--exploit); }
+
+  .score-label {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin: 0 8px 0 2px;
+  }
+
+  /* Summary Table */
+  .summary-section {
+    margin-top: 48px;
+  }
+
+  .summary-section h2 {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    font-size: 0.92rem;
+  }
+
+  .summary-table th {
+    background: #2d2a26;
+    color: white;
+    padding: 14px 16px;
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .summary-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .summary-table tr:last-child td { border-bottom: none; }
+
+  .summary-table tr:nth-child(even) td {
+    background: #fafaf9;
+  }
+
+  .summary-table .col-exploit { color: var(--exploit); font-weight: 500; }
+  .summary-table .col-explore { color: var(--explore); font-weight: 500; }
+
+  /* Data & Scripts section */
+  .info-section {
+    margin-top: 40px;
+  }
+
+  .info-section h2 {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 600px) {
+    .info-grid { grid-template-columns: 1fr; }
+    .ee-row { grid-template-columns: 1fr; }
+    header h1 { font-size: 1.8rem; }
+  }
+
+  .info-chip {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 0.88rem;
+  }
+
+  .info-chip code {
+    display: block;
+    font-family: 'Courier New', monospace;
+    direction: ltr;
+    text-align: left;
+    font-size: 0.82rem;
+    color: var(--accent);
+    margin-top: 4px;
+  }
+
+  .info-chip .info-desc {
+    color: var(--text-secondary);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>מדדי Explore / Exploit</h1>
+    <p class="subtitle">פיילוט גלישה בוויקיפדיה — 20 משתתפים, תנאי HC, שני ניסויים לכל משתתף</p>
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot explore"></div>
+        <span>Explore — חיפוש, סריקה</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot exploit"></div>
+        <span>Exploit — ניצול, קריאה מעמיקה</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- M1 -->
+  <div class="measure-card">
+    <div class="measure-header">
+      <span class="measure-id">M1</span>
+      <span class="measure-title">זמן בדף — סף 20 שניות</span>
+    </div>
+    <p class="measure-logic">ביקורים קצרים = סריקה וגלישה (explore), ביקורים ארוכים = קריאה מעמיקה (exploit).</p>
+    <div class="ee-row">
+      <div class="ee-box exploit">
+        <div class="ee-label">Exploit</div>
+        שהייה בדף מעל 20 שניות
+      </div>
+      <div class="ee-box explore">
+        <div class="ee-label">Explore</div>
+        שהייה בדף פחות מ-20 שניות
+      </div>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><strong>פאנלים:</strong> ציר זמן, עמודות מוערמות, יחס ממוין</div>
+    </div>
+  </div>
+
+  <!-- M2 -->
+  <div class="measure-card">
+    <div class="measure-header">
+      <span class="measure-id">M2</span>
+      <span class="measure-title">זמן בדף — סף 60 שניות</span>
+    </div>
+    <p class="measure-logic">זהה ל-M1 עם סף מחמיר יותר — רק ביקורים ארוכים מאוד נחשבים כ-exploit.</p>
+    <div class="ee-row">
+      <div class="ee-box exploit">
+        <div class="ee-label">Exploit</div>
+        שהייה בדף מעל 60 שניות
+      </div>
+      <div class="ee-box explore">
+        <div class="ee-label">Explore</div>
+        שהייה בדף פחות מ-60 שניות
+      </div>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><strong>פאנלים:</strong> ציר זמן, עמודות מוערמות, יחס ממוין</div>
+    </div>
+  </div>
+
+  <!-- M3 -->
+  <div class="measure-card">
+    <div class="measure-header">
+      <span class="measure-id">M3</span>
+      <span class="measure-title">מבוסס הקלדה</span>
+    </div>
+    <p class="measure-logic">כתיבת תשובה = שימוש במה שמצאת (exploit), גלישה בוויקיפדיה = חיפוש מידע (explore). אירועי הדבקה מוצגים כמשולשים אדומים.</p>
+    <div class="ee-row">
+      <div class="ee-box exploit">
+        <div class="ee-label">Exploit</div>
+        הקלדה / עריכת תשובה
+      </div>
+      <div class="ee-box explore">
+        <div class="ee-label">Explore</div>
+        גלישה בוויקיפדיה (ללא הקלדה)
+      </div>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><strong>פאנלים:</strong> ציר זמן, עמודות מוערמות, יחס ממוין</div>
+    </div>
+  </div>
+
+  <!-- M4 -->
+  <div class="measure-card">
+    <div class="measure-header">
+      <span class="measure-id">M4</span>
+      <span class="measure-title">הקלדה + הדבקה משולב</span>
+    </div>
+    <p class="measure-logic">הרחבה של M3 — הדבקה מוויקיפדיה נחשבת גם כ-exploit (שליפת ערך). חלון של ±10 שניות סביב אירוע ההדבקה תופס את מחזור הקריאה-העתקה-הדבקה.</p>
+    <div class="ee-row">
+      <div class="ee-box exploit">
+        <div class="ee-label">Exploit</div>
+        הקלדת תשובה או חלון הדבקה (±10 שניות)
+      </div>
+      <div class="ee-box explore">
+        <div class="ee-label">Explore</div>
+        כל השאר
+      </div>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><strong>פאנלים:</strong> ציר זמן, עמודות מוערמות, יחס ממוין</div>
+    </div>
+  </div>
+
+  <!-- M5 -->
+  <div class="measure-card">
+    <div class="measure-header">
+      <span class="measure-id">M5</span>
+      <span class="measure-title">מבוסס ניווט</span>
+    </div>
+    <p class="measure-logic">לחיצה על קישור = הישארות בשכונת הנושא (exploit), חיפוש = קפיצה לנושא חדש (explore).</p>
+    <div class="ee-row">
+      <div class="ee-box exploit">
+        <div class="ee-label">Exploit</div>
+        לחיצה על קישור (ניווט בתוך הערך)
+      </div>
+      <div class="ee-box explore">
+        <div class="ee-label">Explore</div>
+        חיפוש (הקלדת שאילתה חדשה)
+      </div>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><strong>פאנלים:</strong> ציר זמן, עמודות מוערמות, יחס ממוין</div>
+    </div>
+  </div>
+
+  <!-- M6 -->
+  <div class="measure-card descriptive">
+    <div class="measure-header">
+      <span class="measure-id">M6</span>
+      <span class="measure-title">ציר זמן ביקורי דפים + התפלגות</span>
+      <span class="measure-type">תיאורי</span>
+    </div>
+    <div class="desc-note">
+      <strong>אין סיווג בינארי של explore/exploit.</strong> מציג סקירה של עוצמת הגלישה — כמה דפים כל משתתף ביקר ומתי. כולל ציר זמן צבעוני, היסטוגרמה, ממוצע למשתתף ו-box plot.
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><strong>פאנלים:</strong> ציר זמן, היסטוגרמה, ממוצע למשתתף, box plot</div>
+    </div>
+  </div>
+
+  <!-- M7 -->
+  <div class="measure-card composite">
+    <div class="measure-header">
+      <span class="measure-id">M7</span>
+      <span class="measure-title">מפת חום — הסכמה בין 3 מדדים</span>
+      <span class="measure-type">מורכב</span>
+    </div>
+    <p class="measure-logic">משלב את M1 + M3 + M5. לכל שנייה, כל מדד מצביע exploit (1) או explore (0). כשמדדים עצמאיים מסכימים — הסיווג אמין יותר.</p>
+    <div class="scoring-row">
+      <span style="font-size:0.88rem; font-weight:500;">ניקוד:</span>
+      <div class="score-chip s0">0</div>
+      <span class="score-label">כולם explore</span>
+      <div class="score-chip s1">1</div>
+      <span class="score-label"></span>
+      <div class="score-chip s2">2</div>
+      <span class="score-label"></span>
+      <div class="score-chip s3">3</div>
+      <span class="score-label">כולם exploit</span>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><strong>פאנלים:</strong> מפת חום על ציר זמן</div>
+    </div>
+  </div>
+
+  <!-- M8 -->
+  <div class="measure-card">
+    <div class="measure-header">
+      <span class="measure-id">M8</span>
+      <span class="measure-title">מבוסס רשת סמנטית</span>
+    </div>
+    <p class="measure-logic">מבוסס על Kedrick et al. (2026). בונה מרחב סמנטי באמצעות דמיון קוסינוס tf-idf, ואז מקבץ ערכים (k-means, 10 אשכולות). אותו אשכול = exploit, אשכול שונה = explore.</p>
+    <div class="ee-row">
+      <div class="ee-box exploit">
+        <div class="ee-label">Exploit</div>
+        מעבר לדף דומה סמנטית (באותו אשכול)
+      </div>
+      <div class="ee-box explore">
+        <div class="ee-label">Explore</div>
+        מעבר לדף רחוק סמנטית (אשכול אחר)
+      </div>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><strong>פאנלים:</strong> מפה סמנטית, התפלגות דמיון, ממוצע למשתתף, יחס exploit</div>
+      <div class="meta-item"><strong>תלויות:</strong> <code style="direction:ltr; font-family:monospace;">similarity_matrix.json</code>, <code style="direction:ltr; font-family:monospace;">wiki_texts.json</code></div>
+    </div>
+  </div>
+
+  <!-- M9 -->
+  <div class="measure-card">
+    <div class="measure-header">
+      <span class="measure-id">M9</span>
+      <span class="measure-title">דמיון סמנטי — מבוסס אשכולות (ויזואליזציה משולבת)</span>
+    </div>
+    <p class="measure-logic">אותו סיווג כמו M8, ויזואליזציה שונה — מותאם למצגת. שלושה פאנלים מספרים את הסיפור המלא: דינמיקה טמפורלית, מבנה מעברים, הבדלים אישיים.</p>
+    <div class="ee-row">
+      <div class="ee-box exploit">
+        <div class="ee-label">Exploit</div>
+        אותו אשכול ידע כמו הדף הקודם
+      </div>
+      <div class="ee-box explore">
+        <div class="ee-label">Explore</div>
+        אשכול ידע שונה מהדף הקודם
+      </div>
+    </div>
+    <div style="background:#f7f7f5; border-radius:8px; padding:14px 18px; margin-bottom:14px; font-size:0.9rem; color:var(--text-secondary);">
+      <strong>Panel A</strong> — ציר זמן: ביקורי דפים צבועים לפי אשכול סמנטי<br>
+      <strong>Panel B</strong> — מפת חום: מטריצת מעברים 10×10 (אלכסון = exploit, מחוץ לאלכסון = explore)<br>
+      <strong>Panel C</strong> — גרפים קטנים: מסלולים למשתתף במרחב סמנטי MDS
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><strong>תלויות:</strong> <code style="direction:ltr; font-family:monospace;">similarity_matrix.json</code></div>
+    </div>
+  </div>
+
+  <!-- Summary Table -->
+  <div class="summary-section">
+    <h2>טבלת סיכום</h2>
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>מדד</th>
+          <th>סיגנל</th>
+          <th>Exploit</th>
+          <th>Explore</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>M1</strong></td>
+          <td>זמן (20s)</td>
+          <td class="col-exploit">מעל 20 שניות בדף</td>
+          <td class="col-explore">פחות מ-20 שניות בדף</td>
+        </tr>
+        <tr>
+          <td><strong>M2</strong></td>
+          <td>זמן (60s)</td>
+          <td class="col-exploit">מעל 60 שניות בדף</td>
+          <td class="col-explore">פחות מ-60 שניות בדף</td>
+        </tr>
+        <tr>
+          <td><strong>M3</strong></td>
+          <td>הקלדה</td>
+          <td class="col-exploit">כתיבת תשובה</td>
+          <td class="col-explore">גלישה</td>
+        </tr>
+        <tr>
+          <td><strong>M4</strong></td>
+          <td>הקלדה + הדבקה</td>
+          <td class="col-exploit">כתיבה או הדבקה</td>
+          <td class="col-explore">גלישה</td>
+        </tr>
+        <tr>
+          <td><strong>M5</strong></td>
+          <td>ניווט</td>
+          <td class="col-exploit">לחיצה על קישור</td>
+          <td class="col-explore">חיפוש</td>
+        </tr>
+        <tr>
+          <td><strong>M6</strong></td>
+          <td>ביקורי דפים</td>
+          <td colspan="2" style="text-align:center; color:var(--text-secondary);">תיאורי (ללא סיווג)</td>
+        </tr>
+        <tr>
+          <td><strong>M7</strong></td>
+          <td>הסכמה</td>
+          <td class="col-exploit">M1+M3+M5 מסכימים exploit</td>
+          <td class="col-explore">M1+M3+M5 מסכימים explore</td>
+        </tr>
+        <tr>
+          <td><strong>M8</strong></td>
+          <td>סמנטי (רשת)</td>
+          <td class="col-exploit">אותו אשכול</td>
+          <td class="col-explore">אשכול אחר</td>
+        </tr>
+        <tr>
+          <td><strong>M9</strong></td>
+          <td>סמנטי (משולב)</td>
+          <td class="col-exploit">אותו אשכול</td>
+          <td class="col-explore">אשכול אחר</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Data & Scripts -->
+  <div class="info-section">
+    <h2>קבצי נתונים</h2>
+    <div class="info-grid">
+      <div class="info-chip">
+        <span class="info-desc">נתונים גולמיים — 3,857 שורות, 20 משתתפים</span>
+        <code>data/Game.csv</code>
+      </div>
+      <div class="info-chip">
+        <span class="info-desc">טקסט מלא של 134 ערכי ויקיפדיה</span>
+        <code>data/wiki_texts.json</code>
+      </div>
+      <div class="info-chip">
+        <span class="info-desc">דמיון קוסינוס tf-idf — 8,911 זוגות ערכים</span>
+        <code>data/similarity_matrix.json</code>
+      </div>
+      <div class="info-chip">
+        <span class="info-desc">פונקציות עזר משותפות</span>
+        <code>scripts/helpers.py</code>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
