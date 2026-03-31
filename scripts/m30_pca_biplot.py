@@ -16,9 +16,17 @@ from sklearn.decomposition import PCA
 
 from m29_pca_raw import (
     load_topic_distances, build_feature_matrix,
-    FEATURE_NAMES, BG_COLOR, TEXT_COLOR, LABEL_COLOR, BORDER_COLOR,
+    FEATURE_NAMES,
 )
+
 from helpers import load_trials, get_pids_and_trials, OUTPUT_DIR
+
+# Light theme overrides (m29 uses dark theme; this plot uses light)
+BG_COLOR = '#ffffff'
+TEXT_COLOR = '#1a1a2e'
+LABEL_COLOR = '#4a4a4a'
+BORDER_COLOR = '#cccccc'
+QUADRANT_COLOR = '#999999'
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -51,7 +59,7 @@ def plot_enhanced_biplot(scores, loadings, explained_var, meta, output_path):
     for m, (x, y) in zip(meta, scores[:, :2]):
         color = DOMAIN_COLORS.get(m['domain'], '#888888')
         ax.scatter(x, y, color=color, alpha=0.6, s=35,
-                   edgecolors='white', linewidths=0.3, zorder=2)
+                   edgecolors='#666666', linewidths=0.3, zorder=2)
 
     # --- Feature loading arrows ---
     x_range = scores[:, 0].max() - scores[:, 0].min()
@@ -90,7 +98,7 @@ def plot_enhanced_biplot(scores, loadings, explained_var, meta, output_path):
 
     for key, (qx, qy, ha, va) in quadrant_positions.items():
         ax.text(qx, qy, QUADRANT_LABELS[key],
-                color='#888888', fontsize=10, fontstyle='italic',
+                color=QUADRANT_COLOR, fontsize=10, fontstyle='italic',
                 ha=ha, va=va, zorder=3,
                 bbox=dict(boxstyle='round,pad=0.3', facecolor=BG_COLOR,
                           edgecolor='none', alpha=0.7))

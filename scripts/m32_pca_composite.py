@@ -22,9 +22,15 @@ from sklearn.decomposition import PCA
 
 from m29_pca_raw import (
     load_topic_distances, build_feature_matrix,
-    FEATURE_NAMES, BG_COLOR, TEXT_COLOR, LABEL_COLOR, BORDER_COLOR,
+    FEATURE_NAMES,
 )
 from helpers import load_trials, get_pids_and_trials, OUTPUT_DIR
+
+# Light theme overrides (replaces dark constants from m29)
+BG_COLOR     = '#ffffff'
+TEXT_COLOR   = '#1a1a2e'
+LABEL_COLOR  = '#4a4a4a'
+BORDER_COLOR = '#cccccc'
 
 DOMAIN_COLORS = {
     'art_history': '#E91E63',
@@ -33,7 +39,7 @@ DOMAIN_COLORS = {
     'economics':   '#FF9800',
 }
 
-QUADRANT_COLOR = '#6e7681'
+QUADRANT_COLOR = '#999999'
 QUADRANT_FS = 9
 
 # ---------------------------------------------------------------------------
@@ -83,8 +89,8 @@ def draw_scree(ax, evr):
 # ---------------------------------------------------------------------------
 
 def _draw_crosshairs(ax):
-    ax.axhline(0, color='#444c56', linewidth=0.8, zorder=1)
-    ax.axvline(0, color='#444c56', linewidth=0.8, zorder=1)
+    ax.axhline(0, color='#cccccc', linewidth=0.8, zorder=1)
+    ax.axvline(0, color='#cccccc', linewidth=0.8, zorder=1)
 
 
 def _draw_quadrant_labels(ax, pc1_positive_is_engagement, pc2_positive_is_breadth):
@@ -203,7 +209,7 @@ def draw_participant_map(ax, scores, meta, evr, loading_signs):
             height=2 * std_y,
             angle=0,
             facecolor=color,
-            alpha=0.15,
+            alpha=0.25,
             edgecolor=color,
             linewidth=0.8,
             zorder=2,
@@ -211,7 +217,7 @@ def draw_participant_map(ax, scores, meta, evr, loading_signs):
         ax.add_patch(ell)
 
         ax.scatter(mean_x, mean_y, color=color, s=120,
-                   edgecolors='white', linewidths=0.8, zorder=4)
+                   edgecolors='#666666', linewidths=0.8, zorder=4)
         ax.text(mean_x + 0.05, mean_y + 0.05, f'P{pid}',
                 color=TEXT_COLOR, fontsize=7, zorder=5)
 
@@ -280,7 +286,7 @@ def main():
     fig.patch.set_facecolor(BG_COLOR)
     fig.suptitle(
         "PCA Analysis — Behavioral Foraging Signals",
-        color='white', fontweight='bold', fontsize=16, y=1.01,
+        color=TEXT_COLOR, fontweight='bold', fontsize=16, y=1.01,
     )
 
     draw_scree(axes[0], evr)
@@ -290,7 +296,7 @@ def main():
     fig.tight_layout()
 
     out_path = OUTPUT_DIR / 'm32_pca_composite.png'
-    fig.savefig(out_path, dpi=200, facecolor=BG_COLOR, bbox_inches='tight')
+    fig.savefig(out_path, dpi=200, facecolor='#ffffff', bbox_inches='tight')
     plt.close(fig)
     print(f"Saved: {out_path}")
 

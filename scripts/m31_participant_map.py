@@ -18,13 +18,19 @@ from sklearn.decomposition import PCA
 
 from m29_pca_raw import (
     load_topic_distances, build_feature_matrix,
-    FEATURE_NAMES, BG_COLOR, TEXT_COLOR, LABEL_COLOR, BORDER_COLOR,
+    FEATURE_NAMES,
 )
 from helpers import load_trials, get_pids_and_trials, OUTPUT_DIR
 
-QUADRANT_COLOR = '#555555'
+# Light theme overrides (replaces dark constants from m29)
+BG_COLOR = '#ffffff'
+TEXT_COLOR = '#1a1a2e'
+LABEL_COLOR = '#4a4a4a'
+BORDER_COLOR = '#cccccc'
+
+QUADRANT_COLOR = '#999999'
 QUADRANT_FONTSIZE = 9
-CROSSHAIR_COLOR = '#444444'
+CROSSHAIR_COLOR = '#cccccc'
 
 QUADRANT_LABELS = [
     (1,  1,  "Deep engagement\ndifferent topics",          'right', 'top'),
@@ -70,7 +76,7 @@ def make_participant_map(pids, pid_score_map, var_explained, output_path):
             height=2 * std_pc2,
             facecolor=color,
             edgecolor='none',
-            alpha=0.15,
+            alpha=0.25,
             zorder=2,
         )
         ax.add_patch(ellipse)
@@ -80,7 +86,7 @@ def make_participant_map(pids, pid_score_map, var_explained, output_path):
             mean_pc1, mean_pc2,
             s=150,
             color=color,
-            edgecolors='white',
+            edgecolors='#444444',
             linewidths=1,
             zorder=3,
         )
