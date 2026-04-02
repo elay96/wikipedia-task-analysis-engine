@@ -1,6 +1,6 @@
-# 🌐 Wikipedia Task Analysis Engine
+# Wikipedia Task Analysis Engine
 
-> 🔬 A Python-based analysis pipeline for studying **explore/exploit strategies** in Wikipedia-based information foraging tasks.
+> A Python-based analysis pipeline for studying **explore/exploit strategies** in Wikipedia-based information foraging tasks.
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -8,111 +8,167 @@
 
 ---
 
-## 📖 Overview
+## Overview
 
-This project analyzes how participants **explore and exploit** information while browsing Wikipedia articles to answer creative and factual questions. The engine processes behavioral data collected via Prolific and produces a comprehensive suite of **25+ behavioral measures** — from basic timing and navigation metrics to advanced semantic analysis, PCA-based classification, and phase-switching dynamics.
+This project analyzes how participants **explore and exploit** information while browsing Wikipedia articles to answer creative and factual questions. The engine processes behavioral data collected via Prolific and produces a comprehensive suite of **33 behavioral measures** — from basic timing and navigation metrics to advanced semantic analysis, PCA-based classification, and phase-switching dynamics.
 
-### 🎯 Research Questions
+### Research Questions
 
 - How do individuals **balance exploration vs. exploitation** during information search?
-- Do **high-creativity** vs. **low-creativity** prompts lead to different foraging strategies?
-- Can we classify moment-to-moment behavior into **explore/exploit phases** and measure switching patterns?
+- Does a **pre-task experimental manipulation** affect foraging strategies?
+- Is explore/exploit **unidimensional or multidimensional**? (Pilot finding: 2 dimensions — engagement + semantic breadth)
 
 ---
 
-## 🏗️ Project Structure
+## Documentation
+
+Interactive HTML guides (open locally in browser):
+
+| Document | Description |
+|----------|-------------|
+| [Methodology Review](docs/methodology_review.html) | Methodological debate, approach comparison, recommendation (MANOVA with 2 PCA DVs), and draft email to advisors |
+| [Professors Plan](docs/professors_plan.html) | Analysis plan from advisors meeting — 3 axes, combined measures, PCA on raw signals |
+| [PCA Charts Guide](docs/pca_charts_guide.html) | How to read PCA charts M29–M32: scree plot, biplot, participant map, composite |
+| [Measures Guide](docs/measures_guide.html) | Overview of measures M1–M9 |
+
+---
+
+## Project Structure
 
 ```
 wikipedia-task-analysis-engine/
 │
-├── 📂 data/                    # Raw experimental data
-│   ├── Game.csv                # Primary dataset — actions, timestamps, metadata
+├── data/                    # Raw experimental data
+│   ├── Game.csv             # Primary dataset — actions, timestamps, metadata
 │   ├── similarity_matrix.json  # Article-to-article cosine similarity
-│   └── wiki_texts.json         # Full article texts
+│   ├── wiki_texts.json      # Full article texts
+│   └── topic_model.json     # LDA topic model output
 │
-├── 📂 scripts/                 # Analysis pipeline (m1–m25)
-│   ├── helpers.py              # Shared utilities — data loading, plot helpers
-│   ├── m1_time_20s.py          # ⏱️ Time-based filtering (20s threshold)
-│   ├── m2_time_60s.py          # ⏱️ Time-based filtering (60s threshold)
-│   ├── m3_typing.py            # ⌨️ Typing behavior analysis
-│   ├── m4_typing_pasting.py    # 📋 Typing vs. pasting detection
-│   ├── m5_navigation.py        # 🧭 Navigation patterns
-│   ├── m6_pages.py             # 📄 Page visit counts
-│   ├── m7_heatmap.py           # 🔥 Activity heatmaps
-│   ├── m8_semantic.py          # 🧠 Semantic similarity analysis
-│   ├── m10_time_per_page.py    # ⏱️ Per-page time distribution
-│   ├── m11_network.py          # 🕸️ Network graph analysis
-│   ├── m11_pca_distance.py     # 📐 PCA-based content distance
-│   ├── m12_pca7_distance.py    # 📐 7-component PCA distance
-│   ├── m13_combined_binary.py  # 🏷️ Binary explore/exploit classification
-│   ├── m14_combined_binary_71d.py  # 🏷️ Classification variant (71d)
-│   ├── m15_combined_binary_median.py # 📊 Median-based classification
-│   ├── m16_combined_lsa_median.py    # 📊 LSA + median classification
-│   ├── m18_typing_binary.py    # ⌨️ Binary typing classification
-│   ├── m19_practice_duration.py # 🎯 Practice phase duration
-│   ├── m20_cross_subject_median.py  # 👥 Cross-subject median analysis
-│   ├── m21_tendency_dist.py    # 📈 Explore/exploit tendency distribution
-│   ├── m22_tendency_analysis.py # 📈 Individual tendency analysis
-│   ├── m23_practice_vs_exploit.py   # 🔄 Practice vs. exploitation
-│   ├── m24_phase_duration.py   # 🔀 Phase duration & switch rate
-│   └── m25_phase_duration_variants.py # 🔀 Switch rate variants
+├── scripts/                 # Analysis pipeline (M1–M33)
+│   ├── helpers.py           # Shared utilities — data loading, plot helpers
+│   ├── compute_similarity.py # Pre-compute similarity matrix
+│   ├── compute_topics.py    # Train LDA topic model
+│   │
+│   │  # Basic measures
+│   ├── m1_time_20s.py       # Time-based filtering (20s threshold)
+│   ├── m2_time_60s.py       # Time-based filtering (60s threshold)
+│   ├── m3_typing.py         # Typing behavior analysis
+│   ├── m4_typing_pasting.py # Typing vs. pasting detection
+│   ├── m5_navigation.py     # Navigation patterns
+│   ├── m6_pages.py          # Page visit counts
+│   ├── m7_heatmap.py        # Activity heatmaps
+│   ├── m8_semantic.py       # Semantic similarity analysis
+│   ├── m10_time_per_page.py # Per-page time distribution
+│   │
+│   │  # Network & PCA
+│   ├── m11_network.py       # Network graph analysis
+│   ├── m11_pca_distance.py  # PCA-based content distance
+│   ├── m11_panel_b.py       # Network panel B
+│   ├── m12_pca7_distance.py # 7-component PCA distance
+│   │
+│   │  # Classification
+│   ├── m13_combined_binary.py       # Binary explore/exploit classification
+│   ├── m14_combined_binary_71d.py   # Classification variant (71d)
+│   ├── m15_combined_binary_median.py # Median-based classification
+│   ├── m15_diagnostics_plot.py      # Diagnostics visualization
+│   ├── m16_combined_lsa_median.py   # LSA + median classification
+│   ├── m18_typing_binary.py         # Binary typing classification
+│   │
+│   │  # Individual differences & phases
+│   ├── m19_practice_duration.py     # Practice phase duration
+│   ├── m20_cross_subject_median.py  # Cross-subject median analysis
+│   ├── m21_tendency_dist.py         # Explore/exploit tendency distribution
+│   ├── m22_tendency_analysis.py     # Individual tendency analysis
+│   ├── m23_practice_vs_exploit.py   # Practice vs. exploitation
+│   ├── m24_phase_duration.py        # Phase duration & switch rate
+│   ├── m25_phase_duration_variants.py # Switch rate variants
+│   │
+│   │  # Topic modeling & combined measures
+│   ├── m26_topic_modeling.py        # LDA topic distance visualization
+│   ├── m27_lsa_time_median.py       # LSA + time-median combined
+│   ├── m28_lsa_60s.py               # LSA + 60s combined
+│   │
+│   │  # PCA on raw signals
+│   ├── m29_pca_raw.py               # PCA on 3 raw continuous signals
+│   ├── m30_pca_biplot.py            # Enhanced PCA biplot by domain
+│   ├── m31_participant_map.py       # Individual strategy map
+│   ├── m32_pca_composite.py         # Composite PCA summary
+│   └── m33_analysis_pipeline.excalidraw  # Analysis pipeline diagram
 │
-├── 📂 output/                  # Generated visualizations (.png)
-├── 📂 docs/                    # Documentation & measure guides
-├── 📂 references/              # Research papers & IRB documents
+├── output/                  # Generated visualizations (.png)
+├── docs/                    # HTML documentation & guides
+├── references/              # Research papers
+│   ├── 4_creative_foraging_yuval_hart_2017.pdf
+│   ├── 5_architectural_styles_curiosity_wikipedia_zhou_2024.pdf
+│   └── 6_semantic_networks_creativity_kenett_2014.pdf
 └── README.md
 ```
 
 ---
 
-## 🧪 Methodology
+## Methodology
 
-### 🧩 Experiment Design
+### Experiment Design
 
 | Component | Details |
 |-----------|---------|
-| 🧑‍💻 **Participants** | Recruited via [Prolific](https://prolific.co) |
-| 📝 **Task** | Answer questions by browsing Wikipedia articles |
-| 🎨 **Conditions** | High-creativity vs. Low-creativity prompts |
-| 📊 **Data Collected** | Article opens, task start/end, paste events, answer snapshots, timestamps |
+| **Participants** | Recruited via [Prolific](https://prolific.co) |
+| **Task** | Answer questions by browsing Wikipedia articles |
+| **Design** | Between-subjects (manipulation before Wikipedia task) |
+| **Data Collected** | Article opens, task start/end, paste events, answer snapshots, timestamps |
 
-### 🔍 Explore/Exploit Classification
+### Explore/Exploit Measurement — PCA on Raw Signals
 
-The engine classifies each page visit as **explore** 🔭 or **exploit** ⛏️ using a multi-signal approach:
+The recommended approach (see [Methodology Review](docs/methodology_review.html)) uses PCA on 3 raw continuous signals per page visit:
 
-1. **🧠 Semantic Distance** — Cosine similarity between consecutive articles (via PCA on similarity matrix, 7 components)
-2. **⏱️ Time on Page** — Duration relative to session mean
-3. **📊 LSA Signals** — Latent semantic analysis for content-based distance
-4. **📐 Combined Threshold** — Session-mean thresholds for both time and distance signals
+| Signal | What it measures | Type |
+|--------|-----------------|------|
+| **Page duration** | Seconds spent on page | Continuous |
+| **Semantic distance** | Topic shift between pages (LDA topic model + JSD) | Continuous |
+| **Writing activity** | Typing duration + weighted paste events | Continuous |
 
-### 📈 Key Measures
+**Pilot results (M29):**
+- PC1 = 55.7% — **Engagement** (time + writing)
+- PC2 = 33.3% — **Semantic breadth** (topic distance)
+- Together: 89% of variance explained
+
+**Pre-specified decision rule:**
+- If PC1 > 70% → use PC1 alone as DV (t-test)
+- If PC1 + PC2 both significant → use both as DVs (MANOVA)
+
+### Key Measures
 
 | Measure | Category | Description |
 |---------|----------|-------------|
-| M1–M2 | ⏱️ Timing | Time filtering at 20s and 60s thresholds |
-| M3–M4 | ⌨️ Typing | Keystroke patterns, typing vs. pasting |
-| M5–M6 | 🧭 Navigation | Page visit patterns and counts |
-| M7 | 🔥 Heatmap | Temporal activity visualization |
-| M8 | 🧠 Semantic | Article similarity analysis |
-| M10 | ⏱️ Per-page | Time distribution per article |
-| M11–M12 | 🕸️ Network/PCA | Network graphs, PCA-based distance |
-| M13–M16 | 🏷️ Classification | Binary explore/exploit labeling |
-| M18–M19 | ⌨️ Typing | Binary typing behavior, practice duration |
-| M20–M22 | 👥 Individual | Cross-subject medians, tendency analysis |
-| M23 | 🔄 Comparison | Practice vs. exploitation patterns |
-| M24–M25 | 🔀 Switching | Phase run-lengths & switch rate variants |
+| M1–M2 | Timing | Time filtering at 20s and 60s thresholds |
+| M3–M4 | Typing | Keystroke patterns, typing vs. pasting |
+| M5–M6 | Navigation | Page visit patterns and counts |
+| M7 | Heatmap | Temporal activity visualization |
+| M8 | Semantic | Article similarity analysis |
+| M10 | Per-page | Time distribution per article |
+| M11–M12 | Network/PCA | Network graphs, PCA-based distance |
+| M13–M16 | Classification | Binary explore/exploit labeling |
+| M18–M19 | Typing | Binary typing behavior, practice duration |
+| M20–M22 | Individual | Cross-subject medians, tendency analysis |
+| M23 | Comparison | Practice vs. exploitation patterns |
+| M24–M25 | Switching | Phase run-lengths & switch rate variants |
+| M26 | Topic Modeling | LDA topic distance visualization |
+| M27–M28 | Combined | LSA + time/60s combined measures |
+| M29 | PCA Raw | PCA on 3 raw continuous signals |
+| M30–M32 | PCA Viz | Biplot, participant map, composite |
+| M33 | Pipeline | Analysis pipeline & decision framework diagram |
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
-### 📋 Prerequisites
+### Prerequisites
 
 ```bash
 pip install pandas numpy matplotlib scikit-learn scipy
 ```
 
-### ▶️ Running an Analysis
+### Running an Analysis
 
 Each measure script is standalone and can be run independently:
 
@@ -120,10 +176,13 @@ Each measure script is standalone and can be run independently:
 # Run a single measure
 python scripts/m24_phase_duration.py
 
+# Run PCA on raw signals
+python scripts/m29_pca_raw.py
+
 # Output visualizations are saved to output/
 ```
 
-### 📂 Data Requirements
+### Data Requirements
 
 Place your data files in the `data/` directory:
 - `Game.csv` — Primary behavioral data export
@@ -132,39 +191,27 @@ Place your data files in the `data/` directory:
 
 ---
 
-## 📊 Sample Output
-
-All measure scripts generate publication-ready visualizations saved to `output/`:
-
-| Visualization | Script |
-|---------------|--------|
-| 🔥 Activity heatmaps | `m7_heatmap.py` |
-| 🕸️ Navigation networks | `m11_network.py` |
-| 🏷️ Explore/exploit timelines | `m13–m16` |
-| 📈 Tendency distributions | `m21_tendency_dist.py` |
-| 🔀 Phase switching patterns | `m24_phase_duration.py` |
-
----
-
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Tool | Purpose |
 |------|---------|
-| 🐍 Python 3.10+ | Core language |
-| 🐼 Pandas | Data manipulation |
-| 🔢 NumPy | Numerical computation |
-| 📊 Matplotlib | Visualization |
-| 🧪 scikit-learn | PCA, similarity metrics |
-| 📐 SciPy | Statistical tests (Wilcoxon, Cohen's d) |
+| Python 3.10+ | Core language |
+| Pandas | Data manipulation |
+| NumPy | Numerical computation |
+| Matplotlib | Visualization |
+| scikit-learn | PCA, LDA topic modeling, similarity metrics |
+| SciPy | Statistical tests (Wilcoxon, Cohen's d) |
 
 ---
 
-## 📄 License
+## References
 
-This project is part of academic research. See `references/` for related publications and IRB documentation.
+- Hart, Y. et al. (2017). *Creative foraging: An experimental paradigm for studying exploration and discovery.* PLOS ONE.
+- Zhou, D. et al. (2024). *Architectural styles of curiosity in global Wikipedia mobile app readership.* Science Advances.
+- Kenett, Y. N. et al. (2014). *Investigating the structure of semantic networks in low and high creative persons.* Frontiers in Human Neuroscience.
 
 ---
 
-<p align="center">
-  Made with 🧠 + ☕ for behavioral research
-</p>
+## License
+
+This project is part of academic research. See `references/` for related publications.
