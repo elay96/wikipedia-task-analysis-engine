@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מדריך קריאת תרשימי PCA — M29–M32</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --explore: #2b6cb0;
+    --exploit: #c05621;
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --text-secondary: #5a5a5a;
+    --border: #e8e5e1;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
+    --radius: 12px;
+    --green: #166534; --green-bg: #dcfce7; --green-border: #86efac;
+    --yellow: #854d0e; --yellow-bg: #fef9c3; --yellow-border: #fde047;
+    --red: #991b1b; --red-bg: #fee2e2; --red-border: #fca5a5;
+    --blue: #1e40af; --blue-bg: #dbeafe; --blue-border: #93c5fd;
+    --purple: #5b21b6; --purple-bg: #ede9fe; --purple-border: #c4b5fd;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* Nav */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(250,250,249,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+  }
+
+  .nav-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 10px 0;
+    scrollbar-width: none;
+  }
+
+  .nav-inner::-webkit-scrollbar { display: none; }
+
+  .nav-inner a {
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    padding: 5px 12px;
+    border-radius: 20px;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .nav-inner a:hover {
+    background: #f0eee9;
+    color: var(--text);
+  }
+
+  .nav-sep {
+    color: var(--border);
+    font-size: 0.85rem;
+    user-select: none;
+  }
+
+  /* Layout */
+  .page-body {
+    padding: 40px 24px 80px;
+  }
+
+  .container {
+    max-width: 880px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 56px;
+    padding-bottom: 40px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  header h1 {
+    font-family: 'Rubik', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+  }
+
+  header .subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 64px;
+  }
+
+  .section-heading {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    padding: 0 12px;
+    border-radius: 6px;
+    background: var(--text);
+    color: white;
+    font-size: 0.82rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: 'Rubik', sans-serif;
+    letter-spacing: 0.5px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .card:hover { box-shadow: var(--shadow-lg); }
+
+  .card-title {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card p {
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+  }
+
+  .card p:last-child { margin-bottom: 0; }
+
+  .card ul {
+    margin: 8px 0 0 0;
+    padding-right: 20px;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .card ul li { margin-bottom: 6px; }
+
+  .card.green-highlight {
+    border: 1.5px solid var(--green-border);
+    background: #f0fdf4;
+  }
+
+  .card.blue-highlight {
+    border: 1.5px solid var(--blue-border);
+    background: #eff6ff;
+  }
+
+  .card.yellow-highlight {
+    border: 1.5px solid var(--yellow-border);
+    background: var(--yellow-bg);
+  }
+
+  .card.purple-highlight {
+    border: 1.5px solid var(--purple-border);
+    background: var(--purple-bg);
+  }
+
+  /* Conclusion numbered list */
+  .conclusion-list {
+    counter-reset: conclusions;
+    padding: 0;
+    list-style: none;
+    margin-top: 8px;
+  }
+
+  .conclusion-list li {
+    counter-increment: conclusions;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+  }
+
+  .conclusion-list li::before {
+    content: counter(conclusions);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--explore);
+    color: white;
+    font-size: 0.78rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Badges */
+  .badge {
+    display: inline-block;
+    font-size: 0.73rem;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .badge-green {
+    background: var(--green-bg);
+    color: var(--green);
+    border: 1px solid var(--green-border);
+  }
+
+  .badge-blue {
+    background: var(--blue-bg);
+    color: var(--blue);
+    border: 1px solid var(--blue-border);
+  }
+
+  .badge-yellow {
+    background: var(--yellow-bg);
+    color: var(--yellow);
+    border: 1px solid var(--yellow-border);
+  }
+
+  .badge-purple {
+    background: var(--purple-bg);
+    color: var(--purple);
+    border: 1px solid var(--purple-border);
+  }
+
+  /* Tables */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    font-size: 0.9rem;
+  }
+
+  thead th {
+    background: var(--text);
+    color: white;
+    padding: 12px 16px;
+    font-weight: 600;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    text-align: right;
+    vertical-align: top;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(even) td { background: #f7f6f4; }
+
+  tbody tr.row-highlight td {
+    background: #f0fdf4 !important;
+    font-weight: 500;
+  }
+
+  /* PC axis display */
+  .pc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .pc-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+
+  .pc-label {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--explore);
+    margin-bottom: 4px;
+  }
+
+  .pc-pct {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .pc-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .pc-block.dim3 .pc-label { color: var(--text-secondary); }
+  .pc-block.dim3 .pc-pct { color: var(--text-secondary); font-size: 1.2rem; }
+
+  /* Quadrant table special styling */
+  .quadrant-table thead th:first-child { width: 140px; }
+
+  /* Sub-heading inside card */
+  .sub-heading {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin: 16px 0 8px;
+    color: var(--text);
+  }
+
+  .sub-heading:first-child { margin-top: 0; }
+
+  /* Summary panels grid */
+  .panels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-top: 4px;
+  }
+
+  .panel-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    font-size: 0.88rem;
+  }
+
+  .panel-label {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+    color: var(--explore);
+  }
+
+  .panel-block p { color: var(--text-secondary); margin: 0; font-size: 0.88rem; }
+
+  /* Story sentences */
+  .story-list {
+    counter-reset: story;
+    padding: 0;
+    list-style: none;
+  }
+
+  .story-list li {
+    counter-increment: story;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    font-size: 0.97rem;
+    color: var(--text);
+  }
+
+  .story-list li::before {
+    content: counter(story);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--exploit);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Print */
+  @media print {
+    nav { display: none; }
+    .card, .table-wrap { box-shadow: none; }
+    body { background: white; }
+  }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.6rem; }
+    .section-heading { font-size: 1.2rem; }
+    .pc-grid { grid-template-columns: 1fr; }
+    .panels-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#m29">M29 — Scree Plot</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#m30">M30 — Biplot</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#m31">M31 — מפת נבדקים</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#m32">M32 — Composite</a>
+  </div>
+</nav>
+
+<main class="page-body">
+<div class="container">
+
+  <header>
+    <h1>מדריך קריאת תרשימי PCA</h1>
+    <p class="subtitle">תרשימים M29–M32 — הסבר, פרשנות ומסקנות</p>
+  </header>
+
+  <!-- M29 -->
+  <section class="section" id="m29">
+    <h2 class="section-heading">
+      <span class="section-badge" lang="en">M29</span>
+      Scree Plot
+    </h2>
+
+    <div class="card">
+      <p class="card-title">מה רואים</p>
+      <p>3 עמודות — כמה שונות <span lang="en">(variance)</span> כל מימד מסביר.</p>
+    </div>
+
+    <div class="card">
+      <p class="card-title">איך קוראים</p>
+      <div class="pc-grid">
+        <div class="pc-block">
+          <div class="pc-label" lang="en">PC1</div>
+          <div class="pc-pct">55.7%</div>
+          <div class="pc-desc">המימד הראשי — מסביר יותר מחצי מהשונות</div>
+        </div>
+        <div class="pc-block">
+          <div class="pc-label" lang="en">PC2</div>
+          <div class="pc-pct">33.3%</div>
+          <div class="pc-desc">מימד שני משמעותי</div>
+        </div>
+        <div class="pc-block dim3">
+          <div class="pc-label" lang="en">PC3</div>
+          <div class="pc-pct">11.0%</div>
+          <div class="pc-desc">שארית</div>
+        </div>
+        <div class="pc-block" style="background: #eff6ff; border-color: var(--blue-border);">
+          <div class="pc-label">יחד PC1+PC2</div>
+          <div class="pc-pct" style="color: var(--blue);">89%</div>
+          <div class="pc-desc">שני המימדים המשמעותיים יחד</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card green-highlight">
+      <p class="card-title">מסקנה</p>
+      <p>
+        <span lang="en">Explore/Exploit</span> <strong>לא חד-ממדי</strong>.
+        אם היה מימד אחד, <span lang="en">PC1</span> היה מסביר מעל 80%.
+        במקום זה יש <strong>שני מימדים משמעותיים</strong> שמסבירים יחד 89%.
+      </p>
+    </div>
+  </section>
+
+  <!-- M30 -->
+  <section class="section" id="m30">
+    <h2 class="section-heading">
+      <span class="section-badge" lang="en">M30</span>
+      Biplot — מרחב ההתנהגות
+    </h2>
+
+    <div class="card">
+      <p class="card-title">מה רואים</p>
+      <p>
+        כל נקודה = ביקור בדף אחד. צבע = דומיין
+        (ורוד = <span lang="en">art_history</span>, ירוק = <span lang="en">ecology</span>,
+        סגול = <span lang="en">psychology</span>, כתום = <span lang="en">economics</span>).
+        חצים כתומים = כיוון המשתנים המקוריים.
+      </p>
+    </div>
+
+    <div class="card">
+      <p class="card-title">הצירים</p>
+      <ul>
+        <li>
+          <strong>ציר X (<span lang="en">PC1 — Engagement</span>, 55.7%):</strong>
+          ימינה = זמן ארוך + כתיבה רבה. שמאלה = גלישה מהירה ללא כתיבה.
+        </li>
+        <li>
+          <strong>ציר Y (<span lang="en">PC2 — Semantic Breadth</span>, 33.3%):</strong>
+          למעלה = קפיצה לנושא שונה. למטה = אותו נושא.
+        </li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <p class="card-title">הרבעים</p>
+      <div class="table-wrap" style="margin-bottom: 0; box-shadow: none;">
+        <table class="quadrant-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>שמאל (engagement נמוך)</th>
+              <th>ימין (engagement גבוה)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>למעלה</strong> (נושא שונה)</td>
+              <td>גלישה מהירה + נושא חדש = <span class="badge badge-blue" lang="en">EXPLORATION</span></td>
+              <td>קריאה עמוקה + נושא חדש</td>
+            </tr>
+            <tr>
+              <td><strong>למטה</strong> (נושא דומה)</td>
+              <td>גלישה מהירה + אותו נושא</td>
+              <td>קריאה עמוקה + כתיבה + אותו נושא = <span class="badge badge-yellow" lang="en">EXPLOITATION</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="card-title">איך קוראים את החצים</p>
+      <ul>
+        <li>
+          "<span lang="en">Time on page</span>" ו-"<span lang="en">Writing amount</span>"
+          מצביעים לאותו כיוון (ימינה) — הם מתואמים. מי שמבלה זמן רב גם כותב הרבה.
+        </li>
+        <li>
+          "<span lang="en">Topic distance</span>" מצביע למעלה, <strong>בניצב</strong>
+          לשני האחרים — הציר הסמנטי <strong>בלתי תלוי</strong> מציר המעורבות.
+        </li>
+      </ul>
+    </div>
+
+    <div class="card green-highlight">
+      <p class="card-title">מסקנות</p>
+      <ol class="conclusion-list">
+        <li>
+          אפשר לבלות זמן רב בדף (<span lang="en">exploit</span> מבחינת <span lang="en">engagement</span>)
+          אבל עדיין לקפוץ בין נושאים רחוקים (<span lang="en">explore</span> מבחינה סמנטית) — ולהפך.
+        </li>
+        <li>
+          יש פיזור שונה בין דומיינים —
+          <span lang="en">economics</span> (כתום) נוטה להתרכז,
+          <span lang="en">ecology</span> (ירוק) מפוזר יותר.
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- M31 -->
+  <section class="section" id="m31">
+    <h2 class="section-heading">
+      <span class="section-badge" lang="en">M31</span>
+      מפת נבדקים — אסטרטגיות אינדיבידואליות
+    </h2>
+
+    <div class="card">
+      <p class="card-title">מה רואים</p>
+      <p>
+        כל <strong>נבדק</strong> = נקודה אחת (ממוצע כל הביקורים שלו) + אליפסה (סטיית תקן).
+        אותם צירים כמו M30.
+      </p>
+    </div>
+
+    <div class="card">
+      <p class="card-title">איך קוראים</p>
+      <div class="table-wrap" style="margin-bottom: 0; box-shadow: none;">
+        <table>
+          <thead>
+            <tr>
+              <th>אלמנט</th>
+              <th>מה הוא מייצג</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>מיקום הנקודה</strong></td>
+              <td>האסטרטגיה הדומיננטית של הנבדק</td>
+            </tr>
+            <tr>
+              <td><strong>גודל האליפסה</strong></td>
+              <td>כמה הנבדק עקבי</td>
+            </tr>
+            <tr>
+              <td>אליפסה <strong>קטנה</strong></td>
+              <td>אסטרטגיה יציבה — תמיד באותו רבע</td>
+            </tr>
+            <tr>
+              <td>אליפסה <strong>גדולה</strong></td>
+              <td>מחליף אסטרטגיות — קופץ בין רבעים</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card green-highlight">
+      <p class="card-title">מסקנות</p>
+      <ol class="conclusion-list">
+        <li>
+          <strong>הבדלים אינדיבידואליים ברורים</strong> — הנבדקים לא מקובצים באותו מקום,
+          כל אחד עם אסטרטגיה שונה.
+        </li>
+        <li>
+          <strong>רוב הנבדקים</strong> נמצאים באזור שמאל-מרכז
+          (<span lang="en">engagement</span> בינוני-נמוך) עם פיזור ב-Y
+          (חלקם חוקרים נושאים שונים, חלקם נשארים בנושא).
+        </li>
+        <li>
+          <strong>נבדקים עם אליפסות צרות</strong> — אסטרטגיה עקבית,
+          אולי "יודעים מה הם רוצים".
+        </li>
+        <li>
+          <strong>נבדקים עם אליפסות רחבות</strong> — מחליפים בין
+          <span lang="en">explore</span> ו-<span lang="en">exploit</span>,
+          אולי מתאימים אסטרטגיה למשימה.
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- M32 -->
+  <section class="section" id="m32">
+    <h2 class="section-heading">
+      <span class="section-badge" lang="en">M32</span>
+      Composite — תרשים מסכם
+    </h2>
+
+    <div class="card">
+      <p class="card-title">מה רואים</p>
+      <p>שלושת הפאנלים יחד:</p>
+      <div class="panels-grid">
+        <div class="panel-block">
+          <div class="panel-label" lang="en">A. Variance Explained</div>
+          <p>Scree plot</p>
+          <p style="margin-top: 6px; font-size: 0.82rem; color: var(--text);">שני מימדים, לא אחד</p>
+        </div>
+        <div class="panel-block">
+          <div class="panel-label" lang="en">B. Behavioral Space</div>
+          <p>Biplot עם דומיינים</p>
+          <p style="margin-top: 6px; font-size: 0.82rem; color: var(--text);">הצירים: engagement vs. semantic breadth</p>
+        </div>
+        <div class="panel-block">
+          <div class="panel-label" lang="en">C. Individual Strategies</div>
+          <p>מפת נבדקים</p>
+          <p style="margin-top: 6px; font-size: 0.82rem; color: var(--text);">כל נבדק עם אסטרטגיה אחרת</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue-highlight">
+      <p class="card-title">הסיפור בשלוש משפטים</p>
+      <ol class="story-list">
+        <li>
+          <span lang="en">Explore/Exploit</span> בוויקיפדיה הוא לא מימד יחיד —
+          יש ציר מעורבות (זמן + כתיבה) וציר חקירה סמנטית (מרחק נושאי),
+          והם חלקית בלתי תלויים.
+        </li>
+        <li>
+          אפשר להיות "<span lang="en">exploiter</span>" מבחינת
+          <span lang="en">engagement</span> אבל "<span lang="en">explorer</span>"
+          מבחינה סמנטית — לכתוב הרבה תוך כדי קפיצה בין נושאים.
+        </li>
+        <li>
+          יש הבדלים אינדיבידואליים משמעותיים —
+          כל נבדק עם תמהיל שונה של שני הצירים.
+        </li>
+      </ol>
+    </div>
+  </section>
+
+</div>
+</main>
+
+</body>
+</html>
