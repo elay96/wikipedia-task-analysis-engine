@@ -404,6 +404,8 @@
     <span class="nav-sep" aria-hidden="true">·</span>
     <a href="#metrics">מפת מדדים</a>
     <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#semantic">סמנטיקה</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
     <a href="#problems">הבעיות</a>
     <span class="nav-sep" aria-hidden="true">·</span>
     <a href="#comparison">השוואת גישות</a>
@@ -465,9 +467,56 @@
     </div>
   </section>
 
-  <!-- Section 3: הבעיות -->
+  <!-- Section 3: Topic Modeling vs LSA -->
+  <section class="section" id="semantic">
+    <h2 class="section-heading"><span class="section-num">3</span> איך מודדים מרחק סמנטי? Topic Modeling מול LSA</h2>
+
+    <p>שני האותות הגולמיים הראשונים (זמן, כתיבה) אינטואיטיביים. האות השלישי — <strong>מרחק סמנטי</strong> בין דפים — דורש הסבר, כי יש שתי דרכים שונות מהותית למדוד אותו.</p>
+
+    <div class="card">
+      <div class="card-title">LSA — Latent Semantic Analysis <span class="badge badge-yellow">בשימוש ב-M16, M20, M27, M28</span></div>
+      <p><strong>מה זה:</strong> TF-IDF על מילות המאמרים → הפחתת מימדים (SVD) → cosine distance בין וקטורי דפים.</p>
+      <p><strong>מה מודד:</strong> חפיפת מילים ברמת פני השטח.</p>
+      <p><strong>הבעיה:</strong> שני מאמרים על אותו נושא (למשל "natural selection" ו-"evolutionary biology") יכולים להשתמש במילון שונה ולהיראות <em>רחוקים</em> ב-LSA — למרות שהם באותו תחום. זה לא באמת explore.</p>
+    </div>
+
+    <div class="card" style="border-color: var(--green-border); background: var(--green-bg);">
+      <div class="card-title" style="color: var(--green);">Topic Modeling — LDA + JSD <span class="badge badge-green">בשימוש ב-M26, M29 (PCA)</span></div>
+      <p><strong>מה זה:</strong></p>
+      <ul>
+        <li><strong>LDA (Latent Dirichlet Allocation)</strong> — אלגוריתם שמגלה "נושאים סמויים" בקורפוס. כל נושא = התפלגות על מילים. כל מאמר = תערובת של נושאים.</li>
+        <li><strong>JSD (Jensen-Shannon Divergence)</strong> — מדד מרחק בין שתי התפלגויות. מודד כמה ההרכב הנושאי של דף A שונה מדף B. ערך 0 = אותם נושאים בדיוק, ערך גבוה = נושאים שונים לחלוטין.</li>
+      </ul>
+      <p><strong>מה מודד:</strong> מעבר בין <em>נושאים</em>, לא בין <em>מילים</em>. "האם הנבדק קפץ מתחום לתחום?"</p>
+      <p><strong>למה עדיף:</strong> זה בדיוק ההגדרה של explore בספרות — "scout for novelty" (Zhou et al. 2024), "discovery of a new category" (Hart 2017). אם נבדק עבר מאקולוגיה לכלכלה — זה explore. LDA+JSD תופס את זה. LSA לא בהכרח.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">השוואה</div>
+      <table>
+        <thead>
+          <tr><th></th><th>LSA (cosine)</th><th>Topic Modeling (JSD)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>מה מודד</td><td>דמיון מילים</td><td>דמיון נושאי</td></tr>
+          <tr><td>מתאים ל-explore/exploit?</td><td>חלקית — proxy</td><td><strong>כן — מדידה ישירה</strong></td></tr>
+          <tr><td>רגישות למילון</td><td>גבוהה — מילים שונות = רחוק</td><td>נמוכה — אותו נושא = קרוב</td></tr>
+          <tr><td>פרמטרים</td><td>מספר רכיבי SVD</td><td>מספר נושאים K</td></tr>
+          <tr><td>חשש</td><td>—</td><td>בחירת K שרירותית — צריך לבדוק רגישות</td></tr>
+          <tr><td>עקביות עם ספרות</td><td>—</td><td>Zhou et al. 2024, Hart 2017</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="background: #fffbeb; border-color: var(--yellow-border);">
+      <div class="card-title" style="color: var(--yellow);">הערה: בדיקת רגישות ל-K</div>
+      <p>LDA דורש בחירה מראש של מספר הנושאים (K). מומלץ לבדוק ב-pre-registration: "נריץ PCA עם K=5, 10, 15 ונדווח האם התוצאה רגישה לבחירה." אם ה-PCA יציב — זה מחזק את הבחירה. אם לא — צריך לנמק את K שנבחר.</p>
+    </div>
+  </section>
+
+  <!-- Section 4: הבעיות -->
   <section class="section" id="problems">
-    <h2 class="section-heading"><span class="section-num">3</span> הבעיה: שלוש בעיות מתודולוגיות</h2>
+    <h2 class="section-heading"><span class="section-num">4</span> הבעיה: שלוש בעיות מתודולוגיות</h2>
 
     <div class="card">
       <div class="card-title">
@@ -510,7 +559,7 @@
 
   <!-- Section 4: השוואת גישות -->
   <section class="section" id="comparison">
-    <h2 class="section-heading"><span class="section-num">4</span> השוואת גישות</h2>
+    <h2 class="section-heading"><span class="section-num">5</span> השוואת גישות</h2>
     <div class="table-wrap">
       <table>
         <thead>
@@ -572,7 +621,7 @@
 
   <!-- Section 5: מסגרת קבלת החלטות -->
   <section class="section" id="decision">
-    <h2 class="section-heading"><span class="section-num">5</span> מסגרת קבלת החלטות</h2>
+    <h2 class="section-heading"><span class="section-num">6</span> מסגרת קבלת החלטות</h2>
 
     <div class="flowchart" lang="en">PC1 explains &gt;70% variance?
   │
@@ -599,7 +648,7 @@
 
   <!-- Section 6: המלצה -->
   <section class="section" id="recommendation">
-    <h2 class="section-heading"><span class="section-num">6</span> ההמלצה: גישת C</h2>
+    <h2 class="section-heading"><span class="section-num">7</span> ההמלצה: גישת C</h2>
 
     <div class="card green-highlight">
       <div class="card-title" style="color: var(--green);">
@@ -647,7 +696,7 @@
 
   <!-- Section 7: טיוטת מייל -->
   <section class="section" id="email">
-    <h2 class="section-heading"><span class="section-num">7</span> טיוטת מייל</h2>
+    <h2 class="section-heading"><span class="section-num">8</span> טיוטת מייל</h2>
 
     <div class="email-card">
       <div class="email-header">
@@ -681,6 +730,8 @@
           <li>Follow-up: t-tests נפרדים על כל PC</li>
         </ul>
         <p>הפיילוט מראה 55.7%+33.3%, כך שסביר שנלך על MANOVA — אבל הכלל מוגדר מראש לשני התרחישים.</p>
+
+        <p><strong>לגבי המרחק הסמנטי:</strong> אנחנו משתמשים ב-Topic Modeling (LDA + JSD) ולא ב-LSA. הסיבה: LSA מודד חפיפת מילים, בעוד LDA מודד מעבר בין נושאים — שזה בדיוק ההגדרה של explore בספרות (Zhou et al. 2024, Hart 2017). נבדוק רגישות ל-K (מספר הנושאים) כחלק מה-pre-registration.</p>
 
         <p><strong>הנימוק:</strong> גישה מבוססת-נתונים, עקבית עם Zhou et al. 2024, ללא בחירה post-hoc. כלל ההחלטה מוגדר מראש ב-pre-registration.</p>
 
