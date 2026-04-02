@@ -230,7 +230,7 @@
   }
 
   thead th {
-    background: #2d2a26;
+    background: var(--text);
     color: white;
     padding: 12px 16px;
     font-weight: 600;
@@ -401,22 +401,22 @@
 <nav>
   <div class="nav-inner">
     <a href="#intro">מבוא</a>
-    <span class="nav-sep">·</span>
+    <span class="nav-sep" aria-hidden="true">·</span>
     <a href="#metrics">מפת מדדים</a>
-    <span class="nav-sep">·</span>
+    <span class="nav-sep" aria-hidden="true">·</span>
     <a href="#problems">הבעיות</a>
-    <span class="nav-sep">·</span>
+    <span class="nav-sep" aria-hidden="true">·</span>
     <a href="#comparison">השוואת גישות</a>
-    <span class="nav-sep">·</span>
+    <span class="nav-sep" aria-hidden="true">·</span>
     <a href="#decision">קבלת החלטות</a>
-    <span class="nav-sep">·</span>
+    <span class="nav-sep" aria-hidden="true">·</span>
     <a href="#recommendation">המלצה</a>
-    <span class="nav-sep">·</span>
+    <span class="nav-sep" aria-hidden="true">·</span>
     <a href="#email">טיוטת מייל</a>
   </div>
 </nav>
 
-<div class="page-body">
+<main class="page-body">
 <div class="container">
 
   <header>
@@ -574,7 +574,7 @@
   <section class="section" id="decision">
     <h2 class="section-heading"><span class="section-num">5</span> מסגרת קבלת החלטות</h2>
 
-    <div class="flowchart">PC1 explains &gt;70% variance?
+    <div class="flowchart" lang="en">PC1 explains &gt;70% variance?
   │
   ├── YES → Use PC1 alone as DV
   │         (unified metric is legitimate)
@@ -676,7 +676,7 @@
   </section>
 
 </div>
-</div>
+</main>
 
 </body>
 </html>
