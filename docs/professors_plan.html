@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>תוכנית ניתוח — סיכום פגישה עם הפרופסורים</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --explore: #2b6cb0;
+    --exploit: #c05621;
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --text-secondary: #5a5a5a;
+    --border: #e8e5e1;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
+    --radius: 12px;
+    --green: #166534; --green-bg: #dcfce7; --green-border: #86efac;
+    --yellow: #854d0e; --yellow-bg: #fef9c3; --yellow-border: #fde047;
+    --red: #991b1b; --red-bg: #fee2e2; --red-border: #fca5a5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* Nav */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(250,250,249,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+  }
+
+  .nav-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 10px 0;
+    scrollbar-width: none;
+  }
+
+  .nav-inner::-webkit-scrollbar { display: none; }
+
+  .nav-inner a {
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    padding: 5px 12px;
+    border-radius: 20px;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .nav-inner a:hover {
+    background: #f0eee9;
+    color: var(--text);
+  }
+
+  .nav-sep {
+    color: var(--border);
+    font-size: 0.85rem;
+    user-select: none;
+  }
+
+  /* Layout */
+  .page-body {
+    padding: 40px 24px 80px;
+  }
+
+  .container {
+    max-width: 880px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 56px;
+    padding-bottom: 40px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  header h1 {
+    font-family: 'Rubik', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+  }
+
+  header .subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 64px;
+  }
+
+  .section-heading {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--text);
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .card:hover { box-shadow: var(--shadow-lg); }
+
+  .card-title {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card p {
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+  }
+
+  .card p:last-child { margin-bottom: 0; }
+
+  .card ul {
+    margin: 8px 0 0 0;
+    padding-right: 20px;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .card ul li { margin-bottom: 4px; }
+
+  .card ol {
+    margin: 8px 0 0 0;
+    padding-right: 20px;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .card ol li { margin-bottom: 6px; }
+
+  .card strong { color: var(--text); }
+
+  .card.green-highlight {
+    border: 1.5px solid var(--green-border);
+    background: #f0fdf4;
+  }
+
+  .card.red-highlight {
+    border: 1.5px solid var(--red-border);
+    background: #fff5f5;
+  }
+
+  /* Badges */
+  .badge {
+    display: inline-block;
+    font-size: 0.73rem;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .badge-green {
+    background: var(--green-bg);
+    color: var(--green);
+    border: 1px solid var(--green-border);
+  }
+
+  .badge-yellow {
+    background: var(--yellow-bg);
+    color: var(--yellow);
+    border: 1px solid var(--yellow-border);
+  }
+
+  .badge-red {
+    background: var(--red-bg);
+    color: var(--red);
+    border: 1px solid var(--red-border);
+  }
+
+  /* Tables */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    font-size: 0.9rem;
+  }
+
+  thead th {
+    background: var(--text);
+    color: white;
+    padding: 12px 16px;
+    font-weight: 600;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    text-align: right;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(even) td { background: #f7f6f4; }
+
+  tbody tr.row-highlight td {
+    background: #f0fdf4 !important;
+    font-weight: 500;
+  }
+
+  /* Code / tree block */
+  .flowchart {
+    direction: ltr;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 24px 28px;
+    border-radius: var(--radius);
+    line-height: 1.6;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    white-space: pre;
+  }
+
+  /* Sub-heading inside card */
+  .sub-heading {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin: 16px 0 8px;
+    color: var(--text);
+  }
+
+  /* Callout / blockquote */
+  .callout {
+    background: #f4f3f1;
+    border-right: 4px solid var(--border);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+  }
+
+  .callout strong { color: var(--text); }
+
+  /* PCA result stat */
+  .pca-stats {
+    display: flex;
+    gap: 20px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  .pca-stat {
+    flex: 1;
+    min-width: 160px;
+    background: white;
+    border: 1px solid var(--green-border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    text-align: center;
+  }
+
+  .pca-stat .pct {
+    font-family: 'Rubik', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--green);
+    line-height: 1.1;
+  }
+
+  .pca-stat .label {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+
+  /* Print */
+  @media print {
+    nav { display: none; }
+    .card, .table-wrap { box-shadow: none; }
+    body { background: white; }
+    .flowchart { background: #f5f5f5; color: #333; border: 1px solid #ccc; }
+  }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.6rem; }
+    .section-heading { font-size: 1.2rem; }
+    .pca-stats { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#structure">מבנה כללי</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#semantic">סמנטיקה</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#time">זמן</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#typepaste">Type/Paste</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#combined">משולבים</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#pca">PCA</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#status">סטטוס</a>
+  </div>
+</nav>
+
+<div class="page-body">
+<div class="container">
+
+<header>
+  <h1>תוכנית ניתוח</h1>
+  <div class="subtitle">סיכום פגישה עם הפרופסורים · 31.03.2026</div>
+</header>
+
+<!-- SECTION 1: מבנה כללי -->
+<section class="section" id="structure">
+  <h2 class="section-heading">
+    <span class="section-num">1</span>
+    מבנה כללי
+  </h2>
+
+  <div class="card">
+    <p>שלושה <strong>צירי ניתוח בסיסיים</strong> שכל אחד מסווג כל דף כ-Explore או Exploit,
+    ואז <strong>שילובים</strong> בין ציר הסמנטיקה לכל ציר אחר, ו-<strong>PCA</strong> מעל הכל.</p>
+  </div>
+
+  <div class="flowchart">PCA (מימד אחד)
+├── ציר 1 — סמנטיקה
+│   ├── 1.א. Topic Modeling
+│   └── 1.ב. ניתוח רגיל (LSA / LCA)
+├── ציר 2 — זמן
+│   ├── 2.א. Median פר נבדק
+│   └── 2.ב. סף 60 שניות (M2)
+├── ציר 3 — Type / Paste
+│   ├── 3.א. Typing vs Pasting (M4)
+│   └── 3.ב. בינארי — יש/אין כתיבה (M18)
+└── ציר 4 — מדדים משולבים
+    ├── 4.א. סמנטיקה (1.ב.) + Median זמן (2.א.) → M27
+    ├── 4.ב. סמנטיקה (1.ב.) + 60s (2.ב.) → M28
+    └── 4.ג. סמנטיקה (1.ב.) + Type/Paste (3.ב.) → M20</div>
+</section>
+
+<!-- SECTION 2: ציר 1 — ניתוח סמנטי -->
+<section class="section" id="semantic">
+  <h2 class="section-heading">
+    <span class="section-num">2</span>
+    ציר 1 — ניתוח סמנטי
+  </h2>
+
+  <div class="card">
+    <div class="card-title">
+      1.א. Topic Modeling
+    </div>
+    <p><strong>שיטה:</strong> LDA או BERTopic על קורפוס המאמרים (<code>wiki_texts.json</code>)</p>
+    <p><strong>מטרה:</strong> לגלות נושאים סמויים (latent topics) ולסווג מעברים בין דפים לפי מרחק נושאי</p>
+    <p><strong>סיווג:</strong> מעבר לנושא שונה = Explore, אותו נושא = Exploit</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      1.ב. ניתוח סמנטי רגיל (LSA / LCA)
+    </div>
+    <p><strong>שיטה:</strong> Latent Semantic Analysis — הפחתת מימדים על TF-IDF ומדידת cosine distance</p>
+    <p><strong>מטרה:</strong> סיווג מעברים לפי דמיון סמנטי בין מאמרים</p>
+    <p><strong>סיווג:</strong> דמיון גבוה (מרחק נמוך) = Exploit, דמיון נמוך (מרחק גבוה) = Explore</p>
+    <p><strong>סטטוס:</strong> כנראה מכוסה ע"י M16 — צריך לוודא</p>
+  </div>
+</section>
+
+<!-- SECTION 3: ציר 2 — ניתוח זמן -->
+<section class="section" id="time">
+  <h2 class="section-heading">
+    <span class="section-num">3</span>
+    ציר 2 — ניתוח זמן
+  </h2>
+
+  <div class="card">
+    <div class="card-title">
+      2.א. Median פר נבדק
+    </div>
+    <p><strong>שיטה:</strong> לכל נבדק, לחשב את ה-Median של זמן שהייה בדפים שלו</p>
+    <p><strong>סיווג:</strong> דף מעל ה-Median האישי = Exploit, מתחת = Explore</p>
+    <p><strong>סטטוס:</strong> M15 עושה Median-based — לוודא שזה Median פר נבדק ולא גלובלי</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      2.ב. סף 60 שניות — תרשים M2
+    </div>
+    <p><strong>שיטה:</strong> סף קשיח של 60 שניות</p>
+    <p><strong>סיווג:</strong> דף מעל 60 שניות = Exploit, מתחת = Explore</p>
+    <p><strong>סטטוס:</strong> <span class="badge badge-green">✅ M2 קיים</span></p>
+  </div>
+</section>
+
+<!-- SECTION 4: ציר 3 — Type / Paste -->
+<section class="section" id="typepaste">
+  <h2 class="section-heading">
+    <span class="section-num">4</span>
+    ציר 3 — ניתוח Type / Paste
+  </h2>
+
+  <div class="card">
+    <div class="card-title">
+      3.א. תרשים M4
+    </div>
+    <p><strong>שיטה:</strong> ניתוח מפורט של typing vs. pasting — הבחנה בין כתיבה ידנית להדבקה</p>
+    <p><strong>סטטוס:</strong> <span class="badge badge-green">✅ M4 קיים</span></p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      3.ב. תרשים M18
+    </div>
+    <p><strong>שיטה:</strong> סיווג בינארי — אם הייתה כל פעילות typing או paste בדף = Exploit</p>
+    <p><strong>סטטוס:</strong> <span class="badge badge-green">✅ M18 קיים</span></p>
+  </div>
+</section>
+
+<!-- SECTION 5: ציר 4 — מדדים משולבים -->
+<section class="section" id="combined">
+  <h2 class="section-heading">
+    <span class="section-num">5</span>
+    ציר 4 — מדדים משולבים
+  </h2>
+
+  <div class="card">
+    <p>כל מדד משולב לוקח את <strong>ציר הסמנטיקה (1.ב.)</strong> ומשלב עם ציר נוסף.
+    דף מסווג כ-Exploit רק אם <strong>שני הצירים</strong> מצביעים על Exploit.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      4.א. סמנטיקה + Median זמן — תרשים M27
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ציר</th>
+            <th>תנאי ל-Exploit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>סמנטיקה (1.ב.)</td>
+            <td>מרחק cosine נמוך (מתחת ל-Median של הדומיין)</td>
+          </tr>
+          <tr>
+            <td>זמן (2.א.)</td>
+            <td>זמן בדף מעל Median האישי</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>סטטוס:</strong> <span class="badge badge-red">❌ צריך לבנות</span> — M20 מסווג דפים לפי typing/paste, לא לפי זמן!</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      4.ב. סמנטיקה + 60 שניות — תרשים M28
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ציר</th>
+            <th>תנאי ל-Exploit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>סמנטיקה (1.ב.)</td>
+            <td>מרחק cosine נמוך</td>
+          </tr>
+          <tr>
+            <td>זמן (2.ב.)</td>
+            <td>זמן בדף מעל 60 שניות</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>סטטוס:</strong> <span class="badge badge-red">❌ צריך לבנות</span></p>
+  </div>
+
+  <div class="card green-highlight">
+    <div class="card-title">
+      4.ג. סמנטיקה + Type/Paste — תרשים M20
+      <span class="badge badge-green">✅ קיים</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ציר</th>
+            <th>תנאי ל-Exploit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>סמנטיקה (1.ב.)</td>
+            <td>מרחק cosine נמוך</td>
+          </tr>
+          <tr>
+            <td>Type/Paste (3.ב.)</td>
+            <td>יש פעילות כתיבה/הדבקה בדף</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>זה בדיוק מה ש-M20 עושה!</p>
+  </div>
+</section>
+
+<!-- SECTION 6: PCA -->
+<section class="section" id="pca">
+  <h2 class="section-heading">
+    <span class="section-num">6</span>
+    PCA — מעל הכל
+  </h2>
+
+  <div class="card">
+    <div class="card-title">מטרה</div>
+    <p>למצוא <strong>מדד אחד רציף</strong> שמצביע האם היוזר ב-Explore או Exploit בכל ביקור בדף.</p>
+  </div>
+
+  <div class="card red-highlight">
+    <div class="card-title">
+      <span class="badge badge-red">בעייתי</span>
+      למה לא PCA על הסיווגים הבינאריים?
+    </div>
+    <p>הרעיון המקורי היה להריץ PCA על כל הסיווגים (Explore/Exploit) מכל המדדים. <strong>זה בעייתי</strong> מ-3 סיבות:</p>
+    <ol>
+      <li><strong>מעגליות</strong> — המדדים המשולבים (4.א–4.ג) בנויים מהמדדים הבסיסיים (1.ב, 2.א, 3.ב).
+      הם מתואמים בהכרח — זה לא גילוי, זה ארטיפקט של הבנייה.</li>
+      <li><strong>PCA על בינאריים</strong> — PCA מניח משתנים רציפים ונורמליים.
+      על 0/1 הוא יתכנס על המקרים ה"קלים" (שבהם כולם מסכימים) ויתעלם מהמקרים המעניינים.</li>
+      <li><strong>לא עונה על השאלה</strong> — השאלה "האם Explore/Exploit חד-ממדי?" היא שאלה של
+      construct validity. PCA על סיווגים מוכנים לא מספק ראיה לכך.</li>
+    </ol>
+  </div>
+
+  <div class="card green-highlight">
+    <div class="card-title">
+      <span class="badge badge-green">הגישה הנכונה</span>
+      PCA על האותות הגולמיים
+    </div>
+    <p>במקום PCA על סיווגים, מריצים PCA על <strong>האותות הרציפים</strong> שמהם הסיווגים נגזרים.
+    כל שורה = ביקור בדף אחד. <strong>3 עמודות — אחת מכל ציר:</strong></p>
+    <div class="table-wrap" style="margin-top:14px;">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>משתנה</th>
+            <th>מקור</th>
+            <th>סוג</th>
+            <th>Exploit ←</th>
+            <th>→ Explore</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>זמן שהייה בדף</td>
+            <td>שניות גולמיות</td>
+            <td>רציף</td>
+            <td>ארוך</td>
+            <td>קצר</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>מרחק סמנטי מהדף הקודם</td>
+            <td>מרחק נושאי — Topic Modeling (1.א.)</td>
+            <td>רציף</td>
+            <td>נמוך (אותו נושא)</td>
+            <td>גבוה (נושא שונה)</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>כמות כתיבה/הדבקה</td>
+            <td>מספר אירועי paste + אורך טקסט (לא בינארי!)</td>
+            <td>רציף</td>
+            <td>הרבה</td>
+            <td>כלום</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <strong>הערה חשובה:</strong> M18 הוא בינארי (0/1) ולא מתאים ל-PCA ישירות.
+      צריך להשתמש בגרסה <strong>רציפה</strong> — למשל: מספר אירועי paste, אורך טקסט שהוקלד,
+      או אחוז הזמן בדף שבו הייתה כתיבה.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">למה Topic Modeling ולא LSA?</div>
+    <ul>
+      <li><strong>Topic Modeling</strong> מודד מרחק <strong>נושאי</strong> — "עבר מנושא אחר לנושא אחר". זה מתמפה ישירות לקונספט של Explore בספרות הקוגניטיבית.</li>
+      <li><strong>LSA</strong> מודד דמיון מילים ברמת פני השטח — שני מאמרים יכולים לעסוק באותו נושא אבל להשתמש במילים שונות, ו-LSA יחשוב שהם רחוקים.</li>
+    </ul>
+    <p style="margin-top:10px;">את ההשוואה בין שתי השיטות עושים בנפרד (ציר 1).</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">מה מצפים למצוא</div>
+    <ul>
+      <li><strong>PC1 מסביר &gt;60% מהשונות + loadings הגיוניים</strong> → Explore/Exploit הוא מימד אחד.
+      ה-PC1 score של כל ביקור בדף הוא המדד המשולב.</li>
+      <li><strong>PC1 מסביר ~40%</strong> → Explore/Exploit לא חד-ממדי לגמרי.
+      הצירים חלקית בלתי תלויים — וזה ממצא מעניין בפני עצמו.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">פלט צפוי</div>
+    <ol>
+      <li><strong>Scree plot</strong> — כמה שונות כל PC מסביר</li>
+      <li><strong>Biplot</strong> — חצים של 4 המשתנים על PC1 × PC2</li>
+      <li><strong>PC1 score per page visit</strong> — ציון רציף Explore↔Exploit לכל ביקור</li>
+      <li><strong>טבלת loadings</strong> — משקל כל משתנה על PC1</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="card-title">אלטרנטיבה מתקדמת — HMM</div>
+    <p>Hidden Markov Model הוא ה-gold standard בקוגניציה למודל Explore/Exploit:</p>
+    <ul>
+      <li>מודל את המעברים <strong>בזמן</strong> בין מצבים (לא רק כל דף בנפרד)</li>
+      <li>מאפשר מצבים סמויים (latent states) שנובעים מ-3 האותות</li>
+      <li>נותן <strong>הסתברות</strong> להיות ב-Explore/Exploit בכל רגע</li>
+    </ul>
+    <p style="margin-top:10px;">זה שלב מתקדם — PCA על האותות הגולמיים הוא נקודת התחלה מספיקה למאמר.</p>
+  </div>
+
+  <div class="card green-highlight">
+    <div class="card-title">
+      <span class="badge badge-green">✅ M29 — ממומש</span>
+      תוצאות ראשוניות
+    </div>
+    <div class="pca-stats">
+      <div class="pca-stat">
+        <div class="pct">55.7%</div>
+        <div class="label">PC1 — זמן שהייה + כתיבה<br>("ציר מעורבות")</div>
+      </div>
+      <div class="pca-stat">
+        <div class="pct">33.3%</div>
+        <div class="label">PC2 — מרחק נושאי<br>("ציר חקירה סמנטית")</div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:16px;">
+      <strong>משמעות:</strong> Explore/Exploit לא חד-ממדי לגמרי — הציר הסמנטי חלקית בלתי תלוי מציר הזמן/כתיבה.
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 7: סיכום סטטוס -->
+<section class="section" id="status">
+  <h2 class="section-heading">
+    <span class="section-num">7</span>
+    סיכום סטטוס
+  </h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>ניתוח</th>
+          <th>תרשים</th>
+          <th>סטטוס</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row-highlight">
+          <td>PCA</td>
+          <td>PCA על 3 אותות גולמיים</td>
+          <td>M29</td>
+          <td><span class="badge badge-green">✅ קיים</span></td>
+        </tr>
+        <tr class="row-highlight">
+          <td>1.א</td>
+          <td>Topic Modeling</td>
+          <td>M26</td>
+          <td><span class="badge badge-green">✅ קיים</span></td>
+        </tr>
+        <tr class="row-highlight">
+          <td>1.ב</td>
+          <td>LSA סמנטי</td>
+          <td>M16</td>
+          <td><span class="badge badge-green">✅ קיים</span></td>
+        </tr>
+        <tr class="row-highlight">
+          <td>2.א</td>
+          <td>Median פר נבדק (פר trial)</td>
+          <td>M15</td>
+          <td><span class="badge badge-green">✅ קיים</span></td>
+        </tr>
+        <tr class="row-highlight">
+          <td>2.ב</td>
+          <td>סף 60 שניות</td>
+          <td>M2</td>
+          <td><span class="badge badge-green">✅ קיים</span></td>
+        </tr>
+        <tr class="row-highlight">
+          <td>3.א</td>
+          <td>Type vs Paste</td>
+          <td>M4</td>
+          <td><span class="badge badge-green">✅ קיים</span></td>
+        </tr>
+        <tr class="row-highlight">
+          <td>3.ב</td>
+          <td>בינארי Type/Paste</td>
+          <td>M18</td>
+          <td><span class="badge badge-green">✅ קיים</span></td>
+        </tr>
+        <tr class="row-highlight">
+          <td>4.א</td>
+          <td>סמנטיקה + Median זמן</td>
+          <td>M27</td>
+          <td><span class="badge badge-green">✅ קיים</span></td>
+        </tr>
+        <tr class="row-highlight">
+          <td>4.ב</td>
+          <td>סמנטיקה + 60s</td>
+          <td>M28</td>
+          <td><span class="badge badge-green">✅ קיים</span></td>
+        </tr>
+        <tr class="row-highlight">
+          <td>4.ג</td>
+          <td>סמנטיקה + Type/Paste</td>
+          <td>M20</td>
+          <td><span class="badge badge-green">✅ קיים</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</div><!-- .container -->
+</div><!-- .page-body -->
+
+</body>
+</html>
