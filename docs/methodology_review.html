@@ -614,6 +614,19 @@
         <li>Follow-up: t-tests נפרדים על כל PC לצורך פרשנות</li>
       </ol>
 
+      <p class="sub-heading">כלל החלטה מוגדר מראש (pre-specified decision rule)</p>
+      <div class="card" style="margin: 12px 0; background: #fffbeb; border-color: var(--yellow-border);">
+        <ul style="margin:0;">
+          <li><strong>אם PC1 מסביר &gt;70% מהשונות</strong> → DV יחיד (PC1), independent samples t-test</li>
+          <li><strong>אם PC1 + PC2 מסבירים יחד &gt;80% ושניהם משמעותיים</strong> → שני DVs, MANOVA</li>
+        </ul>
+        <p style="margin-top:8px; color: var(--text-secondary); font-size:0.9rem;">
+          הפיילוט מראה PC1=55.7%, PC2=33.3% — כלומר סביר שנגיע לנתיב ה-MANOVA.
+          אבל אם הנתונים החדשים יראו PC1&gt;70%, הכלל מוגדר מראש ואנחנו מכוסים.
+          שני הנתיבים לגיטימיים — אין בחירה post-hoc.
+        </p>
+      </div>
+
       <p class="sub-heading">איך זה פותר את הוויכוח</p>
       <div class="advisors">
         <div class="advisor-block">
@@ -660,13 +673,16 @@
           <li>PC2 = 33.3% מהשונות — ציר semantic breadth (סמנטיקה)</li>
         </ul>
 
-        <p><strong>המלצתי:</strong> MANOVA עם PC1 ו-PC2 כ-DVs ותנאי ניסויי כ-IV, לפי תכנית הניתוח הבאה:</p>
+        <p><strong>המלצתי:</strong> PCA על 3 אותות גולמיים, עם כלל החלטה מוגדר מראש:</p>
         <ul>
-          <li>חילוץ 3 אותות גולמיים → PCA → ציון פר נבדק</li>
-          <li>MANOVA ראשי + t-tests follow-up על כל PC</li>
+          <li>חילוץ 3 אותות גולמיים → PCA → ציון ממוצע פר נבדק</li>
+          <li>אם PC1 &gt; 70% שונות → t-test עם PC1 כ-DV יחיד</li>
+          <li>אם PC1 + PC2 שניהם משמעותיים → MANOVA עם שניהם כ-DVs</li>
+          <li>Follow-up: t-tests נפרדים על כל PC</li>
         </ul>
+        <p>הפיילוט מראה 55.7%+33.3%, כך שסביר שנלך על MANOVA — אבל הכלל מוגדר מראש לשני התרחישים.</p>
 
-        <p><strong>הנימוק:</strong> גישה זו מבוססת-נתונים, עקבית עם Zhou et al. 2024 שתיארו explore/exploit כרב-ממדי, ומשחררת אותנו מהצורך לבחור משקלות שרירותיות.</p>
+        <p><strong>הנימוק:</strong> גישה מבוססת-נתונים, עקבית עם Zhou et al. 2024, ללא בחירה post-hoc. כלל ההחלטה מוגדר מראש ב-pre-registration.</p>
 
         <p><strong>הצעד הבא:</strong> אם מסכימים, אגיש את ה-pre-registration עם תכנית ניתוח זו.</p>
 
