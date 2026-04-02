@@ -24,6 +24,8 @@
     --purple: #5b21b6; --purple-bg: #ede9fe; --purple-border: #c4b5fd;
   }
 
+  [lang="en"] { direction: ltr; unicode-bidi: isolate; }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
@@ -471,7 +473,7 @@
 
     <div class="card">
       <p class="card-title">מה רואים</p>
-      <p>3 עמודות — כמה שונות <span lang="en">(variance)</span> כל מימד מסביר.</p>
+      <p>3 עמודות — כמה שונות (variance) כל מימד מסביר.</p>
     </div>
 
     <div class="card">
@@ -520,9 +522,9 @@
     <div class="card">
       <p class="card-title">מה רואים</p>
       <p>
-        כל נקודה = ביקור בדף אחד. צבע = דומיין
-        (ורוד = <span lang="en">art_history</span>, ירוק = <span lang="en">ecology</span>,
-        סגול = <span lang="en">psychology</span>, כתום = <span lang="en">economics</span>).
+        כל נקודה = ביקור בדף אחד. צבע = דומיין:
+        ורוד = art_history, ירוק = ecology,
+        סגול = psychology, כתום = economics.
         חצים כתומים = כיוון המשתנים המקוריים.
       </p>
     </div>
@@ -531,11 +533,11 @@
       <p class="card-title">הצירים</p>
       <ul>
         <li>
-          <strong>ציר X (<span lang="en">PC1 — Engagement</span>, 55.7%):</strong>
+          <strong><span lang="en">PC1 — Engagement</span> ,ציר X, מסביר 55.7%:</strong>
           ימינה = זמן ארוך + כתיבה רבה. שמאלה = גלישה מהירה ללא כתיבה.
         </li>
         <li>
-          <strong>ציר Y (<span lang="en">PC2 — Semantic Breadth</span>, 33.3%):</strong>
+          <strong><span lang="en">PC2 — Semantic Breadth</span> ,ציר Y, מסביר 33.3%:</strong>
           למעלה = קפיצה לנושא שונה. למטה = אותו נושא.
         </li>
       </ul>
@@ -572,11 +574,11 @@
       <p class="card-title">איך קוראים את החצים</p>
       <ul>
         <li>
-          "<span lang="en">Time on page</span>" ו-"<span lang="en">Writing amount</span>"
+          החצים <span lang="en">Time on page</span> ו-<span lang="en">Writing amount</span>
           מצביעים לאותו כיוון (ימינה) — הם מתואמים. מי שמבלה זמן רב גם כותב הרבה.
         </li>
         <li>
-          "<span lang="en">Topic distance</span>" מצביע למעלה, <strong>בניצב</strong>
+          החץ <span lang="en">Topic distance</span> מצביע למעלה, <strong>בניצב</strong>
           לשני האחרים — הציר הסמנטי <strong>בלתי תלוי</strong> מציר המעורבות.
         </li>
       </ul>
@@ -586,13 +588,13 @@
       <p class="card-title">מסקנות</p>
       <ol class="conclusion-list">
         <li>
-          אפשר לבלות זמן רב בדף (<span lang="en">exploit</span> מבחינת <span lang="en">engagement</span>)
-          אבל עדיין לקפוץ בין נושאים רחוקים (<span lang="en">explore</span> מבחינה סמנטית) — ולהפך.
+          אפשר לבלות זמן רב בדף (exploit מבחינת engagement)
+          אבל עדיין לקפוץ בין נושאים רחוקים (explore מבחינה סמנטית) — ולהפך.
         </li>
         <li>
           יש פיזור שונה בין דומיינים —
-          <span lang="en">economics</span> (כתום) נוטה להתרכז,
-          <span lang="en">ecology</span> (ירוק) מפוזר יותר.
+          economics (כתום) נוטה להתרכז,
+          ecology (ירוק) מפוזר יותר.
         </li>
       </ol>
     </div>
@@ -654,8 +656,8 @@
         </li>
         <li>
           <strong>רוב הנבדקים</strong> נמצאים באזור שמאל-מרכז
-          (<span lang="en">engagement</span> בינוני-נמוך) עם פיזור ב-Y
-          (חלקם חוקרים נושאים שונים, חלקם נשארים בנושא).
+          (engagement בינוני-נמוך) עם פיזור ב-Y —
+          חלקם חוקרים נושאים שונים, חלקם נשארים בנושא.
         </li>
         <li>
           <strong>נבדקים עם אליפסות צרות</strong> — אסטרטגיה עקבית,
@@ -663,7 +665,7 @@
         </li>
         <li>
           <strong>נבדקים עם אליפסות רחבות</strong> — מחליפים בין
-          <span lang="en">explore</span> ו-<span lang="en">exploit</span>,
+          explore ו-exploit,
           אולי מתאימים אסטרטגיה למשימה.
         </li>
       </ol>
@@ -703,14 +705,13 @@
       <p class="card-title">הסיפור בשלוש משפטים</p>
       <ol class="story-list">
         <li>
-          <span lang="en">Explore/Exploit</span> בוויקיפדיה הוא לא מימד יחיד —
+          Explore/Exploit בוויקיפדיה הוא לא מימד יחיד —
           יש ציר מעורבות (זמן + כתיבה) וציר חקירה סמנטית (מרחק נושאי),
           והם חלקית בלתי תלויים.
         </li>
         <li>
-          אפשר להיות "<span lang="en">exploiter</span>" מבחינת
-          <span lang="en">engagement</span> אבל "<span lang="en">explorer</span>"
-          מבחינה סמנטית — לכתוב הרבה תוך כדי קפיצה בין נושאים.
+          אפשר להיות exploiter מבחינת engagement
+          אבל explorer מבחינה סמנטית — לכתוב הרבה תוך כדי קפיצה בין נושאים.
         </li>
         <li>
           יש הבדלים אינדיבידואליים משמעותיים —
