@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>סקירה מתודולוגית — מדד Explore/Exploit</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --explore: #2b6cb0;
+    --exploit: #c05621;
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --text-secondary: #5a5a5a;
+    --border: #e8e5e1;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
+    --radius: 12px;
+    --green: #166534; --green-bg: #dcfce7; --green-border: #86efac;
+    --yellow: #854d0e; --yellow-bg: #fef9c3; --yellow-border: #fde047;
+    --red: #991b1b; --red-bg: #fee2e2; --red-border: #fca5a5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* Nav */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(250,250,249,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+  }
+
+  .nav-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 10px 0;
+    scrollbar-width: none;
+  }
+
+  .nav-inner::-webkit-scrollbar { display: none; }
+
+  .nav-inner a {
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    padding: 5px 12px;
+    border-radius: 20px;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .nav-inner a:hover {
+    background: #f0eee9;
+    color: var(--text);
+  }
+
+  .nav-sep {
+    color: var(--border);
+    font-size: 0.85rem;
+    user-select: none;
+  }
+
+  /* Layout */
+  .page-body {
+    padding: 40px 24px 80px;
+  }
+
+  .container {
+    max-width: 880px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 56px;
+    padding-bottom: 40px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  header h1 {
+    font-family: 'Rubik', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+  }
+
+  header .subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 64px;
+  }
+
+  .section-heading {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--text);
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .card:hover { box-shadow: var(--shadow-lg); }
+
+  .card-title {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card p {
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+  }
+
+  .card p:last-child { margin-bottom: 0; }
+
+  .card ul {
+    margin: 8px 0 0 0;
+    padding-right: 20px;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .card ul li { margin-bottom: 4px; }
+
+  .card.green-highlight {
+    border: 1.5px solid var(--green-border);
+    background: #f0fdf4;
+  }
+
+  /* Badges */
+  .badge {
+    display: inline-block;
+    font-size: 0.73rem;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .badge-green {
+    background: var(--green-bg);
+    color: var(--green);
+    border: 1px solid var(--green-border);
+  }
+
+  .badge-yellow {
+    background: var(--yellow-bg);
+    color: var(--yellow);
+    border: 1px solid var(--yellow-border);
+  }
+
+  .badge-red {
+    background: var(--red-bg);
+    color: var(--red);
+    border: 1px solid var(--red-border);
+  }
+
+  /* Tables */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    font-size: 0.9rem;
+  }
+
+  thead th {
+    background: #2d2a26;
+    color: white;
+    padding: 12px 16px;
+    font-weight: 600;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    text-align: right;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(even) td { background: #f7f6f4; }
+
+  tbody tr.row-highlight td {
+    background: #f0fdf4 !important;
+    font-weight: 500;
+  }
+
+  /* Flowchart */
+  .flowchart {
+    direction: ltr;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 24px 28px;
+    border-radius: var(--radius);
+    line-height: 1.6;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    white-space: pre;
+  }
+
+  /* Numbered steps */
+  .steps {
+    counter-reset: steps;
+    padding: 0;
+    list-style: none;
+  }
+
+  .steps li {
+    counter-increment: steps;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+  }
+
+  .steps li::before {
+    content: counter(steps);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--explore);
+    color: white;
+    font-size: 0.78rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Advisor blocks */
+  .advisors {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-top: 20px;
+  }
+
+  .advisor-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    font-size: 0.88rem;
+  }
+
+  .advisor-name {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 600;
+    font-size: 0.92rem;
+    margin-bottom: 6px;
+    color: var(--explore);
+  }
+
+  .advisor-block p { color: var(--text-secondary); margin: 0; }
+
+  /* Sub-heading inside card */
+  .sub-heading {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin: 16px 0 8px;
+    color: var(--text);
+  }
+
+  /* Email card */
+  .email-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .email-header {
+    background: #f4f3f1;
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+  }
+
+  .email-meta {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.9;
+  }
+
+  .email-meta strong {
+    color: var(--text);
+    font-weight: 600;
+    display: inline-block;
+    min-width: 60px;
+  }
+
+  .email-body {
+    padding: 24px 28px;
+    font-size: 0.93rem;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  .email-body p { margin-bottom: 10px; }
+  .email-body p:last-child { margin-bottom: 0; }
+
+  .email-body ul {
+    margin: 6px 0 10px 0;
+    padding-right: 20px;
+    color: var(--text-secondary);
+  }
+
+  .email-body ul li { margin-bottom: 3px; }
+
+  /* Print */
+  @media print {
+    nav { display: none; }
+    .card, .email-card, .table-wrap { box-shadow: none; }
+    body { background: white; }
+    .flowchart { background: #f5f5f5; color: #333; border: 1px solid #ccc; }
+  }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.6rem; }
+    .section-heading { font-size: 1.2rem; }
+    .advisors { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#intro">מבוא</a>
+    <span class="nav-sep">·</span>
+    <a href="#metrics">מפת מדדים</a>
+    <span class="nav-sep">·</span>
+    <a href="#problems">הבעיות</a>
+    <span class="nav-sep">·</span>
+    <a href="#comparison">השוואת גישות</a>
+    <span class="nav-sep">·</span>
+    <a href="#decision">קבלת החלטות</a>
+    <span class="nav-sep">·</span>
+    <a href="#recommendation">המלצה</a>
+    <span class="nav-sep">·</span>
+    <a href="#email">טיוטת מייל</a>
+  </div>
+</nav>
+
+<div class="page-body">
+<div class="container">
+
+  <header>
+    <h1>סקירה מתודולוגית</h1>
+    <p class="subtitle">מדד Explore/Exploit למטלת הוויקיפדיה — ניתוח הבעיות והמלצה</p>
+  </header>
+
+  <!-- Section 1: מבוא -->
+  <section class="section" id="intro">
+    <h2 class="section-heading"><span class="section-num">1</span> מבוא</h2>
+    <div class="card">
+      <p>הפרויקט חוקר התנהגות explore/exploit בגלישה בוויקיפדיה. המשתתפים מבצעים משימת חיפוש מידע פתוחה, ואנו מנסים לכמת האם הם נוטים לחקור נושאים חדשים (explore) או להעמיק בנושא שכבר מוכר להם (exploit). שאלת המחקר הבסיסית היא האם מניפולציה ניסויית שנעשית לפני המטלה משנה את האיזון בין שתי האסטרטגיות הללו.</p>
+      <p>הניסוי הוא between-subjects: נבדקים מוקצים אקראית לתנאי ניסויי או ביקורת, עוברים מניפולציה, ואז מבצעים את מטלת הגלישה בוויקיפדיה. כל גלישה מתועדת ברמת הדף — זמן שהייה, תוכן סמנטי, ופעילות כתיבה.</p>
+      <p>הצורך בהגדרת משתנה תלוי (DV) ברורה נובע מדרישות ה-pre-registration: צריך להגדיר בדיוק מה מודדים לפני איסוף הנתונים. הבעיה היא שהיועצים חלוקים בדעותיהם לגבי הגישה הנכונה — שאלה שדורשת הכרעה מתודולוגית מנומקת.</p>
+    </div>
+  </section>
+
+  <!-- Section 2: מפת מדדים -->
+  <section class="section" id="metrics">
+    <h2 class="section-heading"><span class="section-num">2</span> מפת מדדים</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>שם מדד</th>
+            <th>מה מודד</th>
+            <th>סוג</th>
+            <th>ציר</th>
+            <th>סטטוס</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>M2</strong></td><td>סף 60 שניות</td><td>דף מעל 60s = Exploit</td><td>בינארי</td><td>זמן</td><td>✅</td></tr>
+          <tr><td><strong>M4</strong></td><td>Type vs Paste</td><td>הבחנה בין כתיבה להדבקה</td><td>קטגוריאלי</td><td>כתיבה</td><td>✅</td></tr>
+          <tr><td><strong>M15</strong></td><td>Median פר נבדק</td><td>דף מעל Median אישי = Exploit</td><td>בינארי</td><td>זמן</td><td>✅</td></tr>
+          <tr><td><strong>M16</strong></td><td>LSA סמנטי</td><td>מרחק cosine בין דפים (TF-IDF)</td><td>רציף</td><td>סמנטיקה</td><td>✅</td></tr>
+          <tr><td><strong>M18</strong></td><td>כתיבה בינארית</td><td>יש/אין כתיבה בדף</td><td>בינארי</td><td>כתיבה</td><td>✅</td></tr>
+          <tr><td><strong>M20</strong></td><td>LSA + Type/Paste</td><td>שילוב: סמנטיקה AND כתיבה</td><td>משולב</td><td>סמנטיקה+כתיבה</td><td>✅</td></tr>
+          <tr><td><strong>M26</strong></td><td>Topic Modeling</td><td>LDA — מרחק נושאי (JSD)</td><td>רציף</td><td>סמנטיקה</td><td>✅</td></tr>
+          <tr><td><strong>M27</strong></td><td>LSA + Median זמן</td><td>שילוב: סמנטיקה AND זמן-median</td><td>משולב</td><td>סמנטיקה+זמן</td><td>✅</td></tr>
+          <tr><td><strong>M28</strong></td><td>LSA + 60s</td><td>שילוב: סמנטיקה AND 60s</td><td>משולב</td><td>סמנטיקה+זמן</td><td>✅</td></tr>
+          <tr><td><strong>M29</strong></td><td>PCA גולמי</td><td>PCA על 3 אותות רציפים</td><td>רציף</td><td>PCA</td><td>✅</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section 3: הבעיות -->
+  <section class="section" id="problems">
+    <h2 class="section-heading"><span class="section-num">3</span> הבעיה: שלוש בעיות מתודולוגיות</h2>
+
+    <div class="card">
+      <div class="card-title">
+        שילוב שרירותי (M27, M28)
+        <span class="badge badge-red">בעייתי</span>
+      </div>
+      <ul>
+        <li>AND לוגי — Exploit מוגדר רק אם שני המדדים מסכימים בו-זמנית</li>
+        <li>אין הצדקה תיאורטית למשקל שווה בין הצירים (זמן = סמנטיקה?)</li>
+        <li>הסף שרירותי: למה 60 שניות? למה Median ולא ממוצע?</li>
+        <li>איבוד מידע מובנה: רציף → בינארי → שילוב AND → עוד יותר בינארי</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        PCA על סיווגים בינאריים
+        <span class="badge badge-red">בעייתי</span>
+      </div>
+      <ul>
+        <li>מעגליות — M27 ו-M28 בנויים מ-M2, M15, M16, M18; מתואמים בהכרח עם הרכיבים שלהם</li>
+        <li>PCA מניח משתנים רציפים ונורמליים — לא תואם לנתונים 0/1</li>
+        <li>לא עונה על שאלת construct validity: PCA מוצא מבנה, לא מאמת תיאוריה</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        PCA על אותות גולמיים — M29
+        <span class="badge badge-yellow">לגיטימי, אבל...</span>
+      </div>
+      <ul>
+        <li>תוצאה: PC1 = 55.7% (engagement), PC2 = 33.3% (semantic breadth)</li>
+        <li>שני מימדים משמעותיים — לא אחד; לא ניתן לתמצת ל-DV יחיד בלי לאבד מידע</li>
+        <li>הציר הסמנטי חלקית בלתי תלוי מציר ה-engagement — שניהם רלוונטיים</li>
+        <li><strong>זה לא כישלון — זה ממצא!</strong> עקבי עם Zhou et al. 2024, שמצאו ש-explore/exploit הוא רב-ממדי</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Section 4: השוואת גישות -->
+  <section class="section" id="comparison">
+    <h2 class="section-heading"><span class="section-num">4</span> השוואת גישות</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>גישה</th>
+            <th>יתרון</th>
+            <th>חסרון</th>
+            <th>מתאימה כש...</th>
+            <th>המלצה</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ממוצע פשוט</td>
+            <td>פשוט להסבר</td>
+            <td>שרירותי, מניח משקל שווה</td>
+            <td>יש הצדקה תיאורטית למשקל שווה</td>
+            <td><span class="badge badge-red">לא מומלץ</span></td>
+          </tr>
+          <tr>
+            <td>ממוצע משוקלל</td>
+            <td>גמיש</td>
+            <td>מאיפה המשקלות?</td>
+            <td>ידע מוקדם על חשיבות יחסית</td>
+            <td><span class="badge badge-yellow">מותנה</span></td>
+          </tr>
+          <tr>
+            <td>PC1 בלבד</td>
+            <td>מבוסס-נתונים, ציון אחד</td>
+            <td>מתעלם מ-33% שונות</td>
+            <td>PC1 מסביר &gt;70% שונות</td>
+            <td><span class="badge badge-yellow">מותנה</span></td>
+          </tr>
+          <tr class="row-highlight">
+            <td><strong>PCA — 2 DVs</strong></td>
+            <td>שומר על כל המידע, data-driven</td>
+            <td>דורש MANOVA, N גדול יותר</td>
+            <td>2+ PCs משמעותיים</td>
+            <td><span class="badge badge-green">מומלץ ←</span></td>
+          </tr>
+          <tr>
+            <td>Factor Analysis</td>
+            <td>מודל latent variable מפורש</td>
+            <td>דורש N גדול, הנחות חזקות</td>
+            <td>100+ observations</td>
+            <td><span class="badge badge-yellow">מותנה</span></td>
+          </tr>
+          <tr>
+            <td>מדד בודד מייצג</td>
+            <td>פשוט, שקוף</td>
+            <td>מתעלם מצירים אחרים</td>
+            <td>ציר אחד דומיננטי תיאורטית</td>
+            <td><span class="badge badge-yellow">מותנה</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section 5: מסגרת קבלת החלטות -->
+  <section class="section" id="decision">
+    <h2 class="section-heading"><span class="section-num">5</span> מסגרת קבלת החלטות</h2>
+
+    <div class="flowchart">PC1 explains &gt;70% variance?
+  │
+  ├── YES → Use PC1 alone as DV
+  │         (unified metric is legitimate)
+  │
+  └── NO  → Are PC1 + PC2 both significant?
+              │
+              ├── YES → MANOVA with 2 DVs     ◄── אתה כאן
+              │         (PC1=55.7%, PC2=33.3%)
+              │
+              └── NO  → Consider Factor Analysis
+                        or single representative metric</div>
+
+    <div class="card">
+      <div class="card-title">קריטריונים נוספים לשיקול</div>
+      <ul>
+        <li>מתאם גבוה בין האותות + בסיס תיאורטי מפורש → שילוב ממוצע אולי עובד</li>
+        <li>CFA (Confirmatory Factor Analysis) — לבדוק אם פקטור יחיד מתאים לנתונים</li>
+        <li>N קטן מדי ל-MANOVA → PC1 לבד כניתוח משני (sensitivity analysis)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Section 6: המלצה -->
+  <section class="section" id="recommendation">
+    <h2 class="section-heading"><span class="section-num">6</span> ההמלצה: גישת C</h2>
+
+    <div class="card green-highlight">
+      <div class="card-title" style="color: var(--green);">
+        תכנית ניתוח — 5 שלבים
+        <span class="badge badge-green">מומלץ</span>
+      </div>
+      <ol class="steps">
+        <li>חלץ 3 אותות גולמיים: זמן שהייה ממוצע לדף, מרחק נושאי JSD (LDA), כמות כתיבה</li>
+        <li>PCA על האותות לאחר standardization (z-score)</li>
+        <li>חשב ציון ממוצע PC1 ו-PC2 פר נבדק</li>
+        <li>MANOVA: תנאי ניסויי כ-IV, PC1 + PC2 כ-DVs</li>
+        <li>Follow-up: t-tests נפרדים על כל PC לצורך פרשנות</li>
+      </ol>
+
+      <p class="sub-heading">איך זה פותר את הוויכוח</p>
+      <div class="advisors">
+        <div class="advisor-block">
+          <div class="advisor-name">כנרת</div>
+          <p>analysis plan ברור ומוגדר מראש. PC1 ניתן להצגה כ"מדד engagement" — אינטואיטיבי להבנה.</p>
+        </div>
+        <div class="advisor-block">
+          <div class="advisor-name">יועד</div>
+          <p>אין שילוב שרירותי. PCA מגדיר את המשקלות מהנתונים עצמם. עקבי עם Zhou et al. 2024.</p>
+        </div>
+        <div class="advisor-block">
+          <div class="advisor-name">יובל</div>
+          <p>PC1 ממפה ל-explore/exploit dynamics. PC2 מוסיף ממד סמנטי — מעשיר את הפרשנות התיאורטית.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 7: טיוטת מייל -->
+  <section class="section" id="email">
+    <h2 class="section-heading"><span class="section-num">7</span> טיוטת מייל</h2>
+
+    <div class="email-card">
+      <div class="email-header">
+        <div class="email-meta">
+          <div><strong>נושא:</strong> עדכון מתודולוגי — מדד Explore/Exploit למטלת הוויקיפדיה</div>
+          <div><strong>אל:</strong> כנרת, יובל, יועד</div>
+        </div>
+      </div>
+      <div class="email-body">
+        <p>שלום כנרת, יובל ויועד,</p>
+
+        <p>רציתי לעדכן אתכם לגבי מדד ה-explore/exploit ולהגיע להסכמה לפני ה-pre-registration.</p>
+
+        <p><strong>הרקע:</strong> המחשבה המקורית הייתה לבנות מדד אחיד שמשלב מספר ממדים (זמן, סמנטיקה, כתיבה) לציון יחיד. זה נראה פשוט — אבל יצר בעיות מתודולוגיות שלא ראיתי מראש.</p>
+
+        <p><strong>מה נבנה:</strong> M27 ו-M28 הם שילובי AND לוגי (סמנטיקה AND זמן), ו-M29 מריץ PCA על שלושת האותות הגולמיים.</p>
+
+        <p><strong>הבעיה:</strong> השילוב הלוגי שרירותי — אין הצדקה למשקל שווה בין זמן לסמנטיקה, והספים (60 שניות, Median) לא מנומקים תיאורטית. ה-PCA, לעומת זאת, גילה שיש <em>שני</em> מימדים, לא אחד.</p>
+
+        <p><strong>ממצאי PCA (M29):</strong></p>
+        <ul>
+          <li>PC1 = 55.7% מהשונות — ציר engagement (זמן + כתיבה)</li>
+          <li>PC2 = 33.3% מהשונות — ציר semantic breadth (סמנטיקה)</li>
+        </ul>
+
+        <p><strong>המלצתי:</strong> MANOVA עם PC1 ו-PC2 כ-DVs ותנאי ניסויי כ-IV, לפי תכנית הניתוח הבאה:</p>
+        <ul>
+          <li>חילוץ 3 אותות גולמיים → PCA → ציון פר נבדק</li>
+          <li>MANOVA ראשי + t-tests follow-up על כל PC</li>
+        </ul>
+
+        <p><strong>הנימוק:</strong> גישה זו מבוססת-נתונים, עקבית עם Zhou et al. 2024 שתיארו explore/exploit כרב-ממדי, ומשחררת אותנו מהצורך לבחור משקלות שרירותיות.</p>
+
+        <p><strong>הצעד הבא:</strong> אם מסכימים, אגיש את ה-pre-registration עם תכנית ניתוח זו.</p>
+
+        <p>אשמח לשמוע את דעתכם — ואם יש הסתייגות כלשהי אעדיף לשמוע עכשיו.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</div>
+
+</body>
+</html>
