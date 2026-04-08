@@ -30,6 +30,7 @@ Interactive HTML guides — available online via GitHub Pages:
 | 📋 [Professors Plan](https://elay96.github.io/wikipedia-task-analysis-engine/docs/professors_plan.html) | Analysis plan from advisors meeting — 3 axes, combined measures, PCA on raw signals |
 | 📊 [PCA Charts Guide](https://elay96.github.io/wikipedia-task-analysis-engine/docs/pca_charts_guide.html) | How to read PCA charts M29–M32: scree plot, biplot, participant map, composite |
 | 📏 [Measures Guide](https://elay96.github.io/wikipedia-task-analysis-engine/docs/measures_guide.html) | Overview of measures M1–M9 |
+| 🔀 [Switch Rate Analysis](https://elay96.github.io/wikipedia-task-analysis-engine/docs/switch_rate_analysis.html) | Switch rate features (M34–M41): 3 signals, PCA attempts, composite score |
 
 ---
 
@@ -93,7 +94,18 @@ wikipedia-task-analysis-engine/
 │   ├── m30_pca_biplot.py               # Enhanced PCA biplot by domain
 │   ├── m31_participant_map.py          # Individual strategy map
 │   ├── m32_pca_composite.py            # Composite PCA summary
-│   └── m33_analysis_pipeline.excalidraw # 🔄 Analysis pipeline diagram
+│   ├── m33_analysis_pipeline.excalidraw # 🔄 Analysis pipeline diagram
+│   │
+│   │  # 🔀 Switch rate features & composite score
+│   ├── compute_bertopic.py             # BERTopic topic model
+│   ├── m34_switch_time.py              # Switch rate — time-based (60s threshold)
+│   ├── m35_switch_topic.py             # Switch rate — topic-based (BERTopic + LDA)
+│   ├── m36_switch_typing.py            # Switch rate — typing/paste binary
+│   ├── m37_pca_switch.py               # PCA per domain on 3 switch rates
+│   ├── m38_pca_avg_first.py            # PCA — average first, then PCA
+│   ├── m39_pca_pool_first.py           # PCA — pool first, then average
+│   ├── m40_pca_zscore.py               # PCA — z-scored
+│   └── m41_composite_avg.py            # Final composite: mean of 3 switch rates
 │
 ├── 📂 output/                  # 🖼️ Generated visualizations (.png)
 ├── 📂 docs/                    # 📄 HTML documentation & guides
@@ -153,6 +165,9 @@ The recommended approach (see [Methodology Review](https://elay96.github.io/wiki
 | M29 | 📐 PCA Raw | PCA on 3 raw continuous signals |
 | M30–M32 | 📊 PCA Viz | Biplot, participant map, composite |
 | M33 | 🔄 Pipeline | Analysis pipeline & decision framework diagram |
+| M34–M36 | 🔀 Switch Rate | 3 switch rate signals: time (60s), topic (LDA), typing |
+| M37–M40 | 📐 PCA Switch | PCA variants on switch rates (per-domain, pooled, z-scored) |
+| M41 | 🎯 Composite | Final composite switching score = mean of 3 switch rates |
 
 ---
 
