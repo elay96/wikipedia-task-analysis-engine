@@ -1,0 +1,9 @@
+pandas
+numpy
+matplotlib
+scikit-learn
+scipy
+bertopic
+sentence-transformers
+umap-learn
+hdbscan
