@@ -168,6 +168,38 @@ with open(out_path, 'w', encoding='utf-8') as f:
     json.dump(output_data, f, indent=2)
 print(f"\nSaved: {out_path}")
 
+# Save DBSCAN (eps=0.5, 7 clusters, 0 outliers - most practical config)
+dbscan_practical = [r for r in dbscan_results if r['eps'] == 0.5][0]
+dbscan_labels = dbscan_practical['labels']
+dbscan_assignments = {slug: int(label) for slug, label in zip(slugs, dbscan_labels)}
+dbscan_data = {
+    "method": "dbscan",
+    "eps": 0.5,
+    "n_clusters": dbscan_practical['n_clusters'],
+    "silhouette_score": float(dbscan_practical['silhouette']) if not np.isnan(dbscan_practical['silhouette']) else None,
+    "n_outliers": dbscan_practical['n_outliers'],
+    "slugs": sorted(slugs),
+    "topic_assignments": dbscan_assignments,
+}
+dbscan_path = DATA_DIR / 'bertopic_dbscan.json'
+with open(dbscan_path, 'w', encoding='utf-8') as f:
+    json.dump(dbscan_data, f, indent=2)
+print(f"Saved: {dbscan_path}")
+
+# Save Spectral + K-means
+spectral_assignments = {slug: int(label) for slug, label in zip(slugs, spectral_labels)}
+spectral_data = {
+    "method": "spectral_kmeans",
+    "n_clusters": int(optimal_k),
+    "silhouette_score": float(spectral_sil),
+    "slugs": sorted(slugs),
+    "topic_assignments": spectral_assignments,
+}
+spectral_path = DATA_DIR / 'bertopic_spectral.json'
+with open(spectral_path, 'w', encoding='utf-8') as f:
+    json.dump(spectral_data, f, indent=2)
+print(f"Saved: {spectral_path}")
+
 # ============================================================
 # Visualization
 # ============================================================
