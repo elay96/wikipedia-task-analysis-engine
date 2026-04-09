@@ -26,6 +26,12 @@ GRID_COLOR = '#21262d'
 BORDER_COLOR = '#30363d'
 MUTED_COLOR = '#8b949e'
 
+TOPIC_PALETTE = [
+    '#4FC3F7', '#81C784', '#FFB74D', '#F06292', '#CE93D8',
+    '#80DEEA', '#FFCC80', '#A5D6A7', '#EF9A9A', '#B0BEC5',
+    '#FFF176', '#90CAF9', '#C5E1A5', '#FFAB91', '#80CBC4',
+]
+
 # ============================================================
 # 1. Load data
 # ============================================================
@@ -296,4 +302,64 @@ viz_path = OUTPUT_DIR / 'bertopic_clustering_experiments.png'
 plt.savefig(viz_path, dpi=150, bbox_inches='tight', facecolor=BG_COLOR)
 plt.close()
 print(f"Saved: {viz_path}")
+
+# ============================================================
+# Per-method overview images (M43, M44, M45 style)
+# ============================================================
+method_configs = [
+    ('M43', 'K-means', f'k={optimal_k}, silhouette={optimal_sil:.3f}', kmeans_labels, optimal_k),
+    ('M44', 'DBSCAN', f'eps=0.5, {dbscan_practical["n_clusters"]} clusters, silhouette={dbscan_practical["silhouette"]:.3f}', np.array(dbscan_labels), dbscan_practical['n_clusters']),
+    ('M45', 'Spectral+K-means', f'k={optimal_k}, silhouette={spectral_sil:.3f}', spectral_labels, optimal_k),
+]
+
+for m_id, method_name, subtitle, labels_arr, n_clust in method_configs:
+    fig_m, (ax_umap, ax_sil) = plt.subplots(1, 2, figsize=(16, 6),
+        gridspec_kw={'width_ratios': [1.4, 1]})
+    fig_m.patch.set_facecolor(BG_COLOR)
+    fig_m.suptitle(
+        f'{m_id}: BERT {method_name} Clustering Overview\n{subtitle}',
+        color=TEXT_COLOR, fontsize=14, fontweight='bold', y=1.02,
+    )
+
+    # UMAP 2D colored by clusters
+    ax_umap.set_facecolor(BG_COLOR)
+    unique_labels = sorted(set(labels_arr))
+    for label in unique_labels:
+        mask = labels_arr == label
+        color = TOPIC_PALETTE[label % len(TOPIC_PALETTE)] if label >= 0 else '#555555'
+        name = f'Cluster {label}' if label >= 0 else 'Outlier'
+        ax_umap.scatter(
+            coords_2d[mask, 0], coords_2d[mask, 1],
+            c=color, s=50, alpha=0.8, edgecolors='white', linewidth=0.3,
+            label=name, zorder=3,
+        )
+    ax_umap.set_xlabel('UMAP 1', color=LABEL_COLOR)
+    ax_umap.set_ylabel('UMAP 2', color=LABEL_COLOR)
+    ax_umap.set_title(f'UMAP 2D - {method_name}', color=TEXT_COLOR, fontsize=12)
+    ax_umap.legend(fontsize=8, facecolor=BG_COLOR, edgecolor=BORDER_COLOR,
+                   labelcolor=LABEL_COLOR, loc='best', ncol=2)
+    ax_umap.grid(True, color=GRID_COLOR, linewidth=0.3, alpha=0.5)
+    for spine in ax_umap.spines.values():
+        spine.set_color(BORDER_COLOR)
+
+    # Silhouette vs k (same for all, with current method marked)
+    ax_sil.set_facecolor(BG_COLOR)
+    ax_sil.plot(ks, scores, color='#58a6ff', linewidth=2, marker='o', markersize=4)
+    ax_sil.plot(optimal_k, optimal_sil, 'o', color='#f85149', markersize=10, zorder=5,
+                label=f'Optimal k={optimal_k} ({optimal_sil:.3f})')
+    ax_sil.set_xlabel('Number of clusters (k)', color=LABEL_COLOR)
+    ax_sil.set_ylabel('Silhouette score', color=LABEL_COLOR)
+    ax_sil.set_title('K-means Silhouette vs k', color=TEXT_COLOR, fontsize=12)
+    ax_sil.grid(True, color=GRID_COLOR, linestyle='--', alpha=0.5)
+    ax_sil.legend(facecolor=BG_COLOR, edgecolor=BORDER_COLOR, labelcolor=TEXT_COLOR, fontsize=9)
+    ax_sil.set_xticks(range(2, 21, 2))
+    for spine in ax_sil.spines.values():
+        spine.set_color(BORDER_COLOR)
+
+    plt.tight_layout()
+    m_path = OUTPUT_DIR / f'{m_id.lower()}_clustering_overview.png'
+    plt.savefig(m_path, dpi=180, bbox_inches='tight', facecolor=BG_COLOR)
+    plt.close()
+    print(f"Saved: {m_path}")
+
 print("\nDone.")
