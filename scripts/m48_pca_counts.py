@@ -24,17 +24,17 @@ DATA_DIR = SCRIPT_DIR / '..' / 'data'
 
 THRESHOLD_S = 60.0
 
-BG_COLOR = '#ffffff'
-TEXT_COLOR = '#1a1a1a'
-LABEL_COLOR = '#333333'
-GRID_COLOR = '#e0e0e0'
-BORDER_COLOR = '#cccccc'
-MUTED_COLOR = '#666666'
-BAR_COLOR = '#2196F3'
-LINE_COLOR = '#FF5722'
-ARROW_COLOR = '#E65100'
-CONDITION_COLORS = {'high-creativity': '#2196F3', 'low-creativity': '#E91E63'}
-DEFAULT_DOT_COLOR = '#2196F3'
+BG_COLOR = '#0d1117'
+TEXT_COLOR = '#e6edf3'
+LABEL_COLOR = '#c9d1d9'
+GRID_COLOR = '#21262d'
+BORDER_COLOR = '#30363d'
+MUTED_COLOR = '#8b949e'
+BAR_COLOR = '#4FC3F7'
+LINE_COLOR = '#FF9800'
+ARROW_COLOR = '#FF9800'
+CONDITION_COLORS = {'high-creativity': '#4FC3F7', 'low-creativity': '#F06292'}
+DEFAULT_DOT_COLOR = '#4FC3F7'
 
 RATE_FEATURE_NAMES = ['SR Time', 'SR Topic', 'SR Typing']
 COUNT_FEATURE_NAMES = ['Count Time', 'Count Topic', 'Count Typing']
@@ -104,7 +104,7 @@ def plot_row(fig, gs, pca, scores, pids, conditions, row_title, pct, feature_nam
     pc_labels = [f'PC{i+1}' for i in range(len(pct))]
 
     # Scree plot
-    ax_scree.set_facecolor('#fafafa')
+    ax_scree.set_facecolor(BG_COLOR)
     bars = ax_scree.bar(pc_labels, pct, color=BAR_COLOR, zorder=2)
     ax_scree.plot(pc_labels, cumulative, color=LINE_COLOR, marker='o', linewidth=2, zorder=3)
     for bar, val in zip(bars, pct):
@@ -119,7 +119,7 @@ def plot_row(fig, gs, pca, scores, pids, conditions, row_title, pct, feature_nam
         spine.set_color(BORDER_COLOR)
 
     # Biplot
-    ax_biplot.set_facecolor('#fafafa')
+    ax_biplot.set_facecolor(BG_COLOR)
     for i, pid in enumerate(pids):
         cond = conditions.get(pid, '')
         color = CONDITION_COLORS.get(cond, DEFAULT_DOT_COLOR)
@@ -151,7 +151,7 @@ def plot_row(fig, gs, pca, scores, pids, conditions, row_title, pct, feature_nam
         spine.set_color(BORDER_COLOR)
 
     # Loadings table
-    ax_table.set_facecolor('#fafafa')
+    ax_table.set_facecolor(BG_COLOR)
     ax_table.axis('off')
     ax_table.set_title('Loadings', color=TEXT_COLOR, fontweight='bold')
 
@@ -173,9 +173,9 @@ def plot_row(fig, gs, pca, scores, pids, conditions, row_title, pct, feature_nam
     table.scale(1, 1.8)
 
     for key, cell in table.get_celld().items():
-        cell.set_facecolor('#fafafa')
-        cell.set_edgecolor('#cccccc')
-        cell.set_text_props(color='#1a1a1a')
+        cell.set_facecolor(BG_COLOR)
+        cell.set_edgecolor(BORDER_COLOR)
+        cell.set_text_props(color=TEXT_COLOR)
 
     # Row title annotation - bold and prominent
     ax_scree.set_title(row_title + '\nScree Plot', color=TEXT_COLOR, fontweight='bold', fontsize=13)
@@ -249,9 +249,9 @@ def main():
     fig = plt.figure(figsize=(22, 14))
     fig.patch.set_facecolor(BG_COLOR)
 
-    gs_top = fig.add_gridspec(1, 3, top=0.95, bottom=0.52,
+    gs_top = fig.add_gridspec(1, 3, top=0.90, bottom=0.52,
                               width_ratios=[1, 1.3, 0.7], wspace=0.3)
-    gs_bot = fig.add_gridspec(1, 3, top=0.45, bottom=0.02,
+    gs_bot = fig.add_gridspec(1, 3, top=0.43, bottom=0.05,
                               width_ratios=[1, 1.3, 0.7], wspace=0.3)
 
     plot_row(fig, gs_top, pca_rates, scores_rates, pids, conditions,
