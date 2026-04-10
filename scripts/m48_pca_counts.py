@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-M48: PCA on Raw Switch Counts
-==============================
-Computes raw switch counts (not divided by N-1) for time, topic, and typing,
-then runs PCA with and without z-scoring. Compares with rate-based M38/M40.
+M48: PCA Comparison - Switch Rates vs Switch Counts
+=====================================================
+Computes both rates (transitions / N-1) and raw counts for time, topic,
+and typing signals, then runs PCA on each (both z-scored).
 """
 
 import json
@@ -33,15 +33,11 @@ MUTED_COLOR = '#8b949e'
 BAR_COLOR = '#4FC3F7'
 LINE_COLOR = '#FF9800'
 ARROW_COLOR = '#FF9800'
-FEATURE_NAMES = ['Count Time', 'Count Topic', 'Count Typing']
 CONDITION_COLORS = {'high-creativity': '#4FC3F7', 'low-creativity': '#F06292'}
 DEFAULT_DOT_COLOR = '#4FC3F7'
 
-
-def compute_switch_count(labels):
-    if len(labels) < 2:
-        return np.nan
-    return sum(1 for i in range(1, len(labels)) if labels[i] != labels[i - 1])
+RATE_FEATURE_NAMES = ['SR Time', 'SR Topic', 'SR Typing']
+COUNT_FEATURE_NAMES = ['Count Time', 'Count Topic', 'Count Typing']
 
 
 def load_lda_assignments():
@@ -50,7 +46,16 @@ def load_lda_assignments():
     return {slug: int(np.argmax(dist)) for slug, dist in tm['topic_distributions'].items()}
 
 
-def build_counts_df(trials):
+def compute_switches(labels):
+    """Return (count, rate) tuple."""
+    if len(labels) < 2:
+        return np.nan, np.nan
+    count = sum(1 for i in range(1, len(labels)) if labels[i] != labels[i - 1])
+    rate = count / (len(labels) - 1)
+    return count, rate
+
+
+def build_features_df(trials):
     pids, pid_trials = get_pids_and_trials(trials)
     lda_assignments = load_lda_assignments()
 
@@ -63,24 +68,24 @@ def build_counts_df(trials):
 
             pvs = tr['page_visits']
 
-            # count_time: exploit/explore via 60s threshold
             time_labels = ['exploit' if pv['duration'] > THRESHOLD_S else 'explore' for pv in pvs]
-            count_time = compute_switch_count(time_labels)
+            count_time, rate_time = compute_switches(time_labels)
 
-            # count_topic: LDA argmax topic changes
             topic_labels = [lda_assignments.get(pv['title'], -1) for pv in pvs]
-            count_topic = compute_switch_count(topic_labels)
+            count_topic, rate_topic = compute_switches(topic_labels)
 
-            # count_typing: typing/no-typing binary
             typing_labels = [
                 page_had_typing_or_paste(pv, tr['typing_intervals'], tr['paste_times'])
                 for pv in pvs
             ]
-            count_typing = compute_switch_count(typing_labels)
+            count_typing, rate_typing = compute_switches(typing_labels)
 
             rows.append({
                 'participant_id': pid,
                 'domain': domain,
+                'rate_time': rate_time,
+                'rate_topic': rate_topic,
+                'rate_typing': rate_typing,
                 'count_time': count_time,
                 'count_topic': count_topic,
                 'count_typing': count_typing,
@@ -89,8 +94,11 @@ def build_counts_df(trials):
     return pd.DataFrame(rows)
 
 
-def plot_row(fig, axes, pca, scores, pids, conditions, title, pct):
-    ax_scree, ax_biplot, ax_table = axes
+def plot_row(fig, gs, pca, scores, pids, conditions, row_title, pct, feature_names):
+    ax_scree = fig.add_subplot(gs[0])
+    ax_biplot = fig.add_subplot(gs[1])
+    ax_table = fig.add_subplot(gs[2])
+
     cumulative = np.cumsum(pct)
     loadings = pca.components_
     pc_labels = [f'PC{i+1}' for i in range(len(pct))]
@@ -103,7 +111,7 @@ def plot_row(fig, axes, pca, scores, pids, conditions, title, pct):
         ax_scree.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 1,
                       f'{val:.1f}%', ha='center', va='bottom', color=TEXT_COLOR, fontsize=10)
     ax_scree.set_ylabel('Variance Explained (%)', color=LABEL_COLOR)
-    ax_scree.set_title(title + '\nScree Plot', color=TEXT_COLOR, fontweight='bold')
+    ax_scree.set_title('Scree Plot', color=TEXT_COLOR, fontweight='bold')
     ax_scree.set_ylim(0, 110)
     ax_scree.tick_params(colors=MUTED_COLOR)
     ax_scree.grid(True, color=GRID_COLOR, linewidth=0.5, axis='y', zorder=0)
@@ -125,7 +133,7 @@ def plot_row(fig, axes, pca, scores, pids, conditions, title, pct):
     y_range = scores[:, 1].max() - scores[:, 1].min() if len(scores) > 1 else 1
     scale = 0.4 * max(x_range, y_range)
 
-    for j, name in enumerate(FEATURE_NAMES):
+    for j, name in enumerate(feature_names):
         lx = loadings[0, j] * scale
         ly = loadings[1, j] * scale
         ax_biplot.annotate('', xy=(lx, ly), xytext=(0, 0),
@@ -155,7 +163,7 @@ def plot_row(fig, axes, pca, scores, pids, conditions, title, pct):
 
     table = ax_table.table(
         cellText=cell_text,
-        rowLabels=FEATURE_NAMES,
+        rowLabels=feature_names,
         colLabels=col_labels,
         cellLoc='center',
         loc='center',
@@ -169,69 +177,91 @@ def plot_row(fig, axes, pca, scores, pids, conditions, title, pct):
         cell.set_edgecolor(BORDER_COLOR)
         cell.set_text_props(color=TEXT_COLOR)
 
+    # Row title annotation
+    ax_scree.set_title(row_title + '\nScree Plot', color=TEXT_COLOR, fontweight='bold')
+
+    return ax_scree, ax_biplot, ax_table
+
 
 def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    print('[M48] PCA on Switch Counts')
+    print('[M48] PCA Comparison: Switch Rates vs Switch Counts')
 
     trials = load_trials()
     conditions = {tr['pid']: tr['condition'] for tr in trials}
 
-    counts_df = build_counts_df(trials)
+    features_df = build_features_df(trials)
 
-    # Average across domains per participant
-    avg_df = counts_df.groupby('participant_id')[['count_time', 'count_topic', 'count_typing']].mean().reset_index()
+    rate_cols = ['rate_time', 'rate_topic', 'rate_typing']
+    count_cols = ['count_time', 'count_topic', 'count_typing']
+    all_cols = rate_cols + count_cols
+
+    avg_df = features_df.groupby('participant_id')[all_cols].mean().reset_index()
     avg_df = avg_df.dropna()
     pids = avg_df['participant_id'].values
 
     print(f'  N={len(pids)} participants')
 
-    # Correlation matrix
-    print('\n  Correlation matrix (raw counts, before PCA):')
-    corr = avg_df[['count_time', 'count_topic', 'count_typing']].corr()
-    print(corr.to_string())
+    # Correlation matrices
+    corr_rates = avg_df[rate_cols].corr()
+    corr_counts = avg_df[count_cols].corr()
 
-    X = avg_df[['count_time', 'count_topic', 'count_typing']].values
+    print('\n  Correlation matrix (rates):')
+    print(corr_rates.to_string())
+    print('\n  Correlation matrix (counts):')
+    print(corr_counts.to_string())
 
-    # PCA without z-score
-    pca_raw = PCA(n_components=3)
-    scores_raw = pca_raw.fit_transform(X)
-    pct_raw = pca_raw.explained_variance_ratio_ * 100
-
-    print('\n  PCA (no z-score) explained variance:')
-    for i, v in enumerate(pct_raw):
-        print(f'    PC{i+1}: {v:.1f}%')
-    print('  Loadings:')
-    for i, comp in enumerate(pca_raw.components_):
-        parts = ', '.join(f'{FEATURE_NAMES[j]}: {comp[j]:+.3f}' for j in range(3))
-        print(f'    PC{i+1}: {parts}')
-
-    # PCA with z-score
+    # PCA on rates (z-scored)
     scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
-    pca_z = PCA(n_components=3)
-    scores_z = pca_z.fit_transform(X_scaled)
-    pct_z = pca_z.explained_variance_ratio_ * 100
+    X_rates = scaler.fit_transform(avg_df[rate_cols].values)
+    pca_rates = PCA(n_components=3)
+    scores_rates = pca_rates.fit_transform(X_rates)
+    pct_rates = pca_rates.explained_variance_ratio_ * 100
 
-    print('\n  PCA (z-scored) explained variance:')
-    for i, v in enumerate(pct_z):
+    # PCA on counts (z-scored)
+    X_counts = scaler.fit_transform(avg_df[count_cols].values)
+    pca_counts = PCA(n_components=3)
+    scores_counts = pca_counts.fit_transform(X_counts)
+    pct_counts = pca_counts.explained_variance_ratio_ * 100
+
+    print('\n  Explained variance (rates, z-scored):')
+    for i, v in enumerate(pct_rates):
         print(f'    PC{i+1}: {v:.1f}%')
     print('  Loadings:')
-    for i, comp in enumerate(pca_z.components_):
-        parts = ', '.join(f'{FEATURE_NAMES[j]}: {comp[j]:+.3f}' for j in range(3))
+    for i, comp in enumerate(pca_rates.components_):
+        parts = ', '.join(f'{RATE_FEATURE_NAMES[j]}: {comp[j]:+.3f}' for j in range(3))
         print(f'    PC{i+1}: {parts}')
 
-    # Visualization: 2 rows x 3 cols
-    fig, axes = plt.subplots(2, 3, figsize=(22, 14),
-                             gridspec_kw={'width_ratios': [1, 1.3, 0.7]})
+    print('\n  Explained variance (counts, z-scored):')
+    for i, v in enumerate(pct_counts):
+        print(f'    PC{i+1}: {v:.1f}%')
+    print('  Loadings:')
+    for i, comp in enumerate(pca_counts.components_):
+        parts = ', '.join(f'{COUNT_FEATURE_NAMES[j]}: {comp[j]:+.3f}' for j in range(3))
+        print(f'    PC{i+1}: {parts}')
+
+    print('\n  Comparison:')
+    print(f'    Rates  PC1: {pct_rates[0]:.1f}%  |  Counts PC1: {pct_counts[0]:.1f}%')
+    print(f'    Rates  PC2: {pct_rates[1]:.1f}%  |  Counts PC2: {pct_counts[1]:.1f}%')
+    print(f'    Rates  PC3: {pct_rates[2]:.1f}%  |  Counts PC3: {pct_counts[2]:.1f}%')
+
+    # Figure layout
+    fig = plt.figure(figsize=(22, 14))
     fig.patch.set_facecolor(BG_COLOR)
 
-    plot_row(fig, axes[0], pca_raw, scores_raw, pids, conditions,
-             'M48: PCA on Switch Counts (No Z-Score)', pct_raw)
-    plot_row(fig, axes[1], pca_z, scores_z, pids, conditions,
-             'M48: PCA on Switch Counts (Z-Scored)', pct_z)
+    gs_top = fig.add_gridspec(1, 3, top=0.95, bottom=0.52,
+                              width_ratios=[1, 1.3, 0.7], wspace=0.3)
+    gs_bot = fig.add_gridspec(1, 3, top=0.45, bottom=0.02,
+                              width_ratios=[1, 1.3, 0.7], wspace=0.3)
 
-    plt.tight_layout()
+    plot_row(fig, gs_top, pca_rates, scores_rates, pids, conditions,
+             'PCA on Switch Rates (transitions / N-1)', pct_rates, RATE_FEATURE_NAMES)
+    plot_row(fig, gs_bot, pca_counts, scores_counts, pids, conditions,
+             'PCA on Switch Counts (raw transitions)', pct_counts, COUNT_FEATURE_NAMES)
+
+    fig.suptitle('M48: PCA Comparison - Switch Rates vs Switch Counts (both z-scored)',
+                 color=TEXT_COLOR, fontsize=14, fontweight='bold', y=0.99)
+
     out_png = OUTPUT_DIR / 'm48_pca_counts.png'
     plt.savefig(out_png, dpi=180, facecolor=fig.get_facecolor(), bbox_inches='tight')
     plt.close()
@@ -241,15 +271,12 @@ def main():
     scores_df = pd.DataFrame({
         'participant_id': pids,
         'condition': [conditions.get(p, '') for p in pids],
-        'count_time': avg_df['count_time'].values,
-        'count_topic': avg_df['count_topic'].values,
-        'count_typing': avg_df['count_typing'].values,
-        'PC1_raw': scores_raw[:, 0],
-        'PC2_raw': scores_raw[:, 1],
-        'PC3_raw': scores_raw[:, 2],
-        'PC1_zscore': scores_z[:, 0],
-        'PC2_zscore': scores_z[:, 1],
-        'PC3_zscore': scores_z[:, 2],
+        'PC1_rates': scores_rates[:, 0],
+        'PC2_rates': scores_rates[:, 1],
+        'PC3_rates': scores_rates[:, 2],
+        'PC1_counts': scores_counts[:, 0],
+        'PC2_counts': scores_counts[:, 1],
+        'PC3_counts': scores_counts[:, 2],
     })
     csv_path = OUTPUT_DIR / 'm48_scores_counts.csv'
     scores_df.to_csv(csv_path, index=False)
