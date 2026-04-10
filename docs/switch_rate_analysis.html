@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ניתוח Switch Rate - M34-M41</title>
+  <title>ניתוח Switch Rate - M34-M48</title>
   <style>
     * {
       box-sizing: border-box;
@@ -22,7 +22,7 @@
     }
 
     .container {
-      max-width: 820px;
+      max-width: 860px;
       margin: 0 auto;
       padding: 0 32px;
     }
@@ -76,10 +76,7 @@
       border-radius: 0 6px 6px 0;
     }
 
-    .goal-box p {
-      margin: 0;
-      font-size: 0.95rem;
-    }
+    .goal-box p { margin: 0; font-size: 0.95rem; }
 
     .finding-box {
       background: #fff8e1;
@@ -89,10 +86,7 @@
       border-radius: 0 6px 6px 0;
     }
 
-    .finding-box p {
-      margin: 0;
-      font-size: 0.95rem;
-    }
+    .finding-box p { margin: 0; font-size: 0.95rem; }
 
     .result-box {
       background: #f0faf3;
@@ -102,10 +96,18 @@
       border-radius: 0 6px 6px 0;
     }
 
-    .result-box p {
-      margin: 0;
-      font-size: 0.95rem;
+    .result-box p { margin: 0; font-size: 0.95rem; }
+
+    .explain-box {
+      background: #f3f0fb;
+      border-right: 4px solid #7b5ea7;
+      padding: 16px 20px;
+      margin: 24px 0;
+      border-radius: 0 6px 6px 0;
     }
+
+    .explain-box p { margin: 0 0 8px 0; font-size: 0.92rem; }
+    .explain-box p:last-child { margin-bottom: 0; }
 
     .signal-grid {
       display: grid;
@@ -157,9 +159,7 @@
       vertical-align: top;
     }
 
-    tr:nth-child(even) td {
-      background: #f6f9fc;
-    }
+    tr:nth-child(even) td { background: #f6f9fc; }
 
     .fig {
       margin: 24px 0;
@@ -191,6 +191,16 @@
       direction: ltr;
     }
 
+    ul {
+      margin: 8px 20px 12px 0;
+      padding-right: 16px;
+    }
+
+    li {
+      margin-bottom: 4px;
+      font-size: 0.93rem;
+    }
+
     footer {
       margin-top: 48px;
       padding-top: 16px;
@@ -205,151 +215,251 @@
   <div class="container">
 
     <header>
-      <h1>בניית משתנה תלוי: ציון מיתוג אחיד (M34-M41)</h1>
+      <h1>בניית משתנה תלוי: ציון Switching מורכב (M34-M48)</h1>
       <div class="subtitle">מחקר ויקיפדיה - Explore/Exploit | אפריל 2026</div>
     </header>
 
     <div class="goal-box">
-      <p><strong>המטרה:</strong> לבנות ציון מורכב אחד לכל משתתף שמסכם כמה הוא עובר בין מצבי Explore ו-Exploit במהלך הגלישה בוויקיפדיה. ציון זה ישמש כמשתנה התלוי בהשוואה בין תנאים ניסויים.</p>
+      <p><strong>המטרה:</strong> לבנות ציון מורכב אחד לכל משתתף שמסכם כמה הוא עובר בין מצבי Explore ו-Exploit במהלך הגלישה בוויקיפדיה. ציון זה ישמש כמשתנה התלוי (DV) בהשוואה בין תנאים ניסויים.</p>
     </div>
 
-    <h2>שלב 1: שלושה אותות עצמאיים לאומדן מיתוג (M34-M36)</h2>
+    <!-- ============================================================ -->
+    <h2>שלב 1: שלושה אותות למדידת Switching (M34-M36)</h2>
+    <!-- ============================================================ -->
 
-    <p>הגדרנו שלוש שיטות מדידה עצמאיות, כל אחת מחשבת <em>switch rate</em> - כמות המעברים בין Explore לבין Exploit חלקי (N-1), כאשר N הוא מספר הדפים שנצפו.</p>
+    <p>הגדרנו שלוש שיטות מדידה עצמאיות. לכל משתתף ולכל שאלה, סופרים כמה פעמים הוא עבר בין מצבי Explore ו-Exploit:</p>
 
     <div class="signal-grid">
       <div class="signal-card">
-        <div class="label">M34 - SR Time</div>
-        <p>דף עם מעל 60 שניות = Exploit, אחרת Explore. מעקב אחר מעברים בין מצבים לאורך הסשן.</p>
+        <div class="label">M34 - זמן</div>
+        <p>דף עם שהייה מעל 60 שניות = Exploit. שהייה מתחת ל-60 שניות = Explore. סופרים מעברים בין המצבים.</p>
       </div>
       <div class="signal-card">
-        <div class="label">M35 - SR Topic</div>
-        <p>כל דף מקבל נושא דומיננטי מ-LDA (10 נושאים). מעבר בין נושאים = מיתוג. ניסינו גם BERTopic אך הוא הפיק רק 4 נושאים גלובליים - switch rates כמעט אפס בכלכלה.</p>
+        <div class="label">M35 - טופיקים (LDA)</div>
+        <p>מודל LDA (10 נושאים) מקצה נושא דומיננטי לכל מאמר. מעבר לנושא אחר = switching. נבחר LDA על פני BERTopic (ראו הסבר למטה).</p>
       </div>
       <div class="signal-card">
-        <div class="label">M36 - SR Typing</div>
-        <p>על בסיס M18: דף עם burst הקלדה או Paste = Exploit. ללא פעילות הקלדה = Explore. Switch rate מחושב אותו הדבר.</p>
+        <div class="label">M36 - כתיבה/הדבקה</div>
+        <p>דף עם burst הקלדה או Paste = Exploit. דף ללא פעילות כתיבה = Explore. סופרים מעברים.</p>
       </div>
     </div>
-
-    <p>כל סקריפט מייצר ויזואליזציות לכל דומיין (גריד של subplots לפי משתתף) וקובץ CSV עם ה-switch rates.</p>
 
     <div class="fig">
       <img src="../output/m34_switch_time_psychology.png" alt="M34 - Switch Rate לפי זמן, דומיין פסיכולוגיה">
-      <figcaption>M34 - Switch Rate מבוסס-זמן, דומיין פסיכולוגיה. כל subplot הוא משתתף אחד.</figcaption>
+      <figcaption>M34 - מעברי Explore/Exploit מבוססי זמן, דומיין פסיכולוגיה. ירוק = Explore, כחול = Exploit. הקו המקווקו = סף 60 שניות.</figcaption>
     </div>
 
-    <h2>שלב 2: ניסיונות PCA לאיחוד האותות (M37-M40)</h2>
+    <!-- ============================================================ -->
+    <h2>למה LDA ולא BERTopic? (M42-M47)</h2>
+    <!-- ============================================================ -->
 
-    <p>ניסינו מספר גישות PCA כדי לאחד את שלושת ה-switch rates לציון מורכב אחד:</p>
+    <p>ניסינו מספר שיטות clustering מבוססות BERT embeddings לייצוג טופיקים:</p>
+
+    <div class="explain-box">
+      <p><strong>מה זה BERT Embeddings?</strong> מודל שפה (sentence-transformers) שקורא את הטקסט של כל מאמר ומייצר וקטור של 384 מספרים. מאמרים דומים בתוכן מקבלים וקטורים קרובים.</p>
+      <p><strong>מה זה K-means?</strong> אלגוריתם שמחלק N נקודות ל-k קבוצות: בוחר מרכזים, מחבר כל נקודה למרכז הקרוב, מזיז מרכזים לממוצע, וחוזר עד שמתייצב.</p>
+      <p><strong>מה זה Silhouette Score?</strong> מודד כמה טוב כל נקודה "שייכת" לקלאסטר שלה. ציון קרוב ל-1 = שיוך מצוין, קרוב ל-0 = לא ברור, שלילי = שובצה לא נכון.</p>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>סקריפט</th>
+          <th>שיטה</th>
+          <th>קלאסטרים</th>
+          <th>תוצאה</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>M35</strong></td>
+          <td>BERTopic (HDBSCAN)</td>
+          <td>4</td>
+          <td>גס מדי - כל מאמרי הכלכלה באותו cluster. Switch rate כמעט 0.</td>
+        </tr>
+        <tr>
+          <td><strong>M42/M43</strong></td>
+          <td>BERT + UMAP + K-means</td>
+          <td>5</td>
+          <td>silhouette=0.58, אך UMAP מעוות מרחקים (ראו הסבר).</td>
+        </tr>
+        <tr>
+          <td><strong>M44</strong></td>
+          <td>BERT + UMAP + DBSCAN</td>
+          <td>7</td>
+          <td>Switch rates נמוכים ברוב הדומיינים.</td>
+        </tr>
+        <tr>
+          <td><strong>M45</strong></td>
+          <td>BERT + UMAP + Spectral + K-means</td>
+          <td>5</td>
+          <td>תוצאות בינוניות. silhouette=0.28.</td>
+        </tr>
+        <tr>
+          <td><strong>M46/M47</strong></td>
+          <td>BERT + Spectral ישירות + K-means (בלי UMAP)</td>
+          <td>3</td>
+          <td>silhouette=0.66, אך רק 3 clusters - switch rates נמוכים מאוד.</td>
+        </tr>
+        <tr>
+          <td><strong>M35</strong></td>
+          <td>LDA (10 נושאים)</td>
+          <td>10</td>
+          <td><strong>הטוב ביותר:</strong> גרנולריות מספיקה, switch rates עקביים בכל הדומיינים.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="explain-box">
+      <p><strong>למה UMAP בעייתי לקלאסטרינג?</strong> UMAP הוא אלגוריתם להקטנת מימדים שדוחף נקודות קרובות להיות עוד יותר קרובות, ורחוקות עוד יותר רחוקות. זה מצוין לויזואליזציה, אבל מעוות מרחקים אמיתיים. כשמריצים K-means על פלט UMAP, הקלאסטרים כבר "מבושלים מראש" וה-silhouette מנופח. הפרמטר n_neighbors (או perplexity ב-tSNE) קובע מה נחשב "קרוב" - מה שמשפיע על התוצאה.</p>
+      <p><strong>Spectral Embedding</strong> (שהוצע על ידי פרופ' יועד) עובד אחרת: בונה גרף שכנויות, מחשב eigenvectors, ומשתמש בהם כקואורדינטות. לא מעוות מרחקים כמו UMAP. אבל עם 134 מאמרים בלבד ו-3 clusters, עדיין לא מספיק גרנולרי.</p>
+      <p><strong>מסקנה:</strong> LDA עם 10 טופיקים קבועים מראש נותן את הגרנולריות הטובה ביותר למדידת topic switching בתוך דומיין.</p>
+    </div>
+
+    <div class="fig">
+      <img src="../output/m46_spectral_kmeans.png" alt="M46 - ניסויי clustering">
+      <figcaption>M46 - השוואת שיטות clustering על BERT embeddings. K-means ישירות על BERT גולמי (384D) נותן silhouette=0.09 - אין קלאסטרים טבעיים במרחב המקורי.</figcaption>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2>שלב 2: Switch Rates vs Switch Counts (M38-M41, M48)</h2>
+    <!-- ============================================================ -->
+
+    <h3>ניסיונות PCA על Switch Rates (M37-M40)</h3>
+
+    <p>ניסינו לאחד את שלושת ה-switch rates (מעברים חלקי N-1) באמצעות PCA:</p>
 
     <table>
       <thead>
         <tr>
           <th>סקריפט</th>
           <th>גישה</th>
-          <th>תוצאה</th>
+          <th>PC1</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>M37</strong></td>
-          <td>PCA נפרד לכל דומיין (4 PCAs)</td>
-          <td>סיור ראשוני - אין ציון מאוחד</td>
-        </tr>
-        <tr>
           <td><strong>M38</strong></td>
-          <td>ממוצע לפי דומיין קודם, אחר כך PCA ללא z-score</td>
-          <td>PC1 נשלט על ידי SR Topic (loading 0.96) - שונות גבוהה יותר</td>
-        </tr>
-        <tr>
-          <td><strong>M39</strong></td>
-          <td>Pool של כל שורות, PCA, ממוצע ציונים</td>
-          <td>בעיה דומה לM38</td>
+          <td>ממוצע על דומיינים, PCA ללא z-score</td>
+          <td>49% - נשלט על ידי SR Topic (loading 0.96)</td>
         </tr>
         <tr>
           <td><strong>M40</strong></td>
-          <td>ממוצע קודם + z-score + PCA</td>
-          <td>שיקלול שווה - אך PC1 הסביר רק 39% מהשונות</td>
+          <td>ממוצע על דומיינים, z-score, PCA</td>
+          <td>39% - שונות מפוזרת שווה על 3 PCs</td>
+        </tr>
+        <tr>
+          <td><strong>M41</strong></td>
+          <td>ממוצע פשוט של 3 ה-rates</td>
+          <td>-</td>
         </tr>
       </tbody>
     </table>
 
-    <div class="fig">
-      <img src="../output/m40_pca_zscore.png" alt="M40 - PCA לאחר z-score">
-      <figcaption>M40 - PCA על z-scored switch rates. PC1 מסביר 39% בלבד - אין מבנה לטנטי ברור.</figcaption>
-    </div>
-
     <div class="finding-box">
-      <p><strong>ממצא מרכזי:</strong> שלושת ה-switch rates כמעט בלתי-מתואמים זה לזה (r קרוב ל-0 בכל הזוגות). הם תופסים ממדים התנהגותיים עצמאיים - לא אותו הקונסטרקט מזוויות שונות. לכן PCA לא יכול לזהות רכיב יחיד חזק.</p>
+      <p><strong>ממצא:</strong> שלושת ה-switch rates כמעט בלתי-מתואמים זה לזה (כל r קרוב ל-0). הם תופסים ממדים התנהגותיים עצמאיים. לכן PCA לא מצליח לזהות רכיב דומיננטי אחד.</p>
     </div>
 
-    <h2>שלב 3: ממוצע שקלול שווה - הגישה הסופית (M41)</h2>
+    <h3>הפתרון: Switch Counts במקום Rates (M48)</h3>
 
-    <p>נוכח העצמאות של שלושת האותות, בחרנו בגישה הפשוטה ביותר: ממוצע בשקלול שווה. אין טעם לכפות מבנה לטנטי כאשר הוא לא קיים בנתונים.</p>
+    <p>במקום לחלק ב-(N-1), השתמשנו במספר המעברים הגולמי. ההבדל:</p>
+    <ul>
+      <li><strong>Switch Rate</strong> = מעברים / (N-1). מנורמל לסקאלה 0-1. מנטרל את אפקט מספר הדפים.</li>
+      <li><strong>Switch Count</strong> = מספר מעברים גולמי. משתתף שביקר ב-20 דפים יהיו לו ערכים גבוהים יותר מאשר מישהו שביקר ב-3 דפים.</li>
+    </ul>
 
-    <div class="formula">
-      Composite = (SR_time + SR_topic + SR_typing) / 3
+    <div class="explain-box">
+      <p><strong>למה counts עובדים טוב יותר ל-PCA?</strong> כל שלושת ה-counts חולקים תלות ב-N (מספר הדפים). משתתף שגלש ביותר דפים צובר יותר מעברים בכל שלושת המדדים. התלות המשותפת הזו יוצרת קורלציה חיובית (r=0.33-0.48) שנותנת ל-PCA מה לעבוד איתו.</p>
+      <p>זה לא רעש - מספר הדפים הוא בחירה התנהגותית (יותר דפים = גלישה מהירה יותר = התנהגות exploratory יותר).</p>
     </div>
-
-    <p>כל אות תורם תרומה שווה לציון המורכב. הציון נע בין 0.17 ל-0.69 (ממוצע=0.43, SD=0.13) על פני 20 משתתפי הפיילוט - פיזור טוב לצורך השוואה בין תנאים.</p>
 
     <div class="fig">
-      <img src="../output/m41_composite_avg.png" alt="M41 - Composite Switch Rate">
-      <figcaption>M41 - חלוקת הציון המורכב לפני 20 משתתפי הפיילוט. פיזור תקין על פני הסקאלה.</figcaption>
+      <img src="../output/m48_pca_counts.png" alt="M48 - PCA Rates vs Counts">
+      <figcaption>M48 - השוואת PCA על switch rates (למעלה, PC1=39%) מול switch counts (למטה, PC1=60%). שלושת החצים בגרסת ה-counts מצביעים לאותו כיוון עם loadings אחידים.</figcaption>
     </div>
 
     <div class="result-box">
-      <p><strong>הניתוח לניסוי האמיתי:</strong> כל משתתף עונה על 2 שאלות (סדר אקראי). ממצעים את שלושת ה-switch rates על פני שתי השאלות, ואז מחשבים את הממוצע הפשוט של שלושתם. המשתנה התלוי הסופי נשווה בין תנאים בבדיקת t.</p>
+      <p><strong>תוצאה:</strong> PCA על switch counts (עם z-score) נותן PC1 שמסביר <strong>60%</strong> מהשונות, עם loadings אחידים על שלושת המדדים (+0.58, +0.54, +0.61). זהו מדד switching משולב אמיתי - כל שלושת האותות תורמים בערך שווה.</p>
     </div>
 
-    <h2>סיכום פלטים</h2>
+    <!-- ============================================================ -->
+    <h2>המדד הסופי</h2>
+    <!-- ============================================================ -->
+
+    <p>PC1 מתוך PCA על שלושת ה-switch counts (z-scored) משמש כמשתנה התלוי.</p>
+
+    <div class="formula">
+      z-score(Count_time, Count_topic, Count_typing) &rarr; PCA &rarr; PC1 = Composite Switching Score
+    </div>
+
+    <h3>הפייפליין לניסוי האמיתי</h3>
+    <p>בניסוי יהיו שני תנאים (between-subjects) וכל משתתף יענה על 2 שאלות בסדר אקראי:</p>
+    <ol style="margin: 8px 20px 12px 0; padding-right: 16px;">
+      <li>לכל שאלה: חשב 3 switch counts (זמן, LDA טופיקים, כתיבה)</li>
+      <li>ממצע ה-counts על פני 2 השאלות לכל משתתף</li>
+      <li>Z-score על פני כל המשתתפים</li>
+      <li>PCA - PC1 = ציון switching מורכב</li>
+      <li>השווה PC1 בין התנאים (t-test)</li>
+    </ol>
+
+    <!-- ============================================================ -->
+    <h2>סיכום כל הסקריפטים</h2>
+    <!-- ============================================================ -->
 
     <table>
       <thead>
         <tr>
           <th>סקריפט</th>
+          <th>תפקיד</th>
           <th>פלט</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>M34</strong></td>
-          <td>4 PNGs (לפי דומיין) + CSV</td>
-        </tr>
-        <tr>
-          <td><strong>M35</strong></td>
-          <td>8 PNGs (4 דומיינים x 2 מודלים) + 2 CSVs</td>
-        </tr>
-        <tr>
-          <td><strong>M36</strong></td>
+          <td>Switch count/rate - זמן (60s)</td>
           <td>4 PNGs + CSV</td>
         </tr>
         <tr>
-          <td><strong>M37</strong></td>
-          <td>8 PNGs + 8 CSVs (PCA נפרד לכל דומיין)</td>
+          <td><strong>M35</strong></td>
+          <td>Switch count/rate - טופיקים (LDA + BERTopic)</td>
+          <td>8 PNGs + 2 CSVs</td>
         </tr>
         <tr>
-          <td><strong>M38</strong></td>
-          <td>1 PNG + 1 CSV (avg-first PCA)</td>
+          <td><strong>M36</strong></td>
+          <td>Switch count/rate - כתיבה/הדבקה</td>
+          <td>4 PNGs + CSV</td>
         </tr>
         <tr>
-          <td><strong>M39</strong></td>
-          <td>1 PNG + 1 CSV (pool-first PCA)</td>
+          <td><strong>M37-M41</strong></td>
+          <td>ניסויי PCA על rates (חקירתי)</td>
+          <td>PNGs + CSVs</td>
         </tr>
         <tr>
-          <td><strong>M40</strong></td>
-          <td>1 PNG + 1 CSV (z-scored PCA)</td>
+          <td><strong>M42</strong></td>
+          <td>ניסויי clustering על BERT embeddings</td>
+          <td>3 JSONs + PNGs</td>
         </tr>
         <tr>
-          <td><strong>M41</strong></td>
-          <td>1 PNG + 1 CSV (ממוצע סופי)</td>
+          <td><strong>M43-M45</strong></td>
+          <td>Switch rates עם K-means / DBSCAN / Spectral</td>
+          <td>12 PNGs + 3 CSVs</td>
+        </tr>
+        <tr>
+          <td><strong>M46-M47</strong></td>
+          <td>Spectral ישירות על BERT (הצעת פרופ' יועד)</td>
+          <td>PNG + JSON + 4 PNGs + CSV</td>
+        </tr>
+        <tr>
+          <td><strong>M48</strong></td>
+          <td><strong>PCA: rates vs counts (המדד הסופי)</strong></td>
+          <td>1 PNG + 1 CSV</td>
         </tr>
       </tbody>
     </table>
 
     <footer>
-      נוצר: אפריל 2026 | מחקר ויקיפדיה - Explore/Exploit
+      עדכון אחרון: אפריל 2026 | מחקר ויקיפדיה - Explore/Exploit
     </footer>
 
   </div>
