@@ -1,0 +1,19 @@
+שאלות לפני עדכון ה-Pre-Registration
+======================================
+
+1. Semantic distance - בינארי:
+   מה הכלל הבינארי לסמנטיק דיסטנס?
+   האם זה שהטופיק הדומיננטי ב-LDA משתנה בין דפים עוקבים = explore,
+   או שיש סף מסוים של JSD שמעליו זה explore?
+
+2. Switch counts vs rates:
+   בפייפליין החדש (M34-M48) ראיתי שcounts עבדו הרבה יותר טוב מrates ב-PCA
+   (60% variance עם loadings אחידים).
+   האם ב-pre-registration לכתוב במפורש switch counts,
+   או לשמור את זה יותר גנרי כמו "number of switches"?
+
+3. שני PCs או אחד?
+   בניתוח הישן היה PC1 + PC2 עם MANOVA.
+   בחדש זה PC1 בלבד עם t-test.
+   סעיף 5 (Analyses) כותב "two measures of interest" -
+   צריך לעדכן גם את זה ל-measure אחד?
