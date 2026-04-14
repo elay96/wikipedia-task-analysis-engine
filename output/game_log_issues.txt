@@ -1,0 +1,54 @@
+Game.csv Log Issues - Wikipedia Explore/Exploit Experiment
+==========================================================
+Date: 2026-04-13
+Version: Wikipedia_Exp_13.04
+Participants: 9 (IDs: 1,2,3,4,5,10,11,13,16)
+
+Issue 1: Missing task_start event
+----------------------------------
+The new Game.csv does not contain any "task_start" action rows.
+The analysis pipeline (helpers.py > load_trials) requires both
+task_start and task_end to define each trial's time window.
+
+Workaround applied: when task_start is missing, the first event
+timestamp in the trial is used as t0 instead. This includes the
+familiarity_rating event, so trial duration may be slightly
+inflated (by a few seconds of rating time).
+
+Recommendation: add a task_start event in Gorilla that fires
+when the participant first sees the Wikipedia interface, after
+the familiarity rating screen.
+
+Issue 2: Missing answer_snapshot events
+----------------------------------------
+The old Game.csv contained periodic "answer_snapshot" events that
+recorded the answer text length at regular intervals during each
+trial. These were used to detect typing bursts and assign typing
+activity to specific page visits.
+
+The new Game.csv has no answer_snapshot events at all. As a result,
+the typing/paste binary indicator per page visit relies solely on
+"paste" events (which do have timestamps). Manual typing cannot be
+attributed to specific page visits.
+
+Impact on analysis:
+- Participants who primarily paste (P1, P10, P11, P13, P16) are
+  unaffected, since paste events carry timestamps.
+- Participants who primarily type (P4, P5) will show typing=False
+  for all page visits, even though they wrote substantial answers.
+- The "Count Typing" switch metric underestimates actual switching
+  for typing-dominant participants.
+
+Evidence (final answer length vs total pasted text):
+  P1:  final=1345, pasted=1358  (paste-dominant)
+  P3:  final=900,  pasted=377   (mixed)
+  P4:  final=1035, pasted=0     (type-dominant, UNDETECTED)
+  P5:  final=581,  pasted=0     (type-dominant, UNDETECTED)
+  P11: final=6185, pasted=6174  (paste-dominant)
+  P13: final=599,  pasted=598   (paste-dominant)
+  P16: final=854,  pasted=855   (paste-dominant)
+
+Recommendation: add answer_snapshot events in Gorilla, firing every
+3-5 seconds during the task, recording current answer text length.
+This restores the ability to detect typing bursts and attribute them
+to specific page visits.

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-M50: Final Composite DV - Switch Counts + PCA (No Z-Score)
+M51: Final Composite DV - Switch Counts + PCA (No Z-Score)
 ==========================================================
-Centralizes the final dependent variable computation:
+Same pipeline as M50 but on updated dataset (Game_new.csv).
   1. Exclusion criteria (idle >=50%, <3 pages, 3 SD outliers)
   2. Raw switch counts for time, topic (LDA), and typing
   3. PCA on raw counts (no standardization)
@@ -498,7 +498,7 @@ def create_png(avg_df, pca, scores, pct, conditions, question_df, exclusion_summ
 
     n = exclusion_summary['n_final']
     fig.suptitle(
-        'M50: Final Composite Dependent Variable\n'
+        'M51: Final Composite Dependent Variable\n'
         f'PCA on Raw Switch Counts (Time, Topic-LDA, Typing)  |  N = {n}',
         color=TEXT_COLOR, fontsize=16, fontweight='bold', y=0.99,
     )
@@ -518,7 +518,7 @@ def create_pdf_report(avg_df, pca, scores, pct, conditions, question_df,
         # Title section
         ax_title = axes[0]
         ax_title.axis('off')
-        ax_title.text(0.5, 0.90, 'M50: Final Composite Dependent Variable',
+        ax_title.text(0.5, 0.90, 'M51: Final Composite Dependent Variable',
                       transform=ax_title.transAxes, fontsize=22, fontweight='bold',
                       ha='center', va='top', color=TEXT_COLOR)
         ax_title.text(0.5, 0.72, 'PCA on Raw Switch Counts (Time, Topic-LDA, Typing)',
@@ -975,10 +975,10 @@ def _welch_df(a, b):
 
 def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    print('[M50] Final Composite DV - Switch Counts + PCA (No Z-Score)')
+    print('[M51] Final Composite DV - Switch Counts + PCA (No Z-Score)')
     print('=' * 60)
 
-    trials = load_trials()
+    trials = load_trials(DATA_DIR / 'Game_new.csv')
     conditions = {tr['pid']: tr['condition'] for tr in trials}
 
     # Build question-level data
@@ -1016,7 +1016,7 @@ def main():
     # PNG
     print('\n--- Saving outputs ---')
     fig = create_png(avg_df, pca, scores, pct, conditions, question_df, exclusion_summary)
-    out_png = OUTPUT_DIR / 'm50_final_composite_dv.png'
+    out_png = OUTPUT_DIR / 'm51_final_composite_dv.png'
     fig.savefig(out_png, dpi=180, facecolor=fig.get_facecolor(), bbox_inches='tight')
     plt.close(fig)
     print(f'Saved: {out_png}')
@@ -1032,12 +1032,12 @@ def main():
         'PC2': scores[:, 1],
         'PC3': scores[:, 2],
     })
-    csv_path = OUTPUT_DIR / 'm50_final_composite_dv.csv'
+    csv_path = OUTPUT_DIR / 'm51_final_composite_dv.csv'
     scores_df.to_csv(csv_path, index=False)
     print(f'Saved: {csv_path}')
 
     # PDF report
-    pdf_path = OUTPUT_DIR / 'm50_final_composite_dv.pdf'
+    pdf_path = OUTPUT_DIR / 'm51_final_composite_dv.pdf'
     create_pdf_report(avg_df, pca, scores, pct, conditions, question_df,
                       exclusion_summary, pdf_path)
 

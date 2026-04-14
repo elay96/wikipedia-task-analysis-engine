@@ -37,9 +37,9 @@ def load_trials(csv_path=None):
             row0 = t.iloc[0]
             starts = t[t['Action'] == 'task_start']['Time']
             ends = t[t['Action'] == 'task_end']['Time']
-            if len(starts) == 0 or len(ends) == 0:
+            if len(ends) == 0:
                 continue
-            t0 = starts.iloc[0]
+            t0 = starts.iloc[0] if len(starts) > 0 else t['Time'].iloc[0]
             t_end = ends.iloc[0]
             duration = (t_end - t0).total_seconds()
             if duration <= 0:
