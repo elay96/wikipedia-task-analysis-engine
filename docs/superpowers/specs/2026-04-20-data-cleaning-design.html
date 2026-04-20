@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<title>Data Cleaning & Article Content Fetch - Design Spec</title>
+<style>
+  :root { color-scheme: light; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    line-height: 1.6;
+    color: #1a1a1a;
+    background: #ffffff;
+  }
+  h1 { border-bottom: 2px solid #1a1a1a; padding-bottom: .3rem; }
+  h2 { margin-top: 2rem; border-bottom: 1px solid #d0d0d0; padding-bottom: .2rem; }
+  h3 { margin-top: 1.5rem; color: #333; }
+  code, pre {
+    font-family: "SF Mono", Consolas, monospace;
+    background: #f4f4f4;
+    border-radius: 3px;
+  }
+  code { padding: 1px 4px; font-size: .92em; }
+  pre { padding: .8rem 1rem; overflow-x: auto; border: 1px solid #e0e0e0; }
+  table { border-collapse: collapse; margin: 1rem 0; }
+  th, td { border: 1px solid #ccc; padding: .4rem .8rem; text-align: left; }
+  th { background: #f0f0f0; }
+  .meta { color: #666; font-size: .9em; margin-bottom: 2rem; }
+  .callout {
+    border-left: 4px solid #0066cc;
+    background: #f0f6ff;
+    padding: .6rem 1rem;
+    margin: 1rem 0;
+  }
+  .warning {
+    border-left: 4px solid #cc6600;
+    background: #fff6e6;
+    padding: .6rem 1rem;
+    margin: 1rem 0;
+  }
+  ul li, ol li { margin: .2rem 0; }
+</style>
+</head>
+<body>
+
+<h1>Data Cleaning & Article Content Fetch - Design Spec</h1>
+
+<p class="meta">
+  <strong>Date:</strong> 2026-04-20 &nbsp;·&nbsp;
+  <strong>Author:</strong> Elay Guez (brainstormed with Claude) &nbsp;·&nbsp;
+  <strong>Status:</strong> Pending implementation
+</p>
+
+<h2>1. Context</h2>
+<p>
+  The Wikipedia navigation experiment logged user trials into <code>data/dirty_data/Game.csv</code>.
+  Two new columns were added to the schema, <code>ArticleRevid</code> and <code>WikipediaUrl</code>,
+  but the server did not populate them for real participants. We need to backfill those columns
+  by resolving the Wikipedia revision active at each <code>article_open</code> timestamp, then
+  (as a separate deferred stage) download the corresponding article content for downstream LDA,
+  PCA and embedding analyses.
+</p>
+
+<h3>Observed data state (after analysis of dirty CSV)</h3>
+<ul>
+  <li>Shape: 4,867 rows × 31 columns; 38 users (incl. test users 69, 70)</li>
+  <li>597 <code>article_open</code> events; only 13 already have <code>ArticleRevid</code> set - all belonging to test users 69/70 (to be removed)</li>
+  <li>584 real-participant <code>article_open</code> rows need revid backfill (~193 unique slugs, ~250-300 unique <code>(slug, timestamp)</code> pairs once grouped by minute-bucket)</li>
+  <li>No missing timestamps, no missing slugs on <code>article_open</code>, no exact row duplicates</li>
+  <li>Date range: 2026-04-14 to 2026-04-20 (current; not future-dated artifacts)</li>
+  <li>36 rows with <code>NavigationType=NaN</code> - all are the practice-landing Capybara open (expected, not a defect)</li>
+  <li>220 <code>answer_snapshot</code> rows with identical text to a neighbor (debounce redundancy) - not treated as errors</li>
+</ul>
+
+<h2>2. Goals & Non-Goals</h2>
+
+<h3>Goals</h3>
+<ol>
+  <li>Produce a cleaned CSV at <code>data/cleaned/Game.csv</code> where every non-practice <code>article_open</code> row has a correct <code>ArticleRevid</code> and <code>WikipediaUrl</code>.</li>
+  <li>Remove test-user rows (IDs 69, 70).</li>
+  <li>Normalise timestamps to a single ISO-8601 UTC format.</li>
+  <li>Design (without implementing yet) a stage-2 script that downloads clean full-text article content per unique revid into <code>data/cleaned/articles.jsonl</code>.</li>
+</ol>
+
+<h3>Non-Goals</h3>
+<ul>
+  <li>Modifying analysis scripts (<code>m1_*</code> through <code>m52_*</code>) to use the new file - that is a separate future step.</li>
+  <li>Deduping <code>answer_snapshot</code> rows (analysis code already handles this).</li>
+  <li>Normalising slug encoding (<code>%20</code> vs <code>_</code>, case) - current slugs work unchanged.</li>
+  <li>Removing practice trials from the cleaned CSV.</li>
+  <li>Implementing stage 2 before stage 1 is verified by the user.</li>
+</ul>
+
+<h2>3. Architecture</h2>
+
+<pre>scripts/cleaning/
+  step1a_resolve_revids.py   ← stage 1, network-bound (slow)
+  step1b_apply_cleaning.py   ← stage 1, deterministic transform (fast)
+  step2_fetch_articles.py    ← stage 2 (deferred - built AFTER stage 1 verified)
+  README.md
+
+data/
+  dirty_data/Game.csv        ← input, never modified
+  cleaned/
+    revid_lookup.csv         ← intermediate artifact (audit-friendly)
+    Game.csv                 ← final stage-1 output
+    articles.jsonl           ← stage-2 output (future)</pre>
+
+<h3>Data flow</h3>
+<pre>dirty_data/Game.csv ──┬──> step1a ──> revid_lookup.csv ──┐
+                      │                                    ├──> step1b ──> cleaned/Game.csv
+                      └────────────────────────────────────┘
+                                                                    │
+                                                                    ▼ (manual checkpoint)
+                                                             step2_fetch_articles.py
+                                                                    │
+                                                                    ▼
+                                                             articles.jsonl</pre>
+
+<h3>Design principles</h3>
+<ul>
+  <li><strong>Separation of concerns:</strong> slow network I/O is isolated from deterministic CSV transformation, so <code>step1b</code> can be re-run freely without re-hitting the API.</li>
+  <li><strong>Idempotent & resumable:</strong> <code>step1a</code> reads its own output on startup and skips already-resolved entries.</li>
+  <li><strong>Auditable:</strong> <code>revid_lookup.csv</code> is inspectable in a spreadsheet - easy to eyeball which slugs resolved cleanly vs. errored.</li>
+  <li><strong>Manual gate before stage 2:</strong> no automated chain from stage 1 to stage 2; the user verifies the cleaned CSV first.</li>
+</ul>
+
+<h2>4. step1a_resolve_revids.py</h2>
+
+<h3>Behaviour</h3>
+<p>For every unique <code>(slug, timestamp)</code> pair among <code>article_open</code> rows (after excluding users 69, 70), query the MediaWiki API for the revision that was current at that timestamp, following redirects automatically.</p>
+
+<h3>API call</h3>
+<pre>GET https://en.wikipedia.org/w/api.php
+  ?action=query
+  &prop=revisions
+  &titles={slug}
+  &rvstart={timestamp}     # "give me the revision that was current no later than X"
+  &rvdir=older
+  &rvlimit=1
+  &rvprop=ids|timestamp
+  &redirects=1             # follow redirects automatically (user choice)
+  &format=json</pre>
+
+<p><strong>HTTP headers:</strong> <code>User-Agent: WikipediaTaskAnalysis/1.0 (elay96@gmail.com)</code> - required by MediaWiki's etiquette policy.</p>
+
+<h3>Output: <code>data/cleaned/revid_lookup.csv</code></h3>
+<table>
+  <tr><th>Column</th><th>Type</th><th>Example</th><th>Notes</th></tr>
+  <tr><td><code>slug</code></td><td>str</td><td><code>Aquatic_plants</code></td><td>Original from CSV (unchanged)</td></tr>
+  <tr><td><code>timestamp</code></td><td>str (ISO UTC)</td><td><code>2026-04-14T13:18:30.751Z</code></td><td>Matches the source row's <code>Time</code></td></tr>
+  <tr><td><code>revid</code></td><td>int or empty</td><td><code>1349431902</code></td><td>Empty on failure</td></tr>
+  <tr><td><code>status</code></td><td>str</td><td><code>ok</code> / <code>not_found</code> / <code>error</code></td><td>Audit value</td></tr>
+  <tr><td><code>fetched_at</code></td><td>str</td><td><code>2026-04-20T12:00:00Z</code></td><td>Debug / cache invalidation</td></tr>
+</table>
+
+<h3>Rate limiting, retries, logging</h3>
+<ul>
+  <li>Throttle: 50 ms between calls (~20 req/s), well below MediaWiki's informal limit</li>
+  <li>Retry policy: 3 attempts with exponential backoff (1s, 2s, 4s) on HTTP 429 / 5xx</li>
+  <li>Timeout: 30 s per request</li>
+  <li>Progress log: <code>[n/total] resolved {slug}@{timestamp} → revid={id}</code> every 50 calls</li>
+  <li>Final summary: total / ok / not_found / error counts + list of failed slugs</li>
+</ul>
+
+<h3>Resume behaviour</h3>
+<ul>
+  <li>On startup, load existing <code>revid_lookup.csv</code> if present</li>
+  <li>Skip rows with <code>status=ok</code>; retry rows with <code>status=error</code> or missing entries</li>
+</ul>
+
+<h2>5. step1b_apply_cleaning.py</h2>
+
+<h3>Inputs</h3>
+<ul>
+  <li><code>data/dirty_data/Game.csv</code></li>
+  <li><code>data/cleaned/revid_lookup.csv</code> (from step 1a)</li>
+</ul>
+
+<h3>Operations (ordered)</h3>
+<ol>
+  <li><strong>Filter test users:</strong> drop all rows where <code>ID ∈ {69, 70}</code> (~122 rows removed)</li>
+  <li><strong>Timestamp normalisation:</strong> parse <code>Time</code> with <code>pd.to_datetime(..., utc=True)</code>, re-serialise as <code>YYYY-MM-DDTHH:MM:SS.fffZ</code> (millisecond precision)</li>
+  <li><strong>Join revids:</strong> left-merge <code>revid_lookup</code> onto rows where <code>Action=='article_open'</code>, keyed by <code>ArticleSlug == lookup.slug AND Time == lookup.timestamp</code>. Write the resolved revid into the existing <code>ArticleRevid</code> column. Other rows remain unchanged (this column is only meaningful for <code>article_open</code>).</li>
+  <li><strong>Build <code>WikipediaUrl</code>:</strong> for populated revid rows, set <code>https://en.wikipedia.org/wiki/{ArticleSlug}?oldid={ArticleRevid}</code>. Uses the original slug (MediaWiki resolves the revision regardless of page title in the URL).</li>
+  <li><strong>Validation gate</strong> (fail loudly if violated):
+    <ul>
+      <li>≥95% of non-practice <code>article_open</code> rows must have non-null <code>ArticleRevid</code></li>
+      <li>Every populated <code>WikipediaUrl</code> matches <code>^https://en\.wikipedia\.org/wiki/.+\?oldid=\d+$</code></li>
+      <li>No row has <code>ID ∈ {69, 70}</code></li>
+      <li>Row count == (dirty row count) − 122</li>
+    </ul>
+  </li>
+  <li><strong>Write output:</strong> <code>data/cleaned/Game.csv</code>, identical column order and set to the source</li>
+</ol>
+
+<h2>6. step2_fetch_articles.py <em>(deferred - design only)</em></h2>
+
+<div class="warning">
+  Not built until stage 1 output has been verified by the user. The design below is a contract, not a deliverable in this pass.
+</div>
+
+<h3>Inputs & outputs</h3>
+<ul>
+  <li>Input: <code>data/cleaned/Game.csv</code> (post-verification)</li>
+  <li>Output: <code>data/cleaned/articles.jsonl</code>, one JSON object per line:
+    <pre>{"article_slug": "Capybara", "revid": 1349431902,
+ "timestamp": "2026-04-14T13:15:03.415Z",
+ "content": "The capybara (Hydrochoerus hydrochaeris) is ..."}</pre>
+  </li>
+</ul>
+
+<h3>API call</h3>
+<pre>GET https://en.wikipedia.org/w/api.php
+  ?action=query
+  &prop=extracts
+  &explaintext=1           # plain text, no HTML
+  &exsectionformat=plain
+  &revids={revid}
+  &redirects=1
+  &format=json</pre>
+<p>
+  Using <code>extracts</code> returns the full article body in clean plain text - no infoboxes,
+  references, or navigation markup. Ideal for LDA / embeddings / PCA downstream.
+</p>
+
+<h3>Dedup & resume</h3>
+<ul>
+  <li>Iterate over <strong>unique revids</strong>, not raw rows (~250-300 calls)</li>
+  <li>For each unique revid, set the record's <code>timestamp</code> to the earliest <code>Time</code> among all users/trials that visited that revid</li>
+  <li>On startup, read existing <code>articles.jsonl</code> and skip any <code>revid</code> already present</li>
+</ul>
+
+<h3>Reliability</h3>
+<p>Same rate-limit / retry / logging pattern as <code>step1a</code> (reuse the shared HTTP helper).</p>
+
+<h3>Validation</h3>
+<p>After completion: assert that every unique revid in the cleaned CSV has a corresponding line in <code>articles.jsonl</code> with non-empty <code>content</code>.</p>
+
+<h2>7. Testing Strategy</h2>
+
+<h3>Unit tests</h3>
+<ul>
+  <li><code>build_wikipedia_url(slug, revid) → str</code> - asserts exact format</li>
+  <li><code>normalise_timestamp(raw) → str</code> - handles varied input, outputs canonical form</li>
+  <li>Validation-gate function - unit tested against synthetic pass/fail DataFrames</li>
+</ul>
+
+<h3>Integration (live API, tiny)</h3>
+<ul>
+  <li><code>step1a</code> dry-run against 3 known slugs including a known redirect (<code>Aquatic_plants</code> → <code>Aquatic_plant</code>) and a known-good page (<code>Capybara</code>). Asserts <code>status=ok</code> and a plausible revid.</li>
+</ul>
+
+<h3>Manual checkpoint</h3>
+<ul>
+  <li>After stage 1: eyeball <code>revid_lookup.csv</code> for <code>not_found</code>/<code>error</code> rows; spot-check 5 random rows in <code>cleaned/Game.csv</code> by opening the URL in a browser and confirming the page shown matches what the user would plausibly have seen.</li>
+</ul>
+
+<h2>8. Performance & Scale Notes</h2>
+<ul>
+  <li>Stage 1 expected duration: ~250 API calls × 50 ms throttle + network ≈ 30-90 seconds. Well within a single interactive run.</li>
+  <li>Stage 2 expected duration: ~250 API calls, larger payloads (5-50 KB each) ≈ 1-3 minutes.</li>
+  <li>No need for parallelism or async - sequential HTTP with throttle is simpler and easier to reason about.</li>
+  <li>If the dataset grows 10×+ in future, the <code>requests.Session</code> can be swapped for <code>httpx.AsyncClient</code> with a semaphore without changing the output contract.</li>
+</ul>
+
+<h2>9. Open Assumptions</h2>
+<ul>
+  <li>All article opens happen at the recorded <code>Time</code>; the API's "revision ≤ timestamp" query is a correct proxy for "what the user saw".</li>
+  <li>Redirect following is acceptable (user confirmed option 1 - no audit columns needed).</li>
+  <li>Full-text extracts are the right content format (user confirmed option 1 + A - clean text, full article).</li>
+  <li>The cleaned CSV becomes the new canonical input; <code>helpers.py</code>'s <code>DEFAULT_DATA</code> pointer will be updated in a separate, later task.</li>
+</ul>
+
+</body>
+</html>
