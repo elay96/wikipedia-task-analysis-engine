@@ -105,3 +105,89 @@ class TestFetchRevisionAt:
         assert result["revid"] is None
         assert result["error"] == "HTTP 500"
         assert session.get.call_count == 3
+
+
+class TestFetchExtractByRevid:
+    def test_happy_path_returns_content(self):
+        session = MagicMock()
+        session.get.return_value = _mock_response({
+            "query": {
+                "pages": {
+                    "1234": {
+                        "pageid": 1234,
+                        "title": "Capybara",
+                        "extract": "The capybara (Hydrochoerus hydrochaeris) is the largest living rodent...",
+                    }
+                }
+            }
+        })
+        from api_client import fetch_extract_by_revid
+        result = fetch_extract_by_revid(session, 1349431902)
+        assert result["status"] == "ok"
+        assert result["content"].startswith("The capybara")
+        assert result["error"] is None
+
+    def test_missing_extract_returns_not_found(self):
+        session = MagicMock()
+        session.get.return_value = _mock_response({
+            "query": {
+                "pages": {
+                    "-1": {"ns": 0, "title": "NonexistentRev", "missing": ""}
+                }
+            }
+        })
+        from api_client import fetch_extract_by_revid
+        result = fetch_extract_by_revid(session, 999999999999)
+        assert result["status"] == "not_found"
+        assert result["content"] is None
+
+    def test_empty_extract_string_returns_not_found(self):
+        session = MagicMock()
+        session.get.return_value = _mock_response({
+            "query": {"pages": {"1": {"pageid": 1, "title": "X", "extract": ""}}}
+        })
+        from api_client import fetch_extract_by_revid
+        result = fetch_extract_by_revid(session, 42)
+        assert result["status"] == "not_found"
+        assert result["content"] is None
+
+    def test_retries_then_succeeds_on_5xx(self):
+        session = MagicMock()
+        ok = _mock_response({
+            "query": {"pages": {"1": {"pageid": 1, "title": "X", "extract": "body"}}}
+        })
+        fail = _mock_response({}, status_code=503)
+        session.get.side_effect = [fail, fail, ok]
+        from api_client import fetch_extract_by_revid
+        with patch("api_client.time.sleep"):
+            result = fetch_extract_by_revid(session, 42)
+        assert result["status"] == "ok"
+        assert result["content"] == "body"
+        assert session.get.call_count == 3
+
+    def test_gives_up_after_3_retries(self):
+        session = MagicMock()
+        session.get.return_value = _mock_response({}, status_code=500)
+        from api_client import fetch_extract_by_revid
+        with patch("api_client.time.sleep"):
+            result = fetch_extract_by_revid(session, 42)
+        assert result["status"] == "error"
+        assert result["error"] == "HTTP 500"
+        assert session.get.call_count == 3
+
+    def test_sends_correct_params(self):
+        session = MagicMock()
+        session.get.return_value = _mock_response({
+            "query": {"pages": {"1": {"pageid": 1, "title": "X", "extract": "body"}}}
+        })
+        from api_client import fetch_extract_by_revid
+        fetch_extract_by_revid(session, 1349431902)
+        _, kwargs = session.get.call_args
+        params = kwargs["params"]
+        assert params["action"] == "query"
+        assert params["prop"] == "extracts"
+        assert params["explaintext"] == 1
+        assert params["exsectionformat"] == "plain"
+        assert params["revids"] == 1349431902
+        assert params["redirects"] == 1
+        assert params["format"] == "json"

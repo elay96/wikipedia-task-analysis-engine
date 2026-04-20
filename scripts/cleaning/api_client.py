@@ -77,3 +77,60 @@ def fetch_revision_at(session: requests.Session, slug: str, timestamp: str) -> R
         return {"revid": int(revisions[0]["revid"]), "status": "ok", "error": None}
 
     return {"revid": None, "status": "error", "error": "unexpected response shape"}
+
+
+class ExtractResult(TypedDict):
+    content: Optional[str]
+    status: str  # 'ok' | 'not_found' | 'error'
+    error: Optional[str]
+
+
+def fetch_extract_by_revid(session: requests.Session, revid: int) -> ExtractResult:
+    """Return the plain-text extract of the article version identified by `revid`.
+
+    Follows redirects (redirects=1). Retries on 429/5xx with exponential backoff.
+    Returns ok/not_found/error per the ExtractResult contract. An empty extract
+    string is treated as not_found (revid exists but API returned no content).
+    """
+    params = {
+        "action": "query",
+        "prop": "extracts",
+        "explaintext": 1,
+        "exsectionformat": "plain",
+        "revids": revid,
+        "redirects": 1,
+        "format": "json",
+        "formatversion": 1,
+    }
+
+    last_error: Optional[str] = None
+    for attempt in range(MAX_RETRIES):
+        try:
+            resp = session.get(API_ENDPOINT, params=params, timeout=TIMEOUT_SEC)
+            if resp.status_code == 429 or resp.status_code >= 500:
+                last_error = f"HTTP {resp.status_code}"
+                if attempt < MAX_RETRIES - 1:
+                    time.sleep(BACKOFF_BASE * (2 ** attempt))
+                continue
+            resp.raise_for_status()
+            data = resp.json()
+            break
+        except (requests.RequestException, ValueError) as e:
+            last_error = str(e)
+            if attempt < MAX_RETRIES - 1:
+                time.sleep(BACKOFF_BASE * (2 ** attempt))
+    else:
+        return {"content": None, "status": "error", "error": last_error}
+
+    time.sleep(THROTTLE_SEC)
+
+    pages = (data.get("query") or {}).get("pages") or {}
+    for _, page in pages.items():
+        if "missing" in page:
+            return {"content": None, "status": "not_found", "error": None}
+        extract = page.get("extract")
+        if not extract:
+            return {"content": None, "status": "not_found", "error": None}
+        return {"content": extract, "status": "ok", "error": None}
+
+    return {"content": None, "status": "error", "error": "unexpected response shape"}
