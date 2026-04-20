@@ -191,3 +191,13 @@ class TestFetchExtractByRevid:
         assert params["revids"] == 1349431902
         assert params["redirects"] == 1
         assert params["format"] == "json"
+
+    def test_non_string_extract_returns_not_found(self):
+        session = MagicMock()
+        session.get.return_value = _mock_response({
+            "query": {"pages": {"1": {"pageid": 1, "title": "X", "extract": ["not", "a", "string"]}}}
+        })
+        from api_client import fetch_extract_by_revid
+        result = fetch_extract_by_revid(session, 42)
+        assert result["status"] == "not_found"
+        assert result["content"] is None

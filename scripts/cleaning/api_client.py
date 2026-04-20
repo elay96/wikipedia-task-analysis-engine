@@ -129,7 +129,7 @@ def fetch_extract_by_revid(session: requests.Session, revid: int) -> ExtractResu
         if "missing" in page:
             return {"content": None, "status": "not_found", "error": None}
         extract = page.get("extract")
-        if not extract:
+        if not isinstance(extract, str) or not extract:
             return {"content": None, "status": "not_found", "error": None}
         return {"content": extract, "status": "ok", "error": None}
 
