@@ -21,6 +21,7 @@ from article_store import (
     extract_unique_revid_records,
     load_existing_revids,
 )
+from validation import validate_articles
 
 SCRIPT_DIR = Path(__file__).parent
 PROJECT_ROOT = SCRIPT_DIR.parent.parent
@@ -72,6 +73,8 @@ def _main(argv=None) -> int:
     cleaned["ArticleRevid"] = pd.to_numeric(cleaned["ArticleRevid"], errors="coerce").astype("Int64")
     session = build_session()
     resolve_all_articles(cleaned, args.out, session=session)
+    validate_articles(cleaned, args.out)
+    print(f"[step2] validation OK -> {args.out}")
     return 0
 
 

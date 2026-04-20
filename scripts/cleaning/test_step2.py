@@ -1,4 +1,5 @@
 import json
+import pytest
 from pathlib import Path
 from unittest.mock import MagicMock
 
@@ -122,3 +123,66 @@ class TestResolveAllArticles:
 
         assert summary == {"ok": 0, "not_found": 0, "error": 0, "skipped": 0}
         assert fetch_fn.call_count == 0
+
+
+class TestStep2MainValidation:
+    def test_main_runs_validation_after_fetch(self, tmp_path: Path, monkeypatch):
+        # Build a tiny cleaned.csv fixture
+        cleaned_path = tmp_path / "Game.csv"
+        pd.DataFrame({
+            "Action": ["article_open", "article_open"],
+            "ArticleSlug": ["A", "B"],
+            "ArticleRevid": pd.array([1, 2], dtype="Int64"),
+            "Time": ["2026-04-14T13:00:00.000Z", "2026-04-14T13:01:00.000Z"],
+        }).to_csv(cleaned_path, index=False)
+        out_path = tmp_path / "articles.jsonl"
+
+        calls = {"resolve": 0, "validate": 0}
+
+        def fake_resolve(df, out, *, session, fetch_fn=None):
+            calls["resolve"] += 1
+            out_path.write_text(
+                json.dumps({"article_slug": "A", "revid": 1, "timestamp": "t",
+                            "content": "body"}) + "\n" +
+                json.dumps({"article_slug": "B", "revid": 2, "timestamp": "t",
+                            "content": "body"}) + "\n",
+                encoding="utf-8",
+            )
+            return {"ok": 2, "not_found": 0, "error": 0, "skipped": 0}
+
+        def fake_validate(df, path):
+            calls["validate"] += 1
+
+        monkeypatch.setattr("step2_fetch_articles.resolve_all_articles", fake_resolve)
+        monkeypatch.setattr("step2_fetch_articles.validate_articles", fake_validate)
+
+        from step2_fetch_articles import _main
+        rc = _main(["--cleaned", str(cleaned_path), "--out", str(out_path)])
+
+        assert rc == 0
+        assert calls["resolve"] == 1
+        assert calls["validate"] == 1
+
+    def test_main_propagates_validation_error(self, tmp_path: Path, monkeypatch):
+        cleaned_path = tmp_path / "Game.csv"
+        pd.DataFrame({
+            "Action": ["article_open"], "ArticleSlug": ["A"],
+            "ArticleRevid": pd.array([1], dtype="Int64"),
+            "Time": ["2026-04-14T13:00:00.000Z"],
+        }).to_csv(cleaned_path, index=False)
+        out_path = tmp_path / "articles.jsonl"
+
+        from validation import ValidationError
+
+        monkeypatch.setattr("step2_fetch_articles.resolve_all_articles",
+                            lambda df, out, *, session, fetch_fn=None: {
+                                "ok": 0, "not_found": 1, "error": 0, "skipped": 0,
+                            })
+
+        def raise_validation(df, path):
+            raise ValidationError("boom")
+        monkeypatch.setattr("step2_fetch_articles.validate_articles", raise_validation)
+
+        from step2_fetch_articles import _main
+        with pytest.raises(ValidationError, match="boom"):
+            _main(["--cleaned", str(cleaned_path), "--out", str(out_path)])
