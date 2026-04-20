@@ -71,3 +71,36 @@ py scripts/cleaning/step1b_apply_cleaning.py
 pytest scripts/cleaning/            # unit tests (fast, no network)
 pytest scripts/cleaning/ -m live    # live MediaWiki API tests (opt-in)
 ```
+
+## Stage 2: fetch article content
+
+Stage 2 downloads the plain-text body of each unique Wikipedia revision referenced in
+`data/cleaned/Game.csv` and writes `data/cleaned/articles.jsonl` — one JSON object per
+line, schema `{article_slug, revid, timestamp, content}`.
+
+### Run
+
+```bash
+py scripts/cleaning/step2_fetch_articles.py
+```
+
+- Input:  `data/cleaned/Game.csv`
+- Output: `data/cleaned/articles.jsonl`
+- Expected: ~584 unique revids -> ~584 HTTP calls, ~1-3 minutes total.
+
+### Resumable
+
+On re-run, any revid already present in the JSONL is skipped. When new participants
+are added, the full pipeline is:
+
+```bash
+py scripts/cleaning/step1a_resolve_revids.py   # backfills revid_lookup.csv
+py scripts/cleaning/step1b_apply_cleaning.py   # regenerates cleaned Game.csv
+py scripts/cleaning/step2_fetch_articles.py    # fills in any new articles
+```
+
+### Validation
+
+After the fetch loop completes, the script asserts that every unique non-null
+`ArticleRevid` in the cleaned CSV has a non-empty `content` line in the JSONL.
+Non-zero exit means validation failed — inspect the summary counts at the end.

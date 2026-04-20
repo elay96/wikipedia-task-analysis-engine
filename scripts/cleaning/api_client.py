@@ -124,7 +124,11 @@ def fetch_extract_by_revid(session: requests.Session, revid: int) -> ExtractResu
 
     time.sleep(THROTTLE_SEC)
 
-    pages = (data.get("query") or {}).get("pages") or {}
+    query = data.get("query") or {}
+    if query.get("badrevids"):
+        return {"content": None, "status": "not_found", "error": None}
+
+    pages = query.get("pages") or {}
     for _, page in pages.items():
         if "missing" in page:
             return {"content": None, "status": "not_found", "error": None}

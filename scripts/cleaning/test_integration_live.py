@@ -31,3 +31,23 @@ class TestLiveMediaWikiAPI:
         )
         assert result["status"] == "not_found"
         assert result["revid"] is None
+
+
+from api_client import fetch_extract_by_revid
+
+
+@pytest.mark.live
+class TestLiveExtractFetch:
+    def test_capybara_extract_has_content(self):
+        session = build_session()
+        result = fetch_extract_by_revid(session, 1349431902)
+        assert result["status"] == "ok"
+        assert isinstance(result["content"], str)
+        assert len(result["content"]) > 100
+        assert "capybara" in result["content"].lower()
+
+    def test_nonexistent_revid_returns_not_found(self):
+        session = build_session()
+        result = fetch_extract_by_revid(session, 999999999999)
+        assert result["status"] == "not_found"
+        assert result["content"] is None
