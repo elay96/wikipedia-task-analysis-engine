@@ -53,3 +53,11 @@ class TestValidateCleaned:
         df = pd.DataFrame([_good_row(), _good_row()])
         with pytest.raises(ValidationError, match="row count"):
             validate_cleaned(df, original_row_count=10, removed_rows=3)
+
+    def test_tolerates_practice_rows_with_string_is_practice(self):
+        # IsPractice may come back from CSV as string "1" in some dtype-coercion paths.
+        real = [_good_row() for _ in range(20)]
+        practice = [_good_row(IsPractice="1", ArticleRevid=None, WikipediaUrl=None)
+                    for _ in range(5)]
+        df = pd.DataFrame(real + practice)
+        validate_cleaned(df, original_row_count=26, removed_rows=1)

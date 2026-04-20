@@ -26,7 +26,7 @@ def validate_cleaned(df: pd.DataFrame, *, original_row_count: int, removed_rows:
             f"(original={original_row_count} - removed={removed_rows})."
         )
 
-    is_practice = df["IsPractice"] == 1
+    is_practice = pd.to_numeric(df["IsPractice"], errors="coerce") == 1
     is_article_open = df["Action"] == "article_open"
     nonprac_opens = df[is_article_open & ~is_practice]
     if len(nonprac_opens) > 0:
