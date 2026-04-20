@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from scipy import stats as sp_stats
 from pathlib import Path
 
-DATA_PATH = Path(__file__).parent / '..' / 'data' / 'Game.csv'
+DATA_PATH = Path(__file__).parent / '..' / 'data' / 'cleaned' / 'Game.csv'
 OUTPUT_DIR = Path(__file__).parent / '..' / 'output'
 
 

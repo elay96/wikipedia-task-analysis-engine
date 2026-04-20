@@ -20,7 +20,7 @@ from helpers import load_trials, get_pids_and_trials, OUTPUT_DIR
 
 SCRIPT_DIR = Path(__file__).parent
 DATA_DIR = SCRIPT_DIR / '..' / 'data'
-MODEL_PATH = DATA_DIR / 'bert_spectral_direct.json'
+MODEL_PATH = DATA_DIR / 'cleaned' / 'bert_spectral_direct.json'
 
 BG_COLOR = '#0d1117'
 TEXT_COLOR = '#e6edf3'

@@ -36,7 +36,7 @@ TOPIC_PALETTE = [
 # 1. Load data
 # ============================================================
 print("Loading wiki_texts.json ...")
-with open(DATA_DIR / 'wiki_texts.json', encoding='utf-8') as f:
+with open(DATA_DIR / 'cleaned' / 'wiki_texts.json', encoding='utf-8') as f:
     wiki = json.load(f)
 
 slugs = sorted(wiki.keys())
@@ -169,7 +169,7 @@ output_data = {
     "slugs": sorted(slugs),
     "topic_assignments": topic_assignments,
 }
-out_path = DATA_DIR / 'bertopic_kmeans.json'
+out_path = DATA_DIR / 'cleaned' / 'bertopic_kmeans.json'
 with open(out_path, 'w', encoding='utf-8') as f:
     json.dump(output_data, f, indent=2)
 print(f"\nSaved: {out_path}")
@@ -187,7 +187,7 @@ dbscan_data = {
     "slugs": sorted(slugs),
     "topic_assignments": dbscan_assignments,
 }
-dbscan_path = DATA_DIR / 'bertopic_dbscan.json'
+dbscan_path = DATA_DIR / 'cleaned' / 'bertopic_dbscan.json'
 with open(dbscan_path, 'w', encoding='utf-8') as f:
     json.dump(dbscan_data, f, indent=2)
 print(f"Saved: {dbscan_path}")
@@ -201,7 +201,7 @@ spectral_data = {
     "slugs": sorted(slugs),
     "topic_assignments": spectral_assignments,
 }
-spectral_path = DATA_DIR / 'bertopic_spectral.json'
+spectral_path = DATA_DIR / 'cleaned' / 'bertopic_spectral.json'
 with open(spectral_path, 'w', encoding='utf-8') as f:
     json.dump(spectral_data, f, indent=2)
 print(f"Saved: {spectral_path}")

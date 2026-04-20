@@ -39,7 +39,7 @@ UMAP_REFERENCE_SILHOUETTE = 0.5809
 # 1. Load data
 # ============================================================
 print("Loading wiki_texts.json ...")
-with open(DATA_DIR / 'wiki_texts.json', encoding='utf-8') as f:
+with open(DATA_DIR / 'cleaned' / 'wiki_texts.json', encoding='utf-8') as f:
     wiki = json.load(f)
 
 slugs = sorted(wiki.keys())
@@ -143,7 +143,7 @@ out = {
     "slugs": slugs,
     "topic_assignments": {slug: int(best_labels[i]) for i, slug in enumerate(slugs)},
 }
-out_path = DATA_DIR / 'bert_spectral_direct.json'
+out_path = DATA_DIR / 'cleaned' / 'bert_spectral_direct.json'
 with open(out_path, 'w', encoding='utf-8') as f:
     json.dump(out, f, indent=2)
 print(f"Saved to {out_path}")

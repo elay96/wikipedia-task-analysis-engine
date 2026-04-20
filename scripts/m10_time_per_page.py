@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import MultipleLocator
 
-df = pd.read_csv('data/Game.csv')
+df = pd.read_csv('data/cleaned/Game.csv')
 
 # Get article_open events for real trials (IsPractice is NaN)
 opens = df[(df['Action'] == 'article_open') & (df['IsPractice'].isna())].copy()

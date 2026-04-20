@@ -22,7 +22,7 @@ from m20_cross_subject_median import plot_trial_grid_with_switches, count_switch
 from helpers import load_trials, get_pids_and_trials, OUTPUT_DIR
 
 DATA_DIR = __import__('pathlib').Path(__file__).parent.parent / 'data'
-TOPIC_MODEL_PATH = DATA_DIR / 'topic_model.json'
+TOPIC_MODEL_PATH = DATA_DIR / 'cleaned' / 'topic_model.json'
 
 N_TOPIC_WORDS = 8
 

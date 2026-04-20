@@ -17,7 +17,7 @@ from pathlib import Path
 from helpers import load_trials, OUTPUT_DIR
 
 DATA_DIR = Path(__file__).parent / '..' / 'data'
-SIM_PATH = DATA_DIR / 'similarity_matrix.json'
+SIM_PATH = DATA_DIR / 'cleaned' / 'similarity_matrix.json'
 
 N_CLUSTERS = 10
 CLUSTER_NAMES = [

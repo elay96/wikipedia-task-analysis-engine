@@ -18,7 +18,9 @@ import warnings
 warnings.filterwarnings('ignore')
 
 SCRIPT_DIR = Path(__file__).parent
-DEFAULT_DATA = SCRIPT_DIR / '..' / 'data' / 'Game.csv'
+DATA_DIR = SCRIPT_DIR / '..' / 'data'
+CLEANED_DIR = DATA_DIR / 'cleaned'
+DEFAULT_DATA = CLEANED_DIR / 'Game.csv'
 OUTPUT_DIR = SCRIPT_DIR / '..' / 'output'
 
 

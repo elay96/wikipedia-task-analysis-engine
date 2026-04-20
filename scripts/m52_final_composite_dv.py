@@ -63,7 +63,7 @@ SNAPSHOT_ACTIONS = ['answer_snapshot', 'answer_snapshot_cursor_leave']
 
 
 def load_lda_assignments():
-    with open(DATA_DIR / 'topic_model.json') as f:
+    with open(DATA_DIR / 'cleaned' / 'topic_model.json') as f:
         tm = json.load(f)
     return {slug: int(np.argmax(dist)) for slug, dist in tm['topic_distributions'].items()}
 
@@ -204,6 +204,14 @@ def apply_exclusions(question_df):
     final_df = avg_df[~outlier_mask].reset_index(drop=True)
     print(f'  Final N: {len(final_df)} participants')
 
+    # Track fully-excluded participants (all questions removed)
+    all_pids = set(question_df['participant_id'].unique())
+    surviving_pids = set(clean_questions['participant_id'].unique())
+    fully_excluded_pids = all_pids - surviving_pids
+
+    # Track outlier pids
+    outlier_pids = set(avg_df.loc[outlier_mask, 'participant_id'].values) if outlier_mask.any() else set()
+
     exclusion_summary = {
         'n_total_questions': n_total_questions,
         'n_participants_before': n_participants_before,
@@ -215,6 +223,8 @@ def apply_exclusions(question_df):
         'n_outliers': int(n_outliers),
         'outlier_details': outlier_details,
         'n_final': len(final_df),
+        'fully_excluded_pids': fully_excluded_pids,
+        'outlier_pids': outlier_pids,
     }
 
     return final_df, exclusion_summary
@@ -325,6 +335,9 @@ def plot_exclusion_summary(ax, question_df, exclusion_summary):
     """Bar chart showing excluded vs kept questions per participant."""
     ax.set_facecolor(BG_COLOR)
 
+    fully_excluded_pids = exclusion_summary.get('fully_excluded_pids', set())
+    outlier_pids = exclusion_summary.get('outlier_pids', set())
+
     pids = sorted(question_df['participant_id'].unique())
     kept_counts = []
     excl_counts = []
@@ -340,8 +353,29 @@ def plot_exclusion_summary(ax, question_df, exclusion_summary):
     ax.bar(x, excl_counts, bottom=kept_counts, color=EXCLUDED_COLOR,
            label='Excluded', edgecolor='white', linewidth=0.5)
 
+    # Annotate fully-excluded and outlier participants
+    for i, pid in enumerate(pids):
+        if pid in fully_excluded_pids:
+            reason = _exclusion_reason(question_df, pid)
+            top_y = excl_counts[i]
+            ax.text(x[i], top_y + 0.08, reason, fontsize=5, ha='center',
+                    va='bottom', color=EXCLUDED_COLOR, rotation=90)
+        elif pid in outlier_pids:
+            top_y = kept_counts[i] + excl_counts[i]
+            ax.text(x[i], top_y + 0.08, '3SD', fontsize=5, ha='center',
+                    va='bottom', color=WARN_COLOR, rotation=90)
+
     ax.set_xticks(x)
+    label_colors = []
+    for pid in pids:
+        if pid in fully_excluded_pids or pid in outlier_pids:
+            label_colors.append(EXCLUDED_COLOR)
+        else:
+            label_colors.append(MUTED_COLOR)
     ax.set_xticklabels([f'P{p}' for p in pids], fontsize=8, rotation=45)
+    for tick_label, color in zip(ax.get_xticklabels(), label_colors):
+        tick_label.set_color(color)
+
     ax.set_ylabel('Questions', color=LABEL_COLOR, fontweight='bold')
     ax.set_title('Exclusion Summary:\nQuestions Kept vs Excluded per Participant',
                  color=TEXT_COLOR, fontweight='bold', fontsize=13)
@@ -351,6 +385,18 @@ def plot_exclusion_summary(ax, question_df, exclusion_summary):
         spine.set_color(BORDER_COLOR)
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
+
+
+def _exclusion_reason(question_df, pid):
+    """Short reason string for a fully-excluded participant."""
+    pid_q = question_df[question_df['participant_id'] == pid]
+    n_pages = pid_q['excluded_pages'].sum()
+    n_idle = pid_q['excluded_idle'].sum()
+    if n_pages > 0 and n_idle > 0:
+        return 'pages+idle'
+    if n_pages > 0:
+        return '<3 pages'
+    return 'idle'
 
 
 def plot_counts_distribution(ax, avg_df):
@@ -950,8 +996,7 @@ def _plot_condition_comparison_page(pdf, avg_df, scores, pct, conditions):
 
     lines.append('')
     lines.append('-' * 72)
-    lines.append('  Note: Typing metric relies on paste events only')
-    lines.append('  (answer_snapshot missing from current log).')
+    lines.append('  Note: Typing metric uses answer_snapshot bursts + paste events.')
 
     text = '\n'.join(lines)
     ax.text(0.02, 0.98, text, transform=ax.transAxes,
@@ -978,7 +1023,7 @@ def main():
     print('[M52] Final Composite DV - Switch Counts + PCA (No Z-Score)')
     print('=' * 60)
 
-    trials = load_trials(DATA_DIR / 'Game_m52_2026-04-14.csv')
+    trials = load_trials(DATA_DIR / 'cleaned' / 'Game.csv')
     conditions = {tr['pid']: tr['condition'] for tr in trials}
 
     # Build question-level data

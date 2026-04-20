@@ -63,7 +63,7 @@ SNAPSHOT_ACTIONS = ['answer_snapshot', 'answer_snapshot_cursor_leave']
 
 
 def load_lda_assignments():
-    with open(DATA_DIR / 'topic_model.json') as f:
+    with open(DATA_DIR / 'cleaned' / 'topic_model.json') as f:
         tm = json.load(f)
     return {slug: int(np.argmax(dist)) for slug, dist in tm['topic_distributions'].items()}
 

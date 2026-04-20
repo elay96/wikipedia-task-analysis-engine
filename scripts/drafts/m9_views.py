@@ -29,7 +29,7 @@ from helpers import (load_trials, get_pids_and_trials, finish_timeline,
                      OUTPUT_DIR)
 
 DATA_DIR = Path(__file__).parent / '..' / 'data'
-SIM_PATH = DATA_DIR / 'similarity_matrix.json'
+SIM_PATH = DATA_DIR / 'cleaned' / 'similarity_matrix.json'
 
 EXPLOIT_COLOR = '#4CAF50'
 EXPLORE_COLOR = '#FF9800'

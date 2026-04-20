@@ -23,7 +23,7 @@ from helpers import load_trials, get_pids_and_trials, OUTPUT_DIR
 # Constants
 # ---------------------------------------------------------------------------
 SCRIPT_DIR = Path(__file__).parent
-TOPIC_MODEL_PATH = SCRIPT_DIR / '..' / 'data' / 'topic_model.json'
+TOPIC_MODEL_PATH = SCRIPT_DIR / '..' / 'data' / 'cleaned' / 'topic_model.json'
 PASTE_WEIGHT = 5.0
 FEATURE_NAMES = ['Time on page (s)', 'Topic distance (JSD)', 'Writing amount (s)']
 

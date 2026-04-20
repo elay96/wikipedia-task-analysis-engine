@@ -25,7 +25,7 @@ from m15_combined_binary_median import build_sequences_median
 from helpers import load_trials, get_pids_and_trials
 
 DATA_DIR = Path(__file__).parent / '..' / 'data'
-SIM_PATH = DATA_DIR / 'similarity_matrix.json'
+SIM_PATH = DATA_DIR / 'cleaned' / 'similarity_matrix.json'
 TARGET_VARIANCE = 0.90
 
 

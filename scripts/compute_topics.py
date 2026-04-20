@@ -13,8 +13,9 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
 
 DATA_DIR = Path(__file__).parent / '..' / 'data'
-INPUT_PATH = DATA_DIR / 'wiki_texts.json'
-OUTPUT_PATH = DATA_DIR / 'topic_model.json'
+CLEANED_DIR = DATA_DIR / 'cleaned'
+INPUT_PATH = CLEANED_DIR / 'wiki_texts.json'
+OUTPUT_PATH = CLEANED_DIR / 'topic_model.json'
 
 N_TOPICS = 10
 N_TOP_WORDS = 15

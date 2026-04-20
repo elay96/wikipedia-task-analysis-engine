@@ -13,8 +13,9 @@ from collections import Counter
 from pathlib import Path
 
 DATA_DIR = Path(__file__).parent / '..' / 'data'
-INPUT_PATH = DATA_DIR / 'wiki_texts.json'
-OUTPUT_PATH = DATA_DIR / 'similarity_matrix.json'
+CLEANED_DIR = DATA_DIR / 'cleaned'
+INPUT_PATH = CLEANED_DIR / 'wiki_texts.json'
+OUTPUT_PATH = CLEANED_DIR / 'similarity_matrix.json'
 
 STOP_WORDS = frozenset(
     "a an the and or but in on at to for of is it this that with as by from "

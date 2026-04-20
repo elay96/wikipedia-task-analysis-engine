@@ -12,8 +12,9 @@ from pathlib import Path
 from bertopic import BERTopic
 
 DATA_DIR = Path(__file__).parent / '..' / 'data'
-INPUT_PATH = DATA_DIR / 'wiki_texts.json'
-OUTPUT_PATH = DATA_DIR / 'bertopic_model.json'
+CLEANED_DIR = DATA_DIR / 'cleaned'
+INPUT_PATH = CLEANED_DIR / 'wiki_texts.json'
+OUTPUT_PATH = CLEANED_DIR / 'bertopic_model.json'
 
 
 def main():

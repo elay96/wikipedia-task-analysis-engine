@@ -21,8 +21,8 @@ from helpers import load_trials, get_pids_and_trials, OUTPUT_DIR
 
 SCRIPT_DIR = Path(__file__).parent
 DATA_DIR = SCRIPT_DIR / '..' / 'data'
-BERTOPIC_PATH = DATA_DIR / 'bertopic_model.json'
-LDA_PATH = DATA_DIR / 'topic_model.json'
+BERTOPIC_PATH = DATA_DIR / 'cleaned' / 'bertopic_model.json'
+LDA_PATH = DATA_DIR / 'cleaned' / 'topic_model.json'
 
 BG_COLOR = '#0d1117'
 TEXT_COLOR = '#e6edf3'
