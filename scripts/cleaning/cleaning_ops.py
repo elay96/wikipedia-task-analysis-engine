@@ -18,7 +18,29 @@ def normalise_timestamp_col(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def merge_revids(df: pd.DataFrame, lookup: pd.DataFrame) -> pd.DataFrame:
-    raise NotImplementedError  # Task 8
+    """Left-join ok-status revids from `lookup` onto article_open rows in `df`.
+
+    Matches on ArticleSlug==lookup.slug AND Time==lookup.timestamp.
+    Only lookup rows with status=='ok' are used; others leave ArticleRevid null.
+    """
+    out = df.copy()
+    ok = lookup[lookup["status"] == "ok"][["slug", "timestamp", "revid"]]
+    merged = out.merge(
+        ok.rename(columns={"slug": "ArticleSlug", "timestamp": "Time", "revid": "_revid_merged"}),
+        on=["ArticleSlug", "Time"],
+        how="left",
+    )
+    mask_article_open = merged["Action"] == "article_open"
+    merged.loc[mask_article_open & merged["_revid_merged"].notna(), "ArticleRevid"] = \
+        merged.loc[mask_article_open & merged["_revid_merged"].notna(), "_revid_merged"]
+    return merged.drop(columns=["_revid_merged"])
+
 
 def build_wikipedia_urls_col(df: pd.DataFrame) -> pd.DataFrame:
-    raise NotImplementedError  # Task 8
+    out = df.copy()
+    mask = out["ArticleRevid"].notna() & out["ArticleSlug"].notna()
+    out.loc[mask, "WikipediaUrl"] = [
+        build_wikipedia_url(slug, int(rev))
+        for slug, rev in zip(out.loc[mask, "ArticleSlug"], out.loc[mask, "ArticleRevid"])
+    ]
+    return out
