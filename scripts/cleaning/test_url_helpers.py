@@ -32,7 +32,6 @@ class TestNormaliseTimestamp:
         assert normalise_timestamp(ts) == "2026-04-14T13:15:03.415Z"
 
     def test_microsecond_precision_truncated_to_ms(self):
-        # 6 decimals in -> 3 decimals out
         assert normalise_timestamp("2026-04-14T13:15:03.415678Z") == \
             "2026-04-14T13:15:03.415Z"
 
@@ -43,3 +42,7 @@ class TestNormaliseTimestamp:
     def test_naive_timestamp_rejected(self):
         with pytest.raises(ValueError):
             normalise_timestamp("2026-04-14 13:15:03")
+
+    def test_naive_pandas_timestamp_rejected(self):
+        with pytest.raises(ValueError):
+            normalise_timestamp(pd.Timestamp("2026-04-14 13:15:03"))  # no tz
