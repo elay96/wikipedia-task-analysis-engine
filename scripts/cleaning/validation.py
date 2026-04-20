@@ -1,7 +1,9 @@
 """Validation gate: asserts the cleaned CSV satisfies our invariants."""
 from __future__ import annotations
 
+import json
 import re
+from pathlib import Path
 
 import pandas as pd
 
@@ -43,3 +45,41 @@ def validate_cleaned(df: pd.DataFrame, *, original_row_count: int, removed_rows:
     if len(bad) > 0:
         sample = bad.iloc[0]
         raise ValidationError(f"{len(bad)} rows have malformed URL (WikipediaUrl); e.g. {sample!r}")
+
+
+def validate_articles(cleaned_df: pd.DataFrame, articles_path) -> None:
+    """Assert every unique non-null revid in the cleaned CSV is represented by a
+    non-empty content line in the articles JSONL.
+    """
+    p = Path(articles_path)
+    if not p.exists():
+        raise ValidationError(f"articles file does not exist: {p}")
+
+    required = set()
+    mask = (cleaned_df["Action"] == "article_open") & cleaned_df["ArticleRevid"].notna()
+    for r in cleaned_df.loc[mask, "ArticleRevid"]:
+        required.add(int(r))
+
+    present: dict = {}
+    with p.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            rec = json.loads(line)
+            present[int(rec["revid"])] = rec.get("content") or ""
+
+    missing = sorted(required - set(present.keys()))
+    if missing:
+        sample = missing[:5]
+        raise ValidationError(
+            f"articles JSONL missing {len(missing)} revids (first 5: {sample})"
+        )
+
+    empties = sorted(r for r in required if not present[r].strip())
+    if empties:
+        sample = empties[:5]
+        raise ValidationError(
+            f"articles JSONL has empty content for {len(empties)} revids "
+            f"(first 5: {sample})"
+        )

@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+
 import pandas as pd
 import pytest
 
@@ -61,3 +64,59 @@ class TestValidateCleaned:
                     for _ in range(5)]
         df = pd.DataFrame(real + practice)
         validate_cleaned(df, original_row_count=26, removed_rows=1)
+
+
+from validation import validate_articles
+
+
+def _cleaned(revids):
+    return pd.DataFrame({
+        "Action": ["article_open"] * len(revids),
+        "ArticleSlug": [f"A{r}" for r in revids],
+        "ArticleRevid": pd.array(revids, dtype="Int64"),
+        "Time": ["2026-04-14T13:00:00.000Z"] * len(revids),
+    })
+
+
+def _write_jsonl(path: Path, rows):
+    lines = [json.dumps(r) for r in rows]
+    path.write_text("\n".join(lines) + ("\n" if lines else ""), encoding="utf-8")
+
+
+class TestValidateArticles:
+    def test_passes_when_every_revid_has_non_empty_content(self, tmp_path: Path):
+        p = tmp_path / "a.jsonl"
+        _write_jsonl(p, [
+            {"article_slug": "A1", "revid": 1, "timestamp": "t", "content": "body"},
+            {"article_slug": "A2", "revid": 2, "timestamp": "t", "content": "body"},
+        ])
+        validate_articles(_cleaned([1, 2]), p)  # no raise
+
+    def test_fails_when_revid_missing_from_jsonl(self, tmp_path: Path):
+        p = tmp_path / "a.jsonl"
+        _write_jsonl(p, [
+            {"article_slug": "A1", "revid": 1, "timestamp": "t", "content": "body"},
+        ])
+        with pytest.raises(ValidationError, match="missing"):
+            validate_articles(_cleaned([1, 2]), p)
+
+    def test_fails_when_content_is_empty_string(self, tmp_path: Path):
+        p = tmp_path / "a.jsonl"
+        _write_jsonl(p, [
+            {"article_slug": "A1", "revid": 1, "timestamp": "t", "content": ""},
+        ])
+        with pytest.raises(ValidationError, match="empty content"):
+            validate_articles(_cleaned([1]), p)
+
+    def test_ignores_extra_revids_in_jsonl(self, tmp_path: Path):
+        p = tmp_path / "a.jsonl"
+        _write_jsonl(p, [
+            {"article_slug": "A1", "revid": 1, "timestamp": "t", "content": "body"},
+            {"article_slug": "A2", "revid": 2, "timestamp": "t", "content": "body"},
+            {"article_slug": "A3", "revid": 3, "timestamp": "t", "content": "body"},
+        ])
+        validate_articles(_cleaned([1, 2]), p)  # no raise even though revid=3 is extra
+
+    def test_fails_when_jsonl_file_missing(self, tmp_path: Path):
+        with pytest.raises(ValidationError, match="not exist"):
+            validate_articles(_cleaned([1]), tmp_path / "missing.jsonl")
