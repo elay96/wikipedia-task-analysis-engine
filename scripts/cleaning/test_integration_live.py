@@ -3,7 +3,7 @@ Opt-in: run with `pytest -m live`. Skipped by default per pytest.ini addopts.
 """
 import pytest
 
-from api_client import build_session, fetch_revision_at
+from api_client import build_session, fetch_extract_by_revid, fetch_revision_at
 
 
 @pytest.mark.live
@@ -31,9 +31,6 @@ class TestLiveMediaWikiAPI:
         )
         assert result["status"] == "not_found"
         assert result["revid"] is None
-
-
-from api_client import fetch_extract_by_revid
 
 
 @pytest.mark.live

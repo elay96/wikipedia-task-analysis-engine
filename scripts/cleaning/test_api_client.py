@@ -201,3 +201,16 @@ class TestFetchExtractByRevid:
         result = fetch_extract_by_revid(session, 42)
         assert result["status"] == "not_found"
         assert result["content"] is None
+
+    def test_badrevids_returns_not_found(self):
+        session = MagicMock()
+        session.get.return_value = _mock_response({
+            "query": {
+                "badrevids": {"999999999999": {"revid": 999999999999, "missing": ""}}
+            }
+        })
+        from api_client import fetch_extract_by_revid
+        result = fetch_extract_by_revid(session, 999999999999)
+        assert result["status"] == "not_found"
+        assert result["content"] is None
+        assert result["error"] is None
