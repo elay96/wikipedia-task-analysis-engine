@@ -106,6 +106,20 @@ class TestMergeRevids:
         assert int(result.iloc[2]["ArticleRevid"]) == 222
 
 
+    def test_revid_dtype_is_int64(self):
+        df = pd.DataFrame([
+            {"ID": 1, "Action": "article_open", "ArticleSlug": "A",
+             "Time": "2026-04-14T13:00:00.000Z", "ArticleRevid": None},
+        ])
+        lookup = pd.DataFrame([
+            {"slug": "A", "timestamp": "2026-04-14T13:00:00.000Z",
+             "revid": 111, "status": "ok", "fetched_at": "x"},
+        ])
+        result = merge_revids(df, lookup)
+        assert result["ArticleRevid"].dtype == "Int64"
+        assert result.iloc[0]["ArticleRevid"] == 111
+
+
 class TestBuildWikipediaUrlsCol:
     def test_populates_url_when_revid_present(self):
         df = pd.DataFrame([

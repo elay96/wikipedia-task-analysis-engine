@@ -33,7 +33,9 @@ def merge_revids(df: pd.DataFrame, lookup: pd.DataFrame) -> pd.DataFrame:
     mask_article_open = merged["Action"] == "article_open"
     merged.loc[mask_article_open & merged["_revid_merged"].notna(), "ArticleRevid"] = \
         merged.loc[mask_article_open & merged["_revid_merged"].notna(), "_revid_merged"]
-    return merged.drop(columns=["_revid_merged"])
+    merged = merged.drop(columns=["_revid_merged"])
+    merged["ArticleRevid"] = pd.to_numeric(merged["ArticleRevid"], errors="coerce").astype("Int64")
+    return merged
 
 
 def build_wikipedia_urls_col(df: pd.DataFrame) -> pd.DataFrame:
