@@ -1,21 +1,36 @@
 # Cleaning Pipeline
 
-Two-stage pipeline that produces `data/cleaned/Game.csv` from the raw experiment
-logs at `data/dirty_data/Game.csv`.
+Three-stage pipeline that produces the canonical cleaned dataset +
+article-content artefacts in `data/cleaned/`. The raw experiment logs at
+`data/dirty_data/Game.csv` are the single source of truth for input; all
+derived artefacts live in `data/cleaned/`.
 
 ## Overview
 
 ```
-data/dirty_data/Game.csv
+data/dirty_data/Game.csv              (raw experiment logs, COMPOUND)
         │
-        ▼   step1a_resolve_revids.py  (network: MediaWiki API)
+        ▼   step1a_resolve_revids.py          (MediaWiki API - resumable)
 data/cleaned/revid_lookup.csv
         │
-        ▼   step1b_apply_cleaning.py  (deterministic CSV transform + validation)
-data/cleaned/Game.csv
+        ▼   step1b_apply_cleaning.py          (deterministic + validation gate)
+data/cleaned/Game.csv                 (canonical input for analysis scripts)
+        │
+        ▼   step2_fetch_articles.py           (MediaWiki API - resumable)
+data/cleaned/articles.jsonl           (revid -> plain-text content)
+        │
+        ▼   step3_build_wiki_texts.py         (slug -> latest content)
+data/cleaned/wiki_texts.json
+        │
+        ▼   scripts/compute_topics.py         (LDA)
+        ▼   scripts/compute_similarity.py     (tf-idf cosine)
+        ▼   scripts/compute_bertopic.py       (optional - BERTopic variants)
+data/cleaned/{topic_model,similarity_matrix,bertopic_*}.json
 ```
 
-Stage 2 (article content fetch) is documented below.
+**Rule:** every derived artefact (anything that can be regenerated from
+`data/dirty_data/Game.csv`) lives in `data/cleaned/`. Nothing should ever
+be written to the root of `data/`.
 
 ## Prerequisites
 
@@ -25,18 +40,36 @@ pip install -r requirements.txt
 
 Requires `requests`, `pandas`, `pytest`. Python 3.9+.
 
-## Running
+## Full re-run sequence (drop-in for new compound data)
+
+When new participants finish and a new compound `Game.csv` arrives:
+
+```bash
+# 1. replace the raw input (compound = old rows preserved + new rows appended)
+cp /path/to/new/Game.csv data/dirty_data/Game.csv
+
+# 2. regenerate the cleaned dataset (resumable where possible)
+py scripts/cleaning/step1a_resolve_revids.py     # only new (slug, time) pairs hit the API
+py scripts/cleaning/step1b_apply_cleaning.py     # regenerate data/cleaned/Game.csv
+py scripts/cleaning/step2_fetch_articles.py      # only new revids hit the API
+py scripts/cleaning/step3_build_wiki_texts.py    # rebuild slug -> content map
+
+# 3. regenerate the semantic artefacts (full rebuild; fast)
+py scripts/compute_topics.py                     # LDA -> topic_model.json
+py scripts/compute_similarity.py                 # tf-idf -> similarity_matrix.json
+# py scripts/compute_bertopic.py                 # optional, slower (BERTopic)
+```
+
+All stages are idempotent. `step1a` and `step2` also resume cleanly after
+a crash or SIGINT.
+
+## Per-stage notes
 
 ### Stage 1a - resolve revids (slow, network-bound)
-
-```
-py scripts/cleaning/step1a_resolve_revids.py
-```
 
 - Reads `data/dirty_data/Game.csv`.
 - Writes / updates `data/cleaned/revid_lookup.csv`.
 - Resumable: re-runs skip entries already resolved with `status=ok`.
-- Expected runtime: ~30-90s on the current dataset (~250 unique pairs).
 - Progress is printed every 50 calls; final summary shows `ok / not_found / error` counts.
 
 Custom paths:
@@ -46,15 +79,26 @@ py scripts/cleaning/step1a_resolve_revids.py --dirty X --lookup Y
 
 ### Stage 1b - apply cleaning (fast, deterministic)
 
-```
-py scripts/cleaning/step1b_apply_cleaning.py
-```
-
 - Reads `data/dirty_data/Game.csv` and `data/cleaned/revid_lookup.csv`.
 - Writes `data/cleaned/Game.csv`.
 - Runs a validation gate; exits non-zero if any invariant is violated.
 
-## Lookup CSV schema
+### Stage 2 - fetch article content
+
+- Input:  `data/cleaned/Game.csv`
+- Output: `data/cleaned/articles.jsonl` (schema: `{article_slug, revid, timestamp, content}`)
+- Resumable: any revid already present in the JSONL is skipped.
+- Validation at end: every unique non-null `ArticleRevid` in cleaned CSV
+  must have a non-empty `content` line in the JSONL.
+
+### Stage 3 - build wiki_texts.json
+
+- Input:  `data/cleaned/articles.jsonl`
+- Output: `data/cleaned/wiki_texts.json` (slug -> latest content)
+- For each slug, picks the content from the latest (timestamp, revid).
+- Full rebuild each run; fast.
+
+## Lookup CSV schema (`revid_lookup.csv`)
 
 | Column | Example | Notes |
 |---|---|---|
@@ -70,37 +114,3 @@ py scripts/cleaning/step1b_apply_cleaning.py
 pytest scripts/cleaning/            # unit tests (fast, no network)
 pytest scripts/cleaning/ -m live    # live MediaWiki API tests (opt-in)
 ```
-
-## Stage 2: fetch article content
-
-Stage 2 downloads the plain-text body of each unique Wikipedia revision referenced in
-`data/cleaned/Game.csv` and writes `data/cleaned/articles.jsonl` — one JSON object per
-line, schema `{article_slug, revid, timestamp, content}`.
-
-### Run
-
-```bash
-py scripts/cleaning/step2_fetch_articles.py
-```
-
-- Input:  `data/cleaned/Game.csv`
-- Output: `data/cleaned/articles.jsonl`
-- Expected: ~150-300 unique revids (fewer than unique visits because the same Wikipedia revision
-  often covers multiple visits) -> ~30-90 seconds total. First production run: 184 revids.
-
-### Resumable
-
-On re-run, any revid already present in the JSONL is skipped. When new participants
-are added, the full pipeline is:
-
-```bash
-py scripts/cleaning/step1a_resolve_revids.py   # backfills revid_lookup.csv
-py scripts/cleaning/step1b_apply_cleaning.py   # regenerates cleaned Game.csv
-py scripts/cleaning/step2_fetch_articles.py    # fills in any new articles
-```
-
-### Validation
-
-After the fetch loop completes, the script asserts that every unique non-null
-`ArticleRevid` in the cleaned CSV has a non-empty `content` line in the JSONL.
-Non-zero exit means validation failed — inspect the summary counts at the end.
