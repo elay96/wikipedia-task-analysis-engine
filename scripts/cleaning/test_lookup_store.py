@@ -1,3 +1,4 @@
+import pytest
 import pandas as pd
 
 from lookup_store import LOOKUP_COLUMNS, extract_unique_pairs, load_lookup, save_lookup
@@ -22,7 +23,8 @@ class TestLoadSaveRoundTrip:
         roundtripped = load_lookup(path)
         assert len(roundtripped) == 1
         assert roundtripped.iloc[0]["slug"] == "Capybara"
-        assert int(roundtripped.iloc[0]["revid"]) == 1349431902
+        assert roundtripped.iloc[0]["revid"] == 1349431902
+        assert roundtripped["revid"].dtype == "Int64"
 
     def test_preserves_nulls_on_errored_rows(self, tmp_path):
         path = tmp_path / "lookup.csv"
@@ -37,6 +39,11 @@ class TestLoadSaveRoundTrip:
         loaded = load_lookup(path)
         assert pd.isna(loaded.iloc[0]["revid"])
         assert loaded.iloc[0]["status"] == "error"
+
+    def test_save_lookup_rejects_missing_columns(self, tmp_path):
+        df = pd.DataFrame([{"slug": "X", "timestamp": "Y"}])  # missing revid/status/fetched_at
+        with pytest.raises(ValueError, match="missing columns"):
+            save_lookup(df, tmp_path / "bad.csv")
 
 
 class TestExtractUniquePairs:
