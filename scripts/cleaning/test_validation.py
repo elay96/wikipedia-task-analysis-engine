@@ -120,3 +120,11 @@ class TestValidateArticles:
     def test_fails_when_jsonl_file_missing(self, tmp_path: Path):
         with pytest.raises(ValidationError, match="not exist"):
             validate_articles(_cleaned([1]), tmp_path / "missing.jsonl")
+
+    def test_corrupted_jsonl_line_reports_missing_revid(self, tmp_path: Path):
+        p = tmp_path / "a.jsonl"
+        good = json.dumps({"article_slug": "A1", "revid": 1, "timestamp": "t", "content": "body"})
+        truncated = '{"article_slug": "A2", "revid":'  # crashed mid-write — should be skipped
+        p.write_text(good + "\n" + truncated + "\n", encoding="utf-8")
+        with pytest.raises(ValidationError, match="missing"):
+            validate_articles(_cleaned([1, 2]), p)

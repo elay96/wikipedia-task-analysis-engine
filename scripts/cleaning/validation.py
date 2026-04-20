@@ -66,8 +66,11 @@ def validate_articles(cleaned_df: pd.DataFrame, articles_path) -> None:
             line = line.strip()
             if not line:
                 continue
-            rec = json.loads(line)
-            present[int(rec["revid"])] = rec.get("content") or ""
+            try:
+                rec = json.loads(line)
+                present[int(rec["revid"])] = rec.get("content") or ""
+            except (json.JSONDecodeError, KeyError, ValueError, TypeError):
+                continue  # skip corrupted/partial lines — validation reports missing
 
     missing = sorted(required - set(present.keys()))
     if missing:

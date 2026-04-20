@@ -15,8 +15,7 @@ data/cleaned/revid_lookup.csv
 data/cleaned/Game.csv
 ```
 
-Stage 2 (article content fetch) is designed but not implemented here - see
-`docs/superpowers/specs/2026-04-20-data-cleaning-design.html` section 6.
+Stage 2 (article content fetch) is documented below.
 
 ## Prerequisites
 
@@ -86,7 +85,8 @@ py scripts/cleaning/step2_fetch_articles.py
 
 - Input:  `data/cleaned/Game.csv`
 - Output: `data/cleaned/articles.jsonl`
-- Expected: ~584 unique revids -> ~584 HTTP calls, ~1-3 minutes total.
+- Expected: ~150-300 unique revids (fewer than unique visits because the same Wikipedia revision
+  often covers multiple visits) -> ~30-90 seconds total. First production run: 184 revids.
 
 ### Resumable
 
