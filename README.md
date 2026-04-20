@@ -39,14 +39,31 @@ Interactive HTML guides — available online via GitHub Pages:
 ```
 wikipedia-task-analysis-engine/
 │
-├── 📂 data/                    # Raw experimental data
-│   ├── Game.csv                # Primary dataset — actions, timestamps, metadata
-│   ├── similarity_matrix.json  # Article-to-article cosine similarity
-│   ├── wiki_texts.json         # Full article texts
-│   └── topic_model.json        # LDA topic model output
+├── 📂 data/
+│   ├── 📂 dirty_data/
+│   │   └── Game.csv            # Raw compound server logs (single input)
+│   │
+│   ├── 📂 cleaned/             # All canonical + derived artefacts
+│   │   ├── Game.csv            # Cleaned CSV - read by every analysis script
+│   │   ├── revid_lookup.csv    # (slug, timestamp) → revid mapping
+│   │   ├── articles.jsonl      # Plain-text article content per revid
+│   │   ├── wiki_texts.json     # slug → latest content
+│   │   ├── topic_model.json    # LDA topic distributions (10 topics)
+│   │   ├── similarity_matrix.json  # tf-idf cosine similarity
+│   │   └── bertopic_*.json     # BERTopic variants (exploration)
+│   │
+│   └── 📂 archive/             # Stale snapshots, no longer referenced
 │
-├── 📂 scripts/                 # Analysis pipeline (M1–M33)
-│   ├── helpers.py              # Shared utilities — data loading, plot helpers
+├── 📂 scripts/
+│   ├── 📂 cleaning/            # 3-stage data cleaning pipeline
+│   │   ├── step1a_resolve_revids.py   # Backfill revids via MediaWiki API
+│   │   ├── step1b_apply_cleaning.py   # Produce cleaned/Game.csv
+│   │   ├── step2_fetch_articles.py    # Fetch article content → articles.jsonl
+│   │   ├── step3_build_wiki_texts.py  # Derive wiki_texts.json from articles.jsonl
+│   │   ├── api_client.py, article_store.py, validation.py, ...
+│   │   └── test_*.py           # 92 unit tests + 5 opt-in live API tests
+│   │
+│   ├── helpers.py              # Shared utilities — load_trials() default reads cleaned/Game.csv
 │   ├── compute_similarity.py   # Pre-compute similarity matrix
 │   ├── compute_topics.py       # Train LDA topic model
 │   │
@@ -105,9 +122,24 @@ wikipedia-task-analysis-engine/
 │   ├── m38_pca_avg_first.py            # PCA — average first, then PCA
 │   ├── m39_pca_pool_first.py           # PCA — pool first, then average
 │   ├── m40_pca_zscore.py               # PCA — z-scored
-│   └── m41_composite_avg.py            # Final composite: mean of 3 switch rates
+│   ├── m41_composite_avg.py            # Final composite: mean of 3 switch rates
+│   │
+│   │  # 🧪 BERTopic experiments (conclusion: LDA > BERTopic)
+│   ├── m42_bert_clustering.py          # BERTopic clustering variants
+│   ├── m43_switch_bert_kmeans.py       # Switch rate — BERTopic k-means
+│   ├── m44_switch_bert_dbscan.py       # Switch rate — BERTopic DBSCAN
+│   ├── m45_switch_bert_spectral.py     # Switch rate — BERTopic spectral
+│   ├── m46_spectral_kmeans.py          # Spectral + k-means direct
+│   ├── m47_switch_spectral_direct.py   # Switch rate — spectral direct
+│   │
+│   │  # 🎯 Final composite DV (preferred for reporting)
+│   ├── m48_pca_counts.py               # PCA on raw switch counts
+│   ├── m49_idle_exclusion.py           # Idle % exclusion analysis
+│   ├── m50_final_composite_dv.py       # Final composite: counts + PCA
+│   ├── m51_final_composite_dv.py       # Variant with condition comparison
+│   └── m52_final_composite_dv.py       # Final pipeline (used for reporting)
 │
-├── 📂 output/                  # 🖼️ Generated visualizations (.png)
+├── 📂 output/                  # 🖼️ Generated visualizations (.png/.pdf/.csv)
 ├── 📂 docs/                    # 📄 HTML documentation & guides
 └── 📂 references/              # 📎 Research papers
 ```
@@ -168,6 +200,53 @@ The recommended approach (see [Methodology Review](https://elay96.github.io/wiki
 | M34–M36 | 🔀 Switch Rate | 3 switch rate signals: time (60s), topic (LDA), typing |
 | M37–M40 | 📐 PCA Switch | PCA variants on switch rates (per-domain, pooled, z-scored) |
 | M41 | 🎯 Composite | Final composite switching score = mean of 3 switch rates |
+| M42–M47 | 🧪 BERTopic | Alternative clustering experiments (conclusion: LDA > BERTopic) |
+| M48 | 📐 PCA Counts | PCA on raw switch counts (no z-scoring) |
+| M49 | 🧹 Exclusion | Idle % exclusion criterion analysis |
+| M50–M52 | 🎯 Final DV | Final composite DV pipeline (switch counts + PCA); M52 used for reporting |
+
+---
+
+## 🧹 Cleaning Pipeline
+
+Raw server logs don't store Wikipedia article revisions or content. The 3-stage cleaning pipeline retroactively resolves revids and fetches article snapshots so downstream semantic analyses operate on the exact content each participant saw.
+
+```
+data/dirty_data/Game.csv              (raw compound logs)
+        │
+        ▼   step1a_resolve_revids.py          (MediaWiki API, resumable)
+data/cleaned/revid_lookup.csv         (slug, timestamp → revid)
+        │
+        ▼   step1b_apply_cleaning.py          (deterministic + validation gate)
+data/cleaned/Game.csv                 (canonical input for m1–m52)
+        │
+        ▼   step2_fetch_articles.py           (MediaWiki API, resumable)
+data/cleaned/articles.jsonl           (revid → plain-text content)
+        │
+        ▼   step3_build_wiki_texts.py         (slug → latest content)
+data/cleaned/wiki_texts.json
+        │
+        ▼   compute_topics.py / compute_similarity.py / compute_bertopic.py
+data/cleaned/{topic_model,similarity_matrix,bertopic_*}.json
+```
+
+### Re-running after new compound data
+
+When a new compound `Game.csv` arrives (ongoing experiment):
+
+```bash
+cp /path/to/new/Game.csv data/dirty_data/Game.csv
+py scripts/cleaning/step1a_resolve_revids.py    # resumable - only new revids hit the API
+py scripts/cleaning/step1b_apply_cleaning.py    # regenerate cleaned/Game.csv
+py scripts/cleaning/step2_fetch_articles.py     # resumable - only new articles
+py scripts/cleaning/step3_build_wiki_texts.py   # rebuild slug → latest content
+py scripts/compute_topics.py                    # LDA → topic_model.json
+py scripts/compute_similarity.py                # tf-idf → similarity_matrix.json
+```
+
+Every step is idempotent. `step1a` and `step2` resume cleanly after a crash. See [`scripts/cleaning/README.md`](scripts/cleaning/README.md) for full details.
+
+**Rule:** every derived artefact lives in `data/cleaned/`. Nothing gets written to `data/` root.
 
 ---
 
@@ -176,29 +255,30 @@ The recommended approach (see [Methodology Review](https://elay96.github.io/wiki
 ### 📋 Prerequisites
 
 ```bash
-pip install pandas numpy matplotlib scikit-learn scipy
+pip install pandas numpy matplotlib scikit-learn scipy requests pytest
 ```
+
+### 📂 Data Requirements
+
+Only one file is required as input:
+
+- **`data/dirty_data/Game.csv`** — raw compound server logs
+
+All other artefacts (cleaned CSV, article content, LDA topics, similarity matrix) are produced by the cleaning pipeline above and live in `data/cleaned/`.
 
 ### ▶️ Running an Analysis
 
-Each measure script is standalone and can be run independently:
+Once `data/cleaned/Game.csv` + `data/cleaned/topic_model.json` exist (produced by the cleaning pipeline), each measure script is standalone:
 
 ```bash
 # Run a single measure
 python scripts/m24_phase_duration.py
 
-# Run PCA on raw signals
-python scripts/m29_pca_raw.py
+# Run the final composite DV pipeline
+python scripts/m52_final_composite_dv.py
 
 # Output visualizations are saved to output/
 ```
-
-### 📂 Data Requirements
-
-Place your data files in the `data/` directory:
-- `Game.csv` — Primary behavioral data export
-- `similarity_matrix.json` — Pre-computed article similarity matrix
-- `wiki_texts.json` — Article text corpus
 
 ---
 
