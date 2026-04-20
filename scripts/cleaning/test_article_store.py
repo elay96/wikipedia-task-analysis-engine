@@ -39,6 +39,14 @@ class TestLoadExistingRevids:
         )
         assert load_existing_revids(p) == {1}
 
+    def test_skips_malformed_lines(self, tmp_path: Path):
+        p = tmp_path / "a.jsonl"
+        good = json.dumps({"article_slug": "A", "revid": 1, "timestamp": "t", "content": "x"})
+        truncated = '{"article_slug": "B", "revid":'  # crashed mid-write
+        more_good = json.dumps({"article_slug": "C", "revid": 3, "timestamp": "t", "content": "z"})
+        p.write_text("\n".join([good, truncated, more_good]) + "\n", encoding="utf-8")
+        assert load_existing_revids(p) == {1, 3}
+
 
 class TestAppendArticle:
     def test_creates_parent_directory_if_missing(self, tmp_path: Path):

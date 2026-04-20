@@ -24,8 +24,11 @@ def load_existing_revids(path) -> Set[int]:
             line = line.strip()
             if not line:
                 continue
-            record = json.loads(line)
-            revids.add(int(record["revid"]))
+            try:
+                record = json.loads(line)
+                revids.add(int(record["revid"]))
+            except (json.JSONDecodeError, KeyError, ValueError, TypeError):
+                continue  # skip corrupted/partial lines — resume is best-effort
     return revids
 
 
@@ -47,13 +50,17 @@ def extract_unique_revid_records(cleaned_df: pd.DataFrame) -> List[dict]:
     """From a cleaned Game.csv DataFrame, emit one record per unique non-null revid.
 
     Each record has article_slug + revid + timestamp (the earliest Time across all
-    article_open rows with that revid). Output is sorted by revid ascending.
+    article_open rows with that revid). Content is NOT included - callers must fetch
+    and attach it before passing to append_article. Output is sorted by revid ascending.
     """
     mask = (cleaned_df["Action"] == "article_open") & cleaned_df["ArticleRevid"].notna()
     sub = cleaned_df.loc[mask, ["ArticleSlug", "ArticleRevid", "Time"]].copy()
     sub["ArticleRevid"] = sub["ArticleRevid"].astype("int64")
     sub = sub.sort_values("Time")
-    grouped = sub.groupby("ArticleRevid", sort=True, as_index=False).first()
+    # nth(0) is positional-first; paired with sort_values("Time") above, this
+    # gives us the earliest Time per revid regardless of pandas version semantics.
+    grouped = sub.groupby("ArticleRevid", sort=True, as_index=False).nth(0)
+    grouped = grouped.sort_values("ArticleRevid")
 
     records: List[dict] = []
     for _, row in grouped.iterrows():
