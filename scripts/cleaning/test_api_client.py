@@ -1,6 +1,5 @@
 from unittest.mock import MagicMock, patch
 
-import pytest
 import requests
 
 from api_client import build_session, fetch_revision_at
@@ -11,8 +10,6 @@ def _mock_response(json_data, status_code=200):
     m.status_code = status_code
     m.json.return_value = json_data
     m.raise_for_status = MagicMock()
-    if status_code >= 500 or status_code == 429:
-        m.raise_for_status.side_effect = requests.HTTPError(f"{status_code}")
     return m
 
 
@@ -106,5 +103,5 @@ class TestFetchRevisionAt:
             result = fetch_revision_at(session, "X", "2026-01-02T00:00:00Z")
         assert result["status"] == "error"
         assert result["revid"] is None
-        assert "500" in (result["error"] or "")
+        assert result["error"] == "HTTP 500"
         assert session.get.call_count == 3

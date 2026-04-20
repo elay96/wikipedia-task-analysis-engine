@@ -51,20 +51,23 @@ def fetch_revision_at(session: requests.Session, slug: str, timestamp: str) -> R
             resp = session.get(API_ENDPOINT, params=params, timeout=TIMEOUT_SEC)
             if resp.status_code == 429 or resp.status_code >= 500:
                 last_error = f"HTTP {resp.status_code}"
-                time.sleep(BACKOFF_BASE * (2 ** attempt))
+                if attempt < MAX_RETRIES - 1:
+                    time.sleep(BACKOFF_BASE * (2 ** attempt))
                 continue
             resp.raise_for_status()
             data = resp.json()
             break
         except (requests.RequestException, ValueError) as e:
             last_error = str(e)
-            time.sleep(BACKOFF_BASE * (2 ** attempt))
+            if attempt < MAX_RETRIES - 1:
+                time.sleep(BACKOFF_BASE * (2 ** attempt))
     else:
         return {"revid": None, "status": "error", "error": last_error}
 
     time.sleep(THROTTLE_SEC)
 
     pages = (data.get("query") or {}).get("pages") or {}
+    # Single-slug call (titles=slug), so pages dict has exactly one entry.
     for _, page in pages.items():
         if "missing" in page:
             return {"revid": None, "status": "not_found", "error": None}
