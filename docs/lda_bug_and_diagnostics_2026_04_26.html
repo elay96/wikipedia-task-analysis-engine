@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>תיקון באג LDA + דיאגנוסטיקה (M52 / M53 / M54)</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", "Arial Hebrew", Arial, sans-serif;
+    background: #ffffff;
+    color: #1a1a1a;
+    margin: 0;
+    padding: 32px 48px 80px;
+    line-height: 1.65;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 28px; margin: 0 0 4px; color: #1a1a1a; }
+  h2 { font-size: 22px; margin: 36px 0 8px; color: #1565c0; border-bottom: 2px solid #e3f2fd; padding-bottom: 4px; }
+  h3 { font-size: 17px; margin: 22px 0 6px; color: #2e7d32; }
+  p { margin: 8px 0; }
+  .lead { color: #555; font-size: 14px; margin-bottom: 24px; }
+  .toc { background: #f7f9fc; border: 1px solid #e0e6ee; border-radius: 8px;
+         padding: 12px 18px; margin: 16px 0 28px; font-size: 14px; }
+  .toc ul { margin: 4px 0; padding-right: 20px; }
+  .toc li { margin: 3px 0; }
+  .toc a { color: #1565c0; text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  .callout {
+    border-right: 4px solid #f9a825;
+    background: #fffbea;
+    padding: 12px 16px;
+    margin: 14px 0;
+    border-radius: 4px;
+  }
+  .callout.bad { border-color: #c62828; background: #fff5f5; }
+  .callout.good { border-color: #2e7d32; background: #f0faf0; }
+  .callout.info { border-color: #1976d2; background: #f5faff; }
+  .callout strong { color: inherit; }
+
+  pre, code { font-family: Consolas, Menlo, "Courier New", monospace; }
+  pre {
+    background: #f5f7fa;
+    border: 1px solid #e0e6ee;
+    border-radius: 6px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.45;
+    direction: ltr;
+    text-align: left;
+  }
+  code { background: #f0f3f7; padding: 1px 5px; border-radius: 3px;
+         font-size: 13px; direction: ltr; display: inline-block; }
+
+  table { border-collapse: collapse; width: 100%; margin: 12px 0;
+          font-size: 14px; }
+  th, td { border: 1px solid #e0e6ee; padding: 8px 12px; text-align: center; }
+  th { background: #f0f3f7; font-weight: 600; color: #333; }
+  td.label { text-align: right; background: #f7f9fc; font-weight: 600; }
+  tr.delta td { background: #f0faf0; font-weight: 600; color: #1b5e20; }
+  tr.warn  td { background: #fff5f5; color: #b71c1c; }
+
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 12px 0;
+  }
+  .compare > div {
+    border: 1px solid #e0e6ee; border-radius: 8px; padding: 14px 16px;
+  }
+  .compare .before { background: #fff5f5; border-color: #ffcdd2; }
+  .compare .after  { background: #f0faf0; border-color: #c8e6c9; }
+  .compare h4 { margin: 0 0 6px; font-size: 14px; }
+  .compare .before h4 { color: #c62828; }
+  .compare .after  h4 { color: #2e7d32; }
+
+  .seq {
+    font-family: Consolas, Menlo, monospace; font-size: 13px;
+    direction: ltr; text-align: left;
+    background: #fafbfc; border: 1px solid #e0e6ee; border-radius: 4px;
+    padding: 8px 10px; margin: 6px 0;
+    white-space: pre-wrap; word-break: break-all;
+  }
+  .topic-bad  { color: #c62828; font-weight: bold; }
+  .topic-good { color: #2e7d32; font-weight: bold; }
+
+  .small { font-size: 13px; color: #666; }
+  ul.tight li { margin: 2px 0; }
+
+  .panel {
+    border: 1px solid #e0e6ee; border-radius: 8px;
+    padding: 14px 18px; margin: 12px 0; background: #fafbfc;
+  }
+  .panel h3 { margin-top: 0; }
+</style>
+</head>
+<body>
+
+<h1>תיקון באג LDA + דיאגנוסטיקה</h1>
+<div class="lead">
+  סיכום מרוכז: באג חישובי שהתגלה בעקבות הערות הפרופסור, ההשפעה שלו על
+  התוצאות, ושלוש ניתוחים חדשים (M52 מעודכן, M53 דיאגנוסטיקה, M54 ריצה
+  ל-שאלה אחת). תאריך: 2026-04-26.
+</div>
+
+<div class="toc">
+  <strong>תוכן:</strong>
+  <ul>
+    <li><a href="#tldr">TL;DR למשרד הפרופסור</a></li>
+    <li><a href="#bug">1. הבאג: הסבר מלא</a></li>
+    <li><a href="#before-after">2. השוואת מספרים: לפני ואחרי התיקון</a></li>
+    <li><a href="#outliers">3. מה זה אאוטליירים? (כולל "LDA residual")</a></li>
+    <li><a href="#m52">4. M52: ניתוח מורכב על שתי השאלות</a></li>
+    <li><a href="#m53">5. M53: סקריפט הדיאגנוסטיקה</a></li>
+    <li><a href="#m54">6. M54: ריצה רק על שאלה אחת</a></li>
+    <li><a href="#bottom-line">7. שורה תחתונה</a></li>
+  </ul>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════ -->
+<h2 id="tldr">TL;DR למשרד הפרופסור</h2>
+
+<div class="callout info">
+  <p><strong>1. ההערה של הפרופסור הצביעה על באג אמיתי.</strong>
+  הוא חשד ש-LDA "התנהג שונה" משתי המדדים האחרים. בדיקה גילתה שב-82% מהביקורים
+  במאמרים, ה-LDA לא מצליח להתאים את הכותרת לסיווג נושא. הסיבה: כותרת המאמר
+  בקובץ היא <code>Ancient art</code> (עם רווח), אבל המודל שמר אותה כ-
+  <code>Ancient_art</code> (קו תחתון). פשוט מחרוזות שונות.</p>
+
+  <p><strong>2. אחרי תיקון הבאג, ההבדל בין LDA לבין השאר נעלם.</strong>
+  שלושת המדדים מתואמים יפה (r ≈ 0.50-0.60), ה-PCA נותן PC1 שמסביר 77% מהשונות.
+  זה לא היה אאוטליירים, אלא כשל חישובי בסיסי.</p>
+
+  <p><strong>3. ריצה רק על שאלה אחת לא משנה את הציון המורכב.</strong>
+  הקורלציה בין PC1 של "שתי השאלות" לבין PC1 של "art_history בלבד" היא 0.84,
+  ובין M52 לבין "psychology בלבד" היא 0.83. כלומר השאלה ה"בעייתית" לא
+  מטה את התוצאה.</p>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════ -->
+<h2 id="bug">1. הבאג: הסבר מלא</h2>
+
+<h3>איך הקוד היה אמור לעבוד</h3>
+
+<p>בכל ניתוח של מעברי-נושא יש פונקציה אחת מרכזית
+   (<code>load_lda_assignments</code>) שטוענת את מודל ה-LDA ובונה מילון
+   מהצורה: <em>שם מאמר → מספר נושא</em>. אחר כך, לכל ביקור בדף
+   (<code>page_visit</code>) הקוד שואל:</p>
+
+<pre>topic_labels = [lda_assignments.get(pv['title'], -1) for pv in pvs]</pre>
+
+<p>אם הכותרת לא נמצאת במילון, הקוד מחזיר <code>-1</code> (כלומר "לא ידוע")
+   כברירת מחדל. אחר כך הוא סופר את מספר ההחלפות בין שכנים: כל פעם
+   ש-<code>topic_labels[i] != topic_labels[i-1]</code> נספרת כמעבר נושא.</p>
+
+<h3>איפה היה הבאג</h3>
+
+<p>המודל נשמר ב-<code>topic_model.json</code> כשהמפתחות הם
+   <em>slugs</em> בסגנון URL של ויקיפדיה (רווחים מוחלפים בקווים תחתונים):</p>
+
+<pre>"topic_distributions": {
+  "Ancient_art":     [...],
+  "Modern_art":      [...],
+  "Brain":           [...],
+  "Human_brain":     [...],
+  ...
+}</pre>
+
+<p>אבל ב-<code>Game.csv</code> כותרות המאמרים נשמרות בדיוק כפי שהן מופיעות
+   למשתמש - עם רווחים:</p>
+
+<pre>ArticleTitle
+Ancient art
+Modern art
+Brain
+Human brain</pre>
+
+<p>הקוד הקיים פשוט עשה <code>get(pv['title'], -1)</code> בלי שום נרמול.
+   ככה <code>"Ancient art"</code> לא מצא את <code>"Ancient_art"</code>
+   ב-Hash table, וקיבל <code>-1</code>.</p>
+
+<div class="callout bad">
+  <strong>תוצאה:</strong> מתוך 1,455 ביקורים בדפים בכל הנבדקים,
+  <strong>1,194 (82%)</strong> קיבלו topic = -1. רק 261 (18%) באמת קיבלו
+  סיווג. במילים אחרות, ה-LDA כמעט לא ראה כלום.
+</div>
+
+<h3>שני סוגי עיוות שהבאג יצר</h3>
+
+<p>הסקריפט החדש (M53) פירק לפי נבדק ומצא ש-21 נבדקים מתוך 101 התנהגו
+   "מוזר" יחסית למה שהיינו מצפים מהזמן והטייפינג שלהם. שתי דוגמאות
+   מאלפות:</p>
+
+<div class="panel">
+  <h3>דוגמה א - מעברים <em>שלא היו</em> (LDA "התכווץ")</h3>
+  <p><strong>P60</strong>, שאלת art_history, 11 דפים שנפתחו ברצף:</p>
+
+  <div class="seq">Ancient art → Metropolitan Museum of Art → Ancient art → Modern art → Ancient art → Periods in Western art history → Ancient art → Minoan art → ...</div>
+
+  <p>כל אחד מהדפים האלה היה במציאות נושא תקני (אומנות עתיקה / מודרנית /
+     מוזיאון). אבל אף אחד מהם לא נמצא במילון בגלל הבאג, אז כל הרצף קיבל
+     את אותה תווית "-1":</p>
+
+  <div class="seq"><span class="topic-bad">-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1</span></div>
+
+  <p>הקוד ראה רצף קבוע ⇒ <strong>0 מעברי נושא</strong>. במציאות,
+     הנבדקת עברה בין 6-7 נושאים שונים בקלות.</p>
+</div>
+
+<div class="panel">
+  <h3>דוגמה ב - מעברים <em>שהומצאו</em> (LDA "התנפח")</h3>
+  <p><strong>P40</strong>, שאלת psychology, 5 דפים:</p>
+
+  <div class="seq">Brain → Synaptic plasticity → Brain → Synaptic plasticity → Brain</div>
+
+  <p>במציאות, P40 פשוט הלך-וחזר בין שני מאמרי נוירולוגיה - exploit מובהק.
+     אבל "Brain" היה במודל ו"Synaptic plasticity" לא, אז:</p>
+
+  <div class="seq">1, <span class="topic-bad">-1</span>, 1, <span class="topic-bad">-1</span>, 1</div>
+
+  <p>הקוד ספר <strong>4 מעברי נושא</strong> ב-5 דפים. ערך מנופח באופן
+     מלאכותי, שנובע אך ורק מקיום של -1 בין הערכים.</p>
+</div>
+
+<h3>התיקון</h3>
+
+<p>שינוי שורה אחת ב-<code>load_lda_assignments</code> - לנרמל את המפתחות
+   לצורה עם רווחים בעת הטעינה:</p>
+
+<div class="compare">
+  <div class="before">
+    <h4>לפני</h4>
+    <pre>def load_lda_assignments():
+    with open(...) as f:
+        tm = json.load(f)
+    return {
+      slug: int(np.argmax(dist))
+      for slug, dist in tm['topic_distributions'].items()
+    }</pre>
+  </div>
+  <div class="after">
+    <h4>אחרי</h4>
+    <pre>def load_lda_assignments():
+    with open(..., encoding='utf-8') as f:
+        tm = json.load(f)
+    return {
+      slug.replace('_', ' '): int(np.argmax(dist))
+      for slug, dist in tm['topic_distributions'].items()
+    }</pre>
+  </div>
+</div>
+
+<p>אחרי התיקון, 97.7% מהביקורים מקבלים סיווג נושא תקני. ה-2.3% הנותרים הם
+   29 כותרות ייחודיות שבאמת לא היו במודל (למשל "Pax Romana", "Asian art" -
+   מאמרים שלא נדגמו במהלך הקרולינג). זה רעש סביר שלא משפיע משמעותית.</p>
+
+<!-- ═════════════════════════════════════════════════════════════ -->
+<h2 id="before-after">2. השוואת מספרים: לפני ואחרי</h2>
+
+<h3>סטטיסטיקה תיאורית של count_topic</h3>
+
+<table>
+  <tr><th></th><th>לפני</th><th>אחרי</th><th>שינוי</th></tr>
+  <tr><td class="label">מספר נבדקים סופי</td><td>101</td><td>101</td><td>—</td></tr>
+  <tr><td class="label">count_topic ממוצע</td><td>1.86</td><td>3.84</td><td>×2.06</td></tr>
+  <tr><td class="label">count_topic SD</td><td>2.12</td><td>2.19</td><td>≈ זהה</td></tr>
+  <tr><td class="label">count_topic min</td><td>0.0</td><td>0.0</td><td>—</td></tr>
+  <tr><td class="label">count_topic max</td><td>9.0</td><td>10.5</td><td>+1.5</td></tr>
+</table>
+
+<p class="small">לפני התיקון, המספר הממוצע של מעברי נושא היה כמעט חצי מהאמיתי, כי הרבה
+מעברים פשוט לא נספרו (כשגם הקודם וגם הנוכחי היו -1).</p>
+
+<h3>קורלציות בין המדדים (אחרי כל הסינונים, N=101)</h3>
+
+<table>
+  <tr><th></th><th>Time × Topic</th><th>Time × Typing</th><th>Typing × Topic</th></tr>
+  <tr class="warn"><td class="label">לפני</td><td>0.31</td><td>0.60</td><td>0.26</td></tr>
+  <tr class="delta"><td class="label">אחרי</td><td>0.56</td><td>0.60</td><td>0.50</td></tr>
+</table>
+
+<p>זה בדיוק מה שהפרופסור ראה: לפני התיקון, time ו-typing היו
+   "ביחד" (0.60), אבל topic היה "מנותק" (0.31, 0.26). אחרי התיקון, שלושת
+   המדדים בערך באותה רמת תיאום, כצפוי תיאורטית - שלושתם מודדים את
+   אותה תופעה (טבע מעברים בזמן הניווט).</p>
+
+<h3>תוצאות PCA</h3>
+
+<table>
+  <tr><th></th><th>PC1 %</th><th>PC2 %</th><th>PC3 %</th>
+      <th>PC1 loading: time / topic / typing</th></tr>
+  <tr class="warn"><td class="label">לפני</td><td>67.2%</td><td>25.3%</td><td>7.6%</td>
+      <td>+0.29 / +0.93 / +0.22</td></tr>
+  <tr class="delta"><td class="label">אחרי</td><td>77.1%</td><td>15.6%</td><td>7.3%</td>
+      <td>+0.37 / +0.88 / +0.30</td></tr>
+</table>
+
+<p>לפני התיקון, PC1 הסביר רק 67% מהשונות, ו-PC2 גנב 25% נוספים - כלומר היה
+   ממד "מסתורי" שני שתפס הרבה מהוריאנס. הסיבה: count_topic לא הסכים עם
+   השאר, וזה יצר ממד נוסף. אחרי התיקון, PC1 בולע 77% וההסברה הופכת לחד-ממדית
+   ופשוטה: מי שמחליף הרבה (בכל המדדים) מקבל ציון גבוה.</p>
+
+<div class="callout good">
+  <strong>הפרשנות הסטטיסטית:</strong> הציון המורכב (PC1) שאנחנו משתמשים בו
+  כ-DV הופך לאמין יותר. במקום ש-LDA יוסיף רעש שמסיט את ה-PCA הצידה, הוא
+  עכשיו תורם תיאום חיובי כמו שאר המדדים. זו הרובוסטיות שהיינו רוצים מהתחלה.
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════ -->
+<h2 id="outliers">3. מה זה אאוטליירים?</h2>
+
+<p>בקונטקסט הזה יש שני סוגים שונים של "אאוטליירים", וחשוב לא לערבב.</p>
+
+<h3>סוג א: כלל ה-3 SD של M52 (פסילה אוטומטית)</h3>
+
+<p>בסיום הצינור, על פני 101 הנבדקים שעברו את הסינון, אנחנו בודקים לכל אחד
+   מ-3 המדדים: האם הערך שלו רחוק יותר מ-3 סטיות תקן מהממוצע? אם כן,
+   הנבדק נפסל מ-PCA. זה כלל סטטיסטי גנרי שאמור להגן מפני נקודות
+   אקסטרים שמטות את הפרופורציה.</p>
+
+<p>אחרי תיקון הבאג, 3 נבדקים נפסלו לפי הכלל הזה (לעומת 3 גם לפני, אבל לא
+   אותם השלושה בדיוק):</p>
+
+<table>
+  <tr><th>נבדק</th><th>מדד שמעל סף</th><th>ערך</th><th>ממוצע</th><th>SD</th></tr>
+  <tr><td>P26</td><td>count_time</td><td>6.50</td><td>2.46</td><td>1.31</td></tr>
+  <tr><td>P79</td><td>count_topic</td><td>13.00</td><td>3.98</td><td>2.36</td></tr>
+  <tr><td>P134</td><td>count_typing</td><td>6.00</td><td>1.98</td><td>1.20</td></tr>
+</table>
+
+<h3>סוג ב: "LDA residual" (זיהוי בנבדקים שה-LDA מתנהג שונה אצלם)</h3>
+
+<p>כדי לבדוק את הטענה הספציפית של הפרופסור - "האם LDA מתנפח אצל נבדקים
+   ספציפיים?" - הגדרנו ב-M53 מדד מותאם:</p>
+
+<pre>z_topic     = z-score של count_topic
+z_time      = z-score של count_time
+z_typing    = z-score של count_typing
+predicted   = (z_time + z_typing) / 2     (כמה מעברי נושא היינו מצפים לפי שאר המדדים)
+residual    = z_topic - predicted          (כמה LDA חרג מהציפייה)</pre>
+
+<p>אם <code>residual</code> חיובי גדול - הנבדק קיבל יותר מעברי-נושא ממה שהיינו
+   מצפים מהזמן והטייפינג שלו. אם הוא שלילי גדול - פחות. אם הוא קרוב ל-0 -
+   LDA מסכים עם השאר.</p>
+
+<p>קבענו סף של ±1.5 SD על ה-residual. לפני התיקון, 21 מתוך 101 נבדקים (21%)
+   עברו את הסף. אחרי התיקון, רק 11 (11%) - ירידה של מחצית.</p>
+
+<table>
+  <tr><th></th><th>נבדקים מסומנים</th><th>LDA "מנופח" (residual חיובי)</th><th>LDA "מכווץ" (residual שלילי)</th></tr>
+  <tr class="warn"><td class="label">לפני התיקון</td><td>21 / 101 (21%)</td><td>11</td><td>10</td></tr>
+  <tr class="delta"><td class="label">אחרי התיקון</td><td>11 / 101 (11%)</td><td>7</td><td>4</td></tr>
+</table>
+
+<p>11 הנבדקים שעדיין מסומנים אחרי התיקון אינם ארטיפקטים, אלא שונות
+   התנהגותית אמיתית. למשל P102 (residual = +2.09) באמת עבר 9 פעמים בין
+   נושאים בשאלה אחת:</p>
+
+<div class="seq">Contemporary art → Ancient art → Contemporary art → Balinese art → Contemporary art → Ancient art → Contemporary art → Modern art → Ancient art → Contemporary Art Society → Ancient art</div>
+
+<p>הוא באמת קופץ הרבה בין "אומנות עתיקה" ל"אומנות מודרנית". זה התנהגות לגיטימית.</p>
+
+<div class="callout info">
+  <strong>חשוב להבין את ההבדל:</strong>
+  <ul class="tight">
+    <li><strong>סוג א</strong> פוסל נבדק מהניתוח (כלל קשיח).</li>
+    <li><strong>סוג ב</strong> רק מסמן נבדקים שנראים שונים, ככלי דיאגנוסטי. הם
+        לא נפסלים. זה היה הכלי שזיהה את הבאג.</li>
+  </ul>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════ -->
+<h2 id="m52">4. M52: ניתוח מורכב על שתי השאלות (מעודכן)</h2>
+
+<p><strong>קובץ:</strong> <code>scripts/m52_final_composite_dv.py</code><br>
+   <strong>פלט:</strong>
+   <code>output/m52_final_composite_dv.{png,pdf,csv}</code></p>
+
+<h3>מה הסקריפט עושה</h3>
+
+<ol>
+  <li>טוען את כל הניסויים מ-<code>data/cleaned/Game.csv</code> (250 שאלות,
+      125 נבדקים).</li>
+  <li>מחשב לכל שאלה 3 מספרי-מעברים: time (זמן בעמוד &gt; 60s = "exploit"),
+      topic (LDA), typing (האם המשתמש הקליד או הדביק טקסט בעמוד הזה).</li>
+  <li>מחיל קריטריוני הדרה ב-3 שלבים:
+    <ul class="tight">
+      <li>שאלה עם פחות מ-3 דפים → נפסלת</li>
+      <li>שאלה עם idle ≥ 50% (משך זמן אחרי הפעולה האחרונה) → נפסלת</li>
+      <li>נבדק עם count מעל ±3 SD בכל אחד מהמדדים → נפסל</li>
+    </ul>
+  </li>
+  <li>ממוצע לכל נבדק על פני שתי השאלות שעברו את הסינון.</li>
+  <li>PCA על 3 ה-counts (ללא z-score). PC1 = ציון מורכב.</li>
+</ol>
+
+<h3>תוצאות אחרי תיקון הבאג</h3>
+
+<table>
+  <tr><th>מטריקה</th><th>ערך</th></tr>
+  <tr><td class="label">סך שאלות בכניסה</td><td>250 (125 נבדקים × 2)</td></tr>
+  <tr><td class="label">נפסלו: &lt; 3 דפים</td><td>65</td></tr>
+  <tr><td class="label">נפסלו: idle ≥ 50%</td><td>27</td></tr>
+  <tr><td class="label">נפסלו: שניהם</td><td>18</td></tr>
+  <tr><td class="label">שאלות שנשארו</td><td>176 / 250</td></tr>
+  <tr><td class="label">3 SD outliers</td><td>3 (P26, P79, P134)</td></tr>
+  <tr class="delta"><td class="label">N סופי</td><td>101 נבדקים</td></tr>
+</table>
+
+<table>
+  <tr><th>רכיב</th><th>variance %</th><th>time</th><th>topic</th><th>typing</th></tr>
+  <tr><td>PC1</td><td>77.1%</td><td>+0.374</td><td>+0.879</td><td>+0.297</td></tr>
+  <tr><td>PC2</td><td>15.6%</td><td>+0.682</td><td>-0.478</td><td>+0.554</td></tr>
+  <tr><td>PC3</td><td>7.3%</td><td>-0.629</td><td>+0.004</td><td>+0.778</td></tr>
+</table>
+
+<p>PC1 כולל את שלושת המדדים עם משקלים חיוביים - בדיוק מה שצריך כ-DV
+   מורכב של "explore-exploit". אפשר לפרש אותו: ציון גבוה = הרבה מעברים
+   בכל המדדים בו-זמנית.</p>
+
+<!-- ═════════════════════════════════════════════════════════════ -->
+<h2 id="m53">5. M53: סקריפט הדיאגנוסטיקה</h2>
+
+<p><strong>קובץ:</strong> <code>scripts/m53_lda_diagnostics.py</code><br>
+   <strong>פלט:</strong>
+   <code>output/m53_lda_diagnostics.{pdf,csv}</code> +
+   <code>output/m53_lda_per_question.csv</code></p>
+
+<h3>למה הוא קיים</h3>
+
+<p>הפרופסור ביקש "להסתכל על הדאטה עצמו של נבדקים מסוימים ולראות אם ה-LDA
+   נותן תוצאה טובה או מנופחת". M53 עושה בדיוק את זה: לוקח את הפלט הסופי של
+   M52, מחשב את ה-LDA residual לכל נבדק, מסמן את החריגים, ומדפיס את רצף
+   הדפים שלהם בפועל בצורה שניתן לקרוא ידנית.</p>
+
+<h3>מבנה הדוח (PDF, 5 עמודים)</h3>
+
+<ol>
+  <li><strong>עמוד 1</strong> - שער + סטטיסטיקה: 3 הקורלציות בזוגות, מספר
+      נבדקים מסומנים, רשימת ה-suspects.</li>
+  <li><strong>עמוד 2</strong> - גרף עמודות אופקי: residual לכל נבדק, ממוין.
+      קל לראות איפה הזנב מתחיל ולמי לתת תשומת לב.</li>
+  <li><strong>עמוד 3</strong> - 3 גרפי פיזור (z_time vs z_topic, z_typing vs
+      z_topic, z_time vs z_typing). הקו האלכסוני y=x הוא ה"מקום שהיינו מצפים".
+      נבדקים מסומנים מודגשים באדום עם תווית.</li>
+  <li><strong>עמוד 4</strong> - count_topic לעומת מספר ממוצע של דפים, +
+      התפלגות הנושאים אצל ה-suspects (לבדוק אם נושא ספציפי שולט).</li>
+  <li><strong>עמוד 5</strong> - טקסט: רצף הדפים, הנושאים, סוג ה-time labels
+      וה-typing labels לכל אחד מ-8 ה-suspects, לכל שתי השאלות שלהם. זה החלק
+      שאפשר לסקור ידנית כדי לוודא שהקוד באמת ראה מה שקרה.</li>
+</ol>
+
+<h3>איך זה זיהה את הבאג</h3>
+
+<p>בריצה הראשונה, רוב ה-suspects חלקו תכונה משונה: סדרות של "-1, -1, -1, -1"
+   או של "X, -1, X, -1, X". זה היה ה-tell. נבדק שעובר 11 דפים שונים בכותרת
+   ולא יוצרים אצלו אפילו מעבר אחד - זה לא יתכן. ברגע שדגמתי אילו כותרות
+   חסרות במודל, הגיעה התשובה.</p>
+
+<!-- ═════════════════════════════════════════════════════════════ -->
+<h2 id="m54">6. M54: ריצה רק על שאלה אחת</h2>
+
+<p><strong>קובץ:</strong> <code>scripts/m54_composite_dv_single_question.py</code><br>
+   <strong>שימוש:</strong> <code>py m54_composite_dv_single_question.py --domain art_history</code><br>
+   <strong>פלט:</strong>
+   <code>output/m54_&lt;domain&gt;_only.{pdf,csv}</code></p>
+
+<h3>למה הוא קיים</h3>
+
+<p>הפרופסור ביקש לבדוק "מה אתה מקבל רק עם שאלה 2 שפחות נבדקים נפסלו בה".
+   M54 בדיוק זה: כפיל של M52 שמסנן רק לדומיין אחד מהשניים לפני
+   הניתוח. ברירת המחדל היא <code>art_history</code> כי שם פחות פסילות
+   (33 לעומת 41 ב-psychology).</p>
+
+<h3>קריטריוני פסילה לפי שאלה</h3>
+
+<table>
+  <tr><th>סינון</th><th>art_history (Q2)</th><th>psychology</th></tr>
+  <tr><td class="label">בכניסה</td><td>125</td><td>125</td></tr>
+  <tr><td class="label">&lt; 3 דפים</td><td>28</td><td>37</td></tr>
+  <tr><td class="label">idle ≥ 50%</td><td>12</td><td>15</td></tr>
+  <tr><td class="label">3 SD outliers</td><td>2</td><td>2</td></tr>
+  <tr class="delta"><td class="label">N סופי</td><td>90</td><td>82</td></tr>
+</table>
+
+<h3>תוצאות PCA לכל גרסה</h3>
+
+<table>
+  <tr><th>גרסה</th><th>N</th><th>PC1 %</th>
+      <th>PC1 loadings (time / topic / typing)</th>
+      <th>r עם M52 המלא</th></tr>
+  <tr><td>M52 (שתי שאלות)</td><td>101</td><td>77.1%</td>
+      <td>+0.37 / +0.88 / +0.30</td><td>—</td></tr>
+  <tr class="delta"><td>M54 art_history</td><td>90</td><td>70.1%</td>
+      <td>+0.40 / +0.84 / +0.37</td><td><strong>0.836</strong></td></tr>
+  <tr><td>M54 psychology</td><td>82</td><td>74.7%</td>
+      <td>+0.44 / +0.86 / +0.25</td><td><strong>0.832</strong></td></tr>
+</table>
+
+<div class="callout good">
+  <strong>הפרשנות:</strong> שתי הגרסאות מייצרות ציונים שמתואמים מאוד עם
+  הציון של M52 המלא (r ≈ 0.83-0.84). המבנה של ה-PCA כמעט זהה - PC1 שולט,
+  כל המשקלים חיוביים, נושא הוא העמוד החזק ביותר. <strong>השאלה ה"בעייתית"
+  לא מטה את התוצאה.</strong>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════ -->
+<h2 id="bottom-line">7. שורה תחתונה</h2>
+
+<ol>
+  <li>ההערה של הפרופסור כיוונה אותנו לבעיה אמיתית בקוד, לא לבעיה תיאורטית
+      בנתונים. תיקון של שורה אחת פתר את הסטייה של LDA משאר המדדים.</li>
+  <li>אחרי התיקון, הקורלציות בין שלושת המדדים מתאזנות סביב ~0.5-0.6,
+      ה-PCA פשוט יותר (PC1 מ-67% ל-77%), והמשמעות של ה-DV ברורה יותר.</li>
+  <li>סינון לכל אחת משתי השאלות בנפרד נותן ציון מורכב כמעט זהה (r ≈ 0.83
+      עם המקור), כלומר התופעה לא תלויה בשאלה ספציפית.</li>
+  <li>11 נבדקים עדיין מציגים LDA residual גדול (≥ 1.5 SD). ספירה ויזואלית
+      של הרצפים שלהם (ב-M53 PDF, עמוד 5) מראה שזו שונות התנהגותית אמיתית,
+      לא ארטיפקט.</li>
+  <li>שלושה נבדקים עדיין נפסלים בכלל ה-3 SD המקורי של M52. שני הסקריפטים
+      החדשים (M53, M54) שומרים על אותו הכלל בדיוק כדי לא לסטות מהפרה-רישום.</li>
+</ol>
+
+<p class="small" style="margin-top: 32px; color: #999;">
+  המסמך הזה נוצר ב-2026-04-26 כסיכום עבודה של סשן אחד. כל הסקריפטים
+  והתוצאות הקיימים בפועל ב-<code>scripts/</code> וב-<code>output/</code>.
+  לא בוצע commit; שינויי הקוד עדיין ב-working tree.
+</p>
+
+</body>
+</html>
