@@ -63,9 +63,13 @@ SNAPSHOT_ACTIONS = ['answer_snapshot', 'answer_snapshot_cursor_leave']
 
 
 def load_lda_assignments():
-    with open(DATA_DIR / 'cleaned' / 'topic_model.json') as f:
+    # topic_model.json keys are wiki slugs ("Ancient_art"); page_visits use the
+    # display title with spaces ("Ancient art"). Normalize to space form so the
+    # caller's `lda.get(pv['title'], -1)` actually hits.
+    with open(DATA_DIR / 'cleaned' / 'topic_model.json', encoding='utf-8') as f:
         tm = json.load(f)
-    return {slug: int(np.argmax(dist)) for slug, dist in tm['topic_distributions'].items()}
+    return {slug.replace('_', ' '): int(np.argmax(dist))
+            for slug, dist in tm['topic_distributions'].items()}
 
 
 def compute_switch_count(labels):
