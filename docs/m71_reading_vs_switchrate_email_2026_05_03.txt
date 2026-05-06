@@ -1,0 +1,19 @@
+בדקנו את הקורלציה בין אורך קריאה ממוצע (זמן שהייה ממוצע בעמוד) לבין שלושת מדדי האלטרנציה explore/exploit.
+
+נתונים: 172 שאלות נקיות, 101 משתתפים (אחרי החרגות M52).
+
+לפי משתתף (ממוצע על שתי השאלות):
+- switch_rate_typing (לפי הקלדה): Pearson r=+.02 (p=.81), Spearman r=+.18 (p=.08)
+- switch_rate_topic (LDA):        Pearson r=-.15 (p=.13), Spearman r=-.14 (p=.15)
+- switch_rate_time (>60s):        Pearson r=+.31 (p=.001), Spearman r=+.18 (p=.07)
+
+לפי שאלה (n=172):
+- switch_rate_typing: Pearson r=+.14 (p=.06), Spearman r=+.26 (p<.001)
+- switch_rate_topic:  Pearson r=-.09 (p=.23), Spearman r=-.11 (p=.14)
+- switch_rate_time:   Pearson r=+.17 (p=.03), Spearman r=+.13 (p=.09)
+
+המסקנה העיקרית: מדד האלטרנציה לפי הקלדה (החשוב ביותר לדיון) אינו רדונדנטי עם אורך קריאה ממוצע - ברמת המשתתף הקשר חלש מאוד (r=+.02). הקשר היחיד החזק הוא עם מדד הזמן, וזה צפוי מכנית כי שניהם נגזרים מאורך השהייה בעמוד.
+
+פילוח לפי תנאי (per-participant, mean_reading_length_s vs switch_rate_typing):
+- diffuse (n=52): r=+.33 (p=.02)
+- clumpy  (n=49): r=-.21 (p=.16)
