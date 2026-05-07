@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Spatial Search Analysis - Design Spec (M74-M76)</title>
+<style>
+  body {
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+    background: #FFFFFF;
+    color: #1a1a1a;
+    line-height: 1.6;
+    max-width: 980px;
+    margin: 32px auto;
+    padding: 0 24px;
+  }
+  h1 { color: #1a1a1a; border-bottom: 2px solid #1976D2; padding-bottom: 8px; }
+  h2 { color: #1976D2; margin-top: 36px; border-bottom: 1px solid #E0E0E0; padding-bottom: 4px; }
+  h3 { color: #333333; margin-top: 24px; }
+  h4 { color: #555555; margin-top: 18px; }
+  code, pre {
+    direction: ltr;
+    text-align: left;
+    background: #F5F5F5;
+    border: 1px solid #E0E0E0;
+    border-radius: 4px;
+    font-family: "Consolas", "Monaco", monospace;
+    font-size: 0.9em;
+  }
+  code { padding: 2px 6px; }
+  pre { padding: 12px; overflow-x: auto; }
+  table {
+    border-collapse: collapse;
+    margin: 12px 0;
+    width: 100%;
+    direction: ltr;
+  }
+  th, td {
+    border: 1px solid #CCCCCC;
+    padding: 8px 12px;
+    text-align: left;
+  }
+  th { background: #F0F4F8; color: #1a1a1a; font-weight: 600; }
+  tr:nth-child(even) { background: #FAFAFA; }
+  .note {
+    background: #FFF8E1;
+    border-right: 4px solid #F9A825;
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 4px;
+  }
+  .info {
+    background: #E3F2FD;
+    border-right: 4px solid #1976D2;
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 4px;
+  }
+  .phase {
+    background: #F3E5F5;
+    border-right: 4px solid #7B1FA2;
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 4px;
+  }
+  ul, ol { padding-right: 24px; }
+  .file { font-family: "Consolas", monospace; color: #C62828; }
+  .meta { color: #666666; font-size: 0.9em; margin-bottom: 24px; }
+</style>
+</head>
+<body>
+
+<h1>Spatial Search Analysis - Design Spec</h1>
+<div class="meta">
+  Scripts: M74 + M75 + M76 &middot;
+  תאריך: 2026-05-07 &middot;
+  Status: design ready, data in place (N=132, 72 Clumpy + 60 Diffuse), ready for implementation
+</div>
+
+<h2>1. רקע ומטרות</h2>
+
+<p>
+  לפני מטלת הויקיפדיה, הנבדקים מבצעים מטלת חיפוש מרחבי בסגנון
+  <em>creative foraging</em> (Hart 2017). המטלה יוצרת את חלוקת הנבדקים לתנאי
+  <strong>Clumpy</strong> (משאבים מקובצים בכתמים) או <strong>Diffuse</strong>
+  (משאבים מפוזרים אחיד). 5 trials לנבדק במפות שונות, ~60 שניות לסבב.
+</p>
+
+<p>שתי מטרות ניתוח:</p>
+<ol>
+  <li>
+    <strong>Manipulation Check</strong> - לוודא שנבדקי Clumpy אכן מתנהגים אחרת
+    מנבדקי Diffuse במטלת ה-foraging עצמה (כלומר המניפולציה השפיעה).
+  </li>
+  <li>
+    <strong>Individual Differences Analysis</strong> (collapsed across condition) -
+    לחפש קורלציות בין מדדי ה-foraging של כל נבדק לבין המדדים שלו במטלת הויקיפדיה.
+  </li>
+</ol>
+
+<h2>2. מבנה הקובץ ומערכות קואורדינטות</h2>
+
+<h3>2.1 פורמט הלוג</h3>
+<p>עמודות (זהה ל-Game.csv של מטלת הויקיפדיה אך עם סוגי Action שונים):</p>
+<pre>ID, RunningName, Version, Age, Gender, GameCondition, Trial, Action, Time,
+CollisionCount, MapID, X, Y, Speed, ResourceX, ResourceY, TotalCollected, Heading</pre>
+
+<p>סוגי Action רלוונטיים:</p>
+<ul>
+  <li><code>Training_start</code> / <code>Training_complete</code> / <code>Collision</code> - שלב אימון, לא נכלל בניתוח</li>
+  <li><code>Round_start</code> / <code>Round_end</code> - גבולות trial. <code>TotalCollected</code> מופיע ב-Round_end.</li>
+  <li><code>Enter_explore_mode</code> / <code>Enter_exploit_mode</code> - <strong>בחירה מפורשת של הנבדק</strong> (לא נגזרת ממהירות; explore קבוע ב-1.2, exploit ב-0.96).</li>
+  <li><code>Resource_found</code> - מיקום ב-<code>ResourceX, ResourceY</code>, מצטבר ב-<code>TotalCollected</code>.</li>
+  <li><code>Movement_sample</code> - מיקום הנבדק (X, Y) ו-Heading, ~10Hz.</li>
+</ul>
+
+<h3>2.2 המרת קואורדינטות</h3>
+<div class="info">
+  <strong>שתי מערכות שונות בקובץ:</strong>
+  <ul>
+    <li>Player position (<code>X, Y</code>): טווח ~ 90-565 בציר X, ~ 80-360 בציר Y.</li>
+    <li>Resource position (<code>ResourceX, ResourceY</code>): טווח ~ 35-190 בציר X, ~ 25-120 בציר Y.</li>
+  </ul>
+  <strong>היחס קבוע: 3.0.</strong> ההמרה: <code>world_X = ResourceX × 3, world_Y = ResourceY × 3</code>.
+  <br>אומת על שני זוגות זמן-בנבדק 218: מרחק עולמי בין מיקום נבדק ל-Resource_found שנמצא בו-זמנית הוא 7-9 פיקסלים בלבד.
+</div>
+
+<h2>3. M74 - חילוץ פיצ'רים וויזואליזציה (פאזה 1, עכשיו)</h2>
+
+<h3>3.1 קלט וסינון לאוכלוסיית הניתוח</h3>
+
+<h4>קבצי קלט</h4>
+<pre>data/cleaned/spatial_search/Game.csv      # compound CSV של 163 נבדקים (714,414 שורות)
+data/cleaned/spatial_search/KeyTable.csv  # 163 שורות: ID, UserID, Mode, Date, זמני התחלה/סיום, BonusPayment
+output/m72_new_per_participant.csv        # רשימת 138 ה-IDs שעוברים את כל בדיקות ההחרגה של ויקיפדיה</pre>
+
+<h4>אוכלוסיית הניתוח: N=132</h4>
+<div class="info">
+  <strong>שני סינונים מצטברים:</strong>
+  <ol>
+    <li>
+      <strong>סינון לפי ויקיפדיה:</strong> M74 מסנן את ה-Game.csv של Spatial Search לפי 138 ה-IDs שמופיעים ב-<code>m72_new_per_participant.csv</code> (שעוברים את ההחרגות של ויקיפדיה: ≥3 page visits, idle&lt;50%, לא 3SD outliers).
+      כל 138 הנבדקים של ויקיפדיה גם השלימו את Spatial Search (inner-join: 138/138).
+    </li>
+    <li>
+      <strong>סינון לפי trial count:</strong> מתוך 138, מחריגים את 6 הנבדקים שאין להם בדיוק 5 trials (1 עם 3, 1 עם 4, 4 עם 6 trials).
+      ההחרגה כוללת גם &lt;5 וגם &gt;5 כדי שלכל הנבדקים יהיה משקל זהה באגרגציה. <strong>נשארים N=132.</strong>
+    </li>
+  </ol>
+  כל הניתוחים (M74, M75, M76) ירוצו על אותו N=132. M76 מבצע inner-join מלא בלי איבוד נוסף.
+</div>
+
+<h4>חלוקת התנאים ב-N=132</h4>
+<table>
+  <tr><th>תנאי</th><th>N</th></tr>
+  <tr><td>Clumpy</td><td>72</td></tr>
+  <tr><td>Diffuse</td><td>60</td></tr>
+  <tr><td><strong>סה"כ</strong></td><td><strong>132</strong></td></tr>
+</table>
+
+<h4>סדר העמודות בקובץ ה-cleaned (שונה מהדוגמה raw)</h4>
+<pre>ID, RunningName, Version, Age, Gender, GameCondition, Trial, Action, Time,
+X, Y, Heading, Speed, MapID, ResourceX, ResourceY, TotalCollected, CollisionCount</pre>
+<p class="note">
+  הקוד יקרא לפי <strong>שם עמודה</strong> ולא לפי מיקום, כדי להיות עמיד לשינויי סדר.
+</p>
+
+<h4>Pipeline cleaning של Spatial Search (קיים ופעיל)</h4>
+<p>
+  ה-cleaning כבר משולב ב-<span class="file">scripts/cleaning/spatial_search_export.py</span>:
+</p>
+<ul>
+  <li>קורא BSON dumps מ-<code>data/Spatial Search Data/{1,2}/spatial_search_users_records.bson</code></li>
+  <li>מסנן ל-<code>RunningName=Wikipedia_Exp_14.04</code>, <code>Version=Wikipedia_Exp_13.04</code> (מדיר Updated Test)</li>
+  <li>קושר ל-wiki KeyTable לפי Prolific UserID, מחליף את ה-ID הפנימי של Spatial ב-ID של ויקיפדיה (כך שה-IDs תואמים בין שני הקבצים)</li>
+  <li>כותב <code>data/cleaned/spatial_search/Game.csv</code> ו-<code>KeyTable.csv</code></li>
+  <li>הרצה: <code>py scripts/cleaning/spatial_search_export.py</code> (one-shot, אידמפוטנטי)</li>
+</ul>
+
+<h4>סטטיסטיקות גלובליות של הדאטה (לפני סינון ל-138)</h4>
+<table>
+  <tr><th>פרמטר</th><th>ערך</th></tr>
+  <tr><td>סה"כ נבדקים בקובץ</td><td>163 (87 Clumpy + 76 Diffuse)</td></tr>
+  <tr><td>סה"כ trials</td><td>815</td></tr>
+  <tr><td>נבדקים עם 5 trials</td><td>155 (95%)</td></tr>
+  <tr><td>נבדקים עם 3 trials</td><td>2</td></tr>
+  <tr><td>נבדקים עם 4 trials</td><td>1</td></tr>
+  <tr><td>נבדקים עם 6 trials</td><td>5</td></tr>
+  <tr><td>Round_end events</td><td>815 (אחד לכל trial ✓)</td></tr>
+  <tr><td>Round_start events</td><td><strong>627 בלבד</strong> - חסרים 188!</td></tr>
+  <tr><td>Movement_sample events</td><td>454,952 (~558 per trial)</td></tr>
+  <tr><td>Resource_found events</td><td>244,628 (~300 per trial ממוצע)</td></tr>
+</table>
+<p class="note">
+  הסטטיסטיקות לעיל הן על 163 הנבדקים. אחרי סינון ל-138 המספרים יהיו קצת קטנים, אבל היחסים זהים.
+</p>
+
+<h3>3.2 פיצ'רים per trial (15 פיצ'רים)</h3>
+
+<h4>A. Phase metrics (ממתגי המצב)</h4>
+<table>
+  <tr><th>Feature</th><th>חישוב</th></tr>
+  <tr><td><code>explore_dur_mean</code></td><td>ממוצע משכי פאזות explore (sec)</td></tr>
+  <tr><td><code>explore_dur_median</code></td><td>חציון משכי פאזות explore</td></tr>
+  <tr><td><code>exploit_dur_mean</code></td><td>ממוצע משכי פאזות exploit</td></tr>
+  <tr><td><code>exploit_dur_median</code></td><td>חציון משכי פאזות exploit</td></tr>
+  <tr><td><code>pct_time_exploit</code></td><td>אחוז זמן הסבב במצב exploit</td></tr>
+  <tr><td><code>n_transitions</code></td><td>מספר מעברי mode בסבב</td></tr>
+</table>
+
+<h4>B. Resource metrics</h4>
+<table>
+  <tr><th>Feature</th><th>חישוב</th></tr>
+  <tr><td><code>total_collected</code></td><td>TotalCollected מ-Round_end</td></tr>
+  <tr><td><code>time_to_first_resource</code></td><td>זמן מ-Round_start עד Resource_found הראשון</td></tr>
+  <tr><td><code>inter_resource_mean</code></td><td>ממוצע פערים בין Resource_found עוקבים</td></tr>
+  <tr><td><code>collection_rate</code></td><td>total_collected / trial_duration_sec</td></tr>
+</table>
+
+<h4>C. Spatial metrics (מ-Movement_sample)</h4>
+<table>
+  <tr><th>Feature</th><th>חישוב</th></tr>
+  <tr><td><code>path_length</code></td><td>סכום ‖Δ(X, Y)‖ בין דגימות עוקבות</td></tr>
+  <tr><td><code>coverage_entropy</code></td><td>Shannon entropy של מיקומים בתאי רשת 20×20 (bits)</td></tr>
+  <tr><td><code>heading_variability</code></td><td>SD של הפרשי Heading עוקבים (מעגלי, 0-360)</td></tr>
+</table>
+
+<h4>D. Hart-inspired</h4>
+<table>
+  <tr><th>Feature</th><th>חישוב</th></tr>
+  <tr>
+    <td><code>patch_leaving_distance</code></td>
+    <td>ממוצע מרחק עולמי מ-Resource_found אחרון לנקודת מעבר exploit→explore</td>
+  </tr>
+  <tr>
+    <td><code>levy_alpha</code></td>
+    <td>מקדם α בהתאמת חוק חזקה <code>P(L) ∝ L<sup>-α</sup></code> לאורכי צעדים בין Resource_found עוקבים (MLE)</td>
+  </tr>
+</table>
+
+<h3>3.3 אגרגציה לרמת נבדק</h3>
+<p>לכל פיצ'ר X מתוך 15 הפיצ'רים, הפלט הוא:</p>
+<ul>
+  <li><code>X_mean</code> - ממוצע על 5 ה-trials של הנבדק</li>
+  <li><code>X_sd</code> - SD על 5 ה-trials (consistency / within-subject variability)</li>
+</ul>
+<p>סה"כ <strong>30 עמודות</strong> per participant, פלוס <code>participant_id</code> ו-<code>condition</code>.</p>
+
+<h3>3.4 לוגיקת החרגה ו-edge cases</h3>
+<ul>
+  <li>Trial עם <code>n_transitions == 0</code> → לא ניתן לחשב phase metrics → לא משתתף בממוצע. שאר ה-trials של אותו נבדק ממשיכים.</li>
+  <li>Trial עם <code>total_collected == 0</code> → warning בלוג, לא מחריג.</li>
+  <li>אין החרגה ברמת נבדק עצמו ב-M74. החרגות 3SD outliers וכד' מבוצעות ב-M75/M76 לפי הצורך.</li>
+  <li>
+    <strong>Round_start חסר (188 trials):</strong> כש-Round_start לא קיים עבור trial,
+    <code>trial_t0</code> = ה-event הראשון של אותו trial לפי <code>Time</code> (Movement_sample, Enter_*_mode, או Resource_found - מה שיש קודם). <code>trial_t_end</code> תמיד מ-Round_end.
+    <br><code>time_to_first_resource</code> מחושב כ-<code>(first Resource_found Time) - trial_t0</code>.
+  </li>
+  <li>
+    <strong>נבדקים עם trial count שונה מ-5: מוחרגים מהניתוח</strong> (החרגה ברמת נבדק, לא רמת trial). ב-N=138 הסינון של ויקיפדיה, 6 נבדקים נופלים: 1 עם 3 trials, 1 עם 4, 4 עם 6. <strong>אחרי ההחרגה: N=132.</strong> כל הניתוחים מניחים בדיוק 5 trials per participant - mean/SD על 5 ערכים בכל פיצ'ר.
+  </li>
+</ul>
+
+<h3>3.5 ויזואליזציה - מפה לנבדק</h3>
+
+<p>Output: <span class="file">output/m74_spatial_maps.pdf</span> - <strong>עמוד אחד לכל נבדק</strong>.</p>
+
+<h4>Layout</h4>
+<ul>
+  <li><strong>כותרת עליונה:</strong> <code>Participant {pid} | Condition: {Clumpy/Diffuse} | Total collected: {N}</code></li>
+  <li><strong>שורה של 5 sub-plots:</strong> אחד לכל trial, רוחב שווה.</li>
+  <li><strong>שורה תחתונה:</strong> טבלת summary עם 5 שורות (משך, % exploit, n_collected, path_length).</li>
+</ul>
+
+<h4>לכל sub-plot (trial אחד)</h4>
+<ul>
+  <li><strong>Background:</strong> ריבוע לבן, גבולות לפי טווח X/Y של המפה.</li>
+  <li><strong>מסלול:</strong> קו רציף מ-Movement_sample, צבוע לפי mode הנוכחי - explore <span style="color:#1976D2">כחול</span>, exploit <span style="color:#C62828">אדום</span>. נקבע לפי Enter_*_mode האחרון לפני כל דגימה.</li>
+  <li><strong>Resources:</strong> ★ במיקום עולמי <code>(ResourceX × 3, ResourceY × 3)</code>, צבע <span style="color:#2E7D32">ירוק</span>.</li>
+  <li><strong>Start point:</strong> ● שחור.</li>
+  <li><strong>End point:</strong> ◆ אפור.</li>
+  <li>כותרת sub-plot: <code>Trial {n} | {MapID} | N={n_collected}</code></li>
+</ul>
+
+<h4>פלטה (Light mode)</h4>
+<pre>EXPLORE_COLOR  = '#1976D2'   # blue
+EXPLOIT_COLOR  = '#C62828'   # red
+RESOURCE_COLOR = '#2E7D32'   # green
+START_COLOR    = '#1a1a1a'   # near black
+BG             = '#FFFFFF'</pre>
+
+<h3>3.6 קבצי פלט של M74</h3>
+<table>
+  <tr><th>קובץ</th><th>תוכן</th></tr>
+  <tr>
+    <td><span class="file">output/m74_spatial_features.csv</span></td>
+    <td>שורה לנבדק. עמודות: <code>participant_id, condition</code> + 30 עמודות פיצ'רים.</td>
+  </tr>
+  <tr>
+    <td><span class="file">output/m74_per_trial_features.csv</span></td>
+    <td>backup - שורה לכל trial (5 לנבדק). עמודות: <code>participant_id, condition, trial, map_id</code> + 15 פיצ'רים.</td>
+  </tr>
+  <tr>
+    <td><span class="file">output/m74_spatial_maps.pdf</span></td>
+    <td>ויזואליזציה - עמוד לנבדק עם 5 sub-plots + טבלת summary.</td>
+  </tr>
+</table>
+
+<h3>3.7 מבנה הקוד</h3>
+<p>קובץ אחד: <span class="file">scripts/m74_spatial_features.py</span>, מודולים:</p>
+<ul>
+  <li><code>parse_log(path)</code> - קורא CSV, מחזיר dict <code>{pid: {condition, trials: [...]}}</code></li>
+  <li><code>extract_phase_metrics(trial_events)</code> - 6 פיצ'רים מקבוצת A</li>
+  <li><code>extract_resource_metrics(trial_events)</code> - 4 פיצ'רים מקבוצת B</li>
+  <li><code>extract_spatial_metrics(movement_samples)</code> - 3 פיצ'רים מקבוצת C</li>
+  <li><code>extract_hart_metrics(trial_events)</code> - 2 פיצ'רים מקבוצת D</li>
+  <li><code>aggregate_to_participant(per_trial_df)</code> - mean+SD per pid</li>
+  <li><code>plot_participant_page(pdf, pid_data)</code> - עמוד אחד ב-PDF</li>
+  <li><code>main()</code> - מארגן הכל, שומר 3 הפלטים</li>
+</ul>
+
+<h2>4. M75 - Manipulation Check (פאזה 2)</h2>
+
+<div class="phase">
+  פאזה 2: ירוץ אחרי שיש דאטה מלאה לכל ~125 הנבדקים.
+</div>
+
+<h3>4.1 קלט</h3>
+<pre>output/m74_spatial_features.csv</pre>
+
+<h3>4.2 ניתוח</h3>
+<ul>
+  <li>אוכלוסיית הניתוח: <strong>N=132 (72 Clumpy + 60 Diffuse)</strong>.</li>
+  <li>לכל אחד מ-30 הפיצ'רים: t-test (Welch) + Mann-Whitney + Cohen's d, Diffuse vs Clumpy.</li>
+  <li>FDR correction (Benjamini-Hochberg) על 30 הבדיקות.</li>
+  <li>תחזית מבוססת תיאוריה: <code>pct_time_exploit_mean</code> ו-<code>exploit_dur_mean_mean</code> צפויים גבוהים יותר ב-Clumpy. <code>n_transitions_mean</code> צפוי נמוך יותר ב-Clumpy.</li>
+</ul>
+
+<h3>4.3 פלטים</h3>
+<table>
+  <tr><th>קובץ</th><th>תוכן</th></tr>
+  <tr><td><span class="file">output/m75_manipulation_check.csv</span></td><td>30 שורות (לכל פיצ'ר): means/SD בכל תנאי, t, p, p_FDR, Cohen's d.</td></tr>
+  <tr><td><span class="file">output/m75_manipulation_check.pdf</span></td>
+      <td>3 עמודים: (1) טבלה כוללת בסגנון M72, (2) forest plot של Cohen's d לכל 30 פיצ'רים, (3) raincloud של 3-5 הפיצ'רים שעוברים FDR.</td></tr>
+</table>
+
+<h2>5. M76 - Wikipedia Correlations (פאזה 2)</h2>
+
+<div class="phase">
+  פאזה 2: ירוץ אחרי M74 + M72 + M73.
+</div>
+
+<h3>5.1 קלטים ו-merge</h3>
+<pre>output/m74_spatial_features.csv               # 30 spatial features (N=132)
+output/m72_new_per_participant.csv             # count_time, count_topic, count_typing,
+                                               # PC1, seq_typing_mean_run_explore (N=138, יסונן ל-132)
+output/m73_new_per_participant_entropy.csv     # seq_typing_entropy (N=138, יסונן ל-132)</pre>
+<p>
+  Merge על <code>participant_id</code>. ה-inner join עם m74 (N=132) מסנן את m72/m73 ל-132 אותם נבדקים:
+  <strong>N=132 (72 Clumpy + 60 Diffuse)</strong>.
+</p>
+
+<h3>5.2 מטריצת קורלציות</h3>
+<p>30 spatial × 6 wiki = <strong>180 קורלציות</strong>:</p>
+<ol>
+  <li>Pearson r ו-Spearman ρ (שניהם, מציגים שניהם בפלט).</li>
+  <li>FDR (Benjamini-Hochberg) על 180 הבדיקות.</li>
+  <li>קורלציה ראשית: <strong>collapsed across condition</strong> (כל ה-N).</li>
+  <li>קורלציה משנית (robustness): partial correlation מנקה את condition כ-covariate.</li>
+</ol>
+
+<h3>5.3 מדדי הויקיפדיה (לפי M72/M73)</h3>
+<table>
+  <tr><th>שם עמודה</th><th>תיאור</th><th>מקור</th></tr>
+  <tr><td><code>seq_typing_mean_run_explore</code></td><td>Mean reading-only streak</td><td>M72 / m56</td></tr>
+  <tr><td><code>count_time</code></td><td>Switch count - זמן (>60s)</td><td>M72 / M52</td></tr>
+  <tr><td><code>count_topic</code></td><td>Switch count - טופי (LDA)</td><td>M72 / M52</td></tr>
+  <tr><td><code>count_typing</code></td><td>Switch count - כתיבה/הדבקה</td><td>M72 / M52</td></tr>
+  <tr><td><code>PC1</code></td><td>Composite explore-exploit (PC1 על 3 הספירות) - ה-DV ה-pre-registered</td><td>M72 / M52</td></tr>
+  <tr><td><code>seq_typing_entropy</code></td><td>Shannon entropy של רצף typing/no-typing</td><td>M73 / m56</td></tr>
+</table>
+
+<h3>5.4 פלטים</h3>
+<table>
+  <tr><th>קובץ</th><th>תוכן</th></tr>
+  <tr><td><span class="file">output/m76_correlations.csv</span></td>
+      <td>טבלה מלאה: לכל זוג spatial × wiki - r_pearson, p_pearson, ρ_spearman, p_spearman, p_FDR, n.</td></tr>
+  <tr><td><span class="file">output/m76_correlations.pdf</span></td>
+      <td>3 עמודים: (1) heatmap 30×6 של Pearson r עם annotations של מובהקים אחרי FDR, (2) טבלת top-10 קורלציות, (3) השוואה collapsed vs partial-out.</td></tr>
+</table>
+
+<h2>6. החלטות שהתקבלו ושטרם התקבלו</h2>
+
+<h4>הוחלט (2026-05-07)</h4>
+<ul>
+  <li><strong>אין PCA</strong> על 30 הפיצ'רים → לא composite spatial DV. הקורלציות והבדיקות יהיו ישירות על הפיצ'רים הגולמיים.</li>
+  <li><strong>החרגת trial count חריג:</strong> רק נבדקים עם בדיוק 5 trials נכנסים. N=132.</li>
+  <li><strong><code>levy_alpha</code> נשמר ב-M74</strong> (אף שיש חששות ליציבות על 60s ועל מפה תחומה - נראה מה התוצאות יראו).</li>
+</ul>
+
+<h4>נדחה להחלטה אחרי M74</h4>
+<ul>
+  <li>האם להריץ within-condition correlations בנפרד (within-Clumpy, within-Diffuse).
+    <br>נדון אחרי שנראה את תוצאות M75 ו-M76.</li>
+</ul>
+
+<h2>7. סדר עבודה</h2>
+<ol>
+  <li>
+    <strong>הכל מוכן להתחיל:</strong>
+    <ul>
+      <li>Design - המסמך הזה ✓</li>
+      <li>Spatial cleaning - <code>scripts/cleaning/spatial_search_export.py</code> ✓</li>
+      <li>Spatial cleaned data - <code>data/cleaned/spatial_search/Game.csv</code> ✓</li>
+      <li>Wikipedia analysis output - <code>output/m72_new_per_participant.csv</code> ו-<code>m73_new_per_participant_entropy.csv</code> ✓</li>
+    </ul>
+  </li>
+  <li>
+    <strong>שלב 1 - M74:</strong> כתיבה ב-<code>scripts/m74_spatial_features.py</code>, הרצה על ה-132 נבדקים (אחרי 2 הסינונים), sanity check על הפיצ'רים (mean/SD בטווחים סבירים) ועל המפות (טראייקטוריה רציפה, צבעי mode הגיוניים, Resources חופפים את המסלול).
+  </li>
+  <li><strong>שלב 2 - M75:</strong> כתיבת והרצת manipulation check (N=132, 72 Clumpy מול 60 Diffuse).</li>
+  <li><strong>שלב 3 - M76:</strong> כתיבת והרצת Wiki correlations (N=132 inner join).</li>
+  <li>החלטה על ההרחבות בסעיף 6 לפי מה שמופיע בתוצאות.</li>
+</ol>
+
+</body>
+</html>
