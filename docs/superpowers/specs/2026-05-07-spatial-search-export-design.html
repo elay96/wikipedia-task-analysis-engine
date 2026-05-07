@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<title>Spatial Search Export - Design Spec (2026-05-07)</title>
+<style>
+  :root { color-scheme: light; }
+  body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; max-width: 920px; margin: 2rem auto; padding: 0 1.25rem; color: #1a1a1a; background: #fff; line-height: 1.55; }
+  h1 { font-size: 1.6rem; border-bottom: 2px solid #ddd; padding-bottom: .35rem; }
+  h2 { font-size: 1.2rem; margin-top: 1.8rem; color: #234; }
+  h3 { font-size: 1.0rem; margin-top: 1.2rem; color: #345; }
+  code, pre { font-family: "JetBrains Mono", Consolas, monospace; font-size: 0.88rem; }
+  pre { background: #f6f8fa; border: 1px solid #e1e4e8; border-radius: 6px; padding: .8rem 1rem; overflow-x: auto; }
+  code { background: #f0f2f4; padding: 1px 5px; border-radius: 3px; }
+  table { border-collapse: collapse; width: 100%; margin: .8rem 0; font-size: 0.9rem; }
+  th, td { border: 1px solid #d0d7de; padding: .35rem .6rem; text-align: left; vertical-align: top; }
+  th { background: #f6f8fa; }
+  .meta { color: #555; font-size: .85rem; }
+  .ok { color: #1a7f37; }
+  .warn { color: #9a6700; }
+  ul li { margin: .15rem 0; }
+  .small { font-size: .85rem; color: #555; }
+</style>
+</head>
+<body>
+
+<h1>Spatial Search Export &mdash; Design Spec</h1>
+<p class="meta">Date: 2026-05-07 &middot; Author: Elay (with Claude) &middot; Status: design approved, awaiting implementation plan.</p>
+
+<h2>Goal</h2>
+<p>
+Convert the two MongoDB BSON dumps of the spatial-search task into a clean, analysis-ready CSV pair that mirrors the existing wikipedia data structure
+(<code>Game.csv</code> + <code>KeyTable.csv</code>), keyed by the wikipedia integer participant <code>ID</code>.
+The spatial-search records will then be join-compatible with <code>data/cleaned_new/Game.csv</code> via a single column.
+</p>
+
+<h2>Background &amp; key findings</h2>
+<ul>
+  <li>Two BSON files for the <code>spatial_search_users_records</code> collection live under <code>data/Spatial Search Data/{1,2}/</code>. They were split because of a backend issue. Each has a different MongoDB UUID; they do <strong>not</strong> overlap in their internal <code>KeyTable.ID</code> (dump1: 1..189, dump2: 190..243).</li>
+  <li>Combined: 495 records total, of which <strong>273</strong> are <code>Version=Wikipedia_Exp_13.04</code>; the rest are old <code>test</code> / <code>version_1</code> sessions.</li>
+  <li>Linkage to wikipedia is <strong>not</strong> through the integer <code>ID</code> field. The two backends use independent ID counters and the same numeric ID can refer to different participants.</li>
+  <li>The reliable bridge is <strong>Prolific UserID</strong>. The wikipedia backend's <code>KeyTable.csv</code> (copied locally to <code>data/Spatial Search Data/KeyTable.csv</code>) maps wiki <code>ID</code> &harr; <code>UserID</code> (Prolific). The spatial-search records carry the same Prolific ID in their top-level <code>UserId</code> field.</li>
+  <li>Validation: 163/164 wiki Prolific UIDs match exactly one spatial-search record with <code>Version=Wikipedia_Exp_13.04</code> and <code>RunningName=Wikipedia_Exp_14.04</code>. The 1 unmatched UID is <code>elay96@gmail.com</code> (test entries IDs 69, 70, already excluded by M52 <code>IGNORED_PIDS</code>). Zero duplicates, zero missing.</li>
+  <li>Final scope: <strong>163 participants, 714,413 events</strong>.</li>
+  <li><strong>Each participant is in exactly one experimental condition</strong> (Clumpy or Diffuse), not both. 87 participants are <code>Clumpy</code>, 76 are <code>Diffuse</code>. The condition assignment matches the wiki <code>Condition</code> column for every participant (100% agreement).</li>
+</ul>
+
+<h3>Action breakdown (across 163 real participants)</h3>
+<table>
+  <tr><th>Action</th><th>Count</th><th>Extra fields</th></tr>
+  <tr><td>Movement_sample</td><td>454,952</td><td>X, Y, Heading, MapID</td></tr>
+  <tr><td>Resource_found</td><td>244,628</td><td>ResourceX, ResourceY, TotalCollected, MapID</td></tr>
+  <tr><td>Collision</td><td>4,762</td><td>CollisionCount</td></tr>
+  <tr><td>Enter_exploit_mode</td><td>4,399</td><td>X, Y, Speed, MapID</td></tr>
+  <tr><td>Enter_explore_mode</td><td>3,904</td><td>X, Y, Speed, MapID</td></tr>
+  <tr><td>Round_end</td><td>815</td><td>TotalCollected, MapID</td></tr>
+  <tr><td>Round_start</td><td>627</td><td>MapID</td></tr>
+  <tr><td>Training_start</td><td>163</td><td>(none)</td></tr>
+  <tr><td>Training_complete</td><td>163</td><td>CollisionCount</td></tr>
+</table>
+<p class="small">
+GameCondition values: <code>Training_Maze</code> (5,088 events), <code>Diffuse</code> (258,154), <code>Clumpy</code> (451,171).
+10 distinct MapIDs (Diffuse_1..5, Clumpy_1..5).
+Round_start (627) is lower than Round_end (815) due to a logging quirk in the spatial-search game (some Round_start events are not recorded). 155 of 163 participants (95%) have exactly 5 Round_end events; the remaining 8 have 3, 4, or 6.
+</p>
+
+<h2>Inputs</h2>
+<ul>
+  <li><code>data/Spatial Search Data/1/spatial_search_users_records.bson</code> (~198 MB)</li>
+  <li><code>data/Spatial Search Data/2/spatial_search_users_records.bson</code> (~56 MB)</li>
+  <li><code>data/Spatial Search Data/KeyTable.csv</code> (wiki backend KeyTable, copied from Drive: <code>G:\My Drive\...\Wikipedia Task\הרצות\4. הרצה שלישית - 138 אנשים\KeyTable.csv</code>)</li>
+</ul>
+
+<h2>Outputs</h2>
+<p>New folder: <code>data/cleaned/spatial_search/</code></p>
+
+<h3>Game.csv (long-format event log)</h3>
+<table>
+  <tr><th>Column</th><th>Type</th><th>Description</th></tr>
+  <tr><td>ID</td><td>int</td><td>Wikipedia participant ID (matches <code>data/cleaned_new/Game.csv</code>). 1..213, 163 distinct.</td></tr>
+  <tr><td>RunningName</td><td>str</td><td><code>Wikipedia_Exp_14.04</code></td></tr>
+  <tr><td>Version</td><td>str</td><td><code>Wikipedia_Exp_13.04</code> (the spatial-search experiment config the participant ran)</td></tr>
+  <tr><td>Age</td><td>str</td><td>Self-reported, copied from spatial-search event payload</td></tr>
+  <tr><td>Gender</td><td>str</td><td>Self-reported</td></tr>
+  <tr><td>GameCondition</td><td>str</td><td><code>Training_Maze</code> | <code>Diffuse</code> | <code>Clumpy</code></td></tr>
+  <tr><td>Trial</td><td>int</td><td>1..5 within each condition (1 for training)</td></tr>
+  <tr><td>Action</td><td>str</td><td>One of the 9 action types listed above</td></tr>
+  <tr><td>Time</td><td>str</td><td>Wall-clock <code>HH:MM:SS[.mmm]</code> (kept as string, matches BSON format; not converted to ISO)</td></tr>
+  <tr><td>X</td><td>float?</td><td>Agent X position (Movement_sample, Enter_*_mode)</td></tr>
+  <tr><td>Y</td><td>float?</td><td>Agent Y position</td></tr>
+  <tr><td>Heading</td><td>float?</td><td>Agent heading (Movement_sample only)</td></tr>
+  <tr><td>Speed</td><td>float?</td><td>Speed at mode-switch events</td></tr>
+  <tr><td>MapID</td><td>str?</td><td>e.g. <code>Diffuse_3</code>, <code>Clumpy_1</code>; null for Training_start/complete</td></tr>
+  <tr><td>ResourceX</td><td>float?</td><td>Found-resource X (Resource_found only)</td></tr>
+  <tr><td>ResourceY</td><td>float?</td><td>Found-resource Y</td></tr>
+  <tr><td>TotalCollected</td><td>int?</td><td>Cumulative resources at this event</td></tr>
+  <tr><td>CollisionCount</td><td>int?</td><td>Collision counter (Collision, Training_complete)</td></tr>
+</table>
+<p>Sort order: <code>ORDER BY ID, Time</code> (deterministic). 714,413 rows.</p>
+
+<h3>KeyTable.csv (one row per participant, 163 rows)</h3>
+<table>
+  <tr><th>Column</th><th>Source</th><th>Description</th></tr>
+  <tr><td>ID</td><td>wiki KeyTable</td><td>Wikipedia participant ID (PK)</td></tr>
+  <tr><td>UserID</td><td>wiki KeyTable</td><td>Prolific ID (the join bridge to spatial-search)</td></tr>
+  <tr><td>RunningName</td><td>wiki KeyTable</td><td><code>Wikipedia_Exp_14.04</code></td></tr>
+  <tr><td>Version</td><td>wiki KeyTable</td><td><code>Wikipedia_Exp_13.04</code> or <code>Wikipedia_Exp_20.04</code> (preserves wiki-side version label)</td></tr>
+  <tr><td>Mode</td><td>wiki KeyTable</td><td><code>Real</code></td></tr>
+  <tr><td>Date</td><td>wiki KeyTable</td><td>Wiki session date (e.g. <code>14-04-2026</code>)</td></tr>
+  <tr><td>SpatialSearchID</td><td>spatial-search KeyTable.ID</td><td>Internal spatial-search ID (for traceability back to BSON)</td></tr>
+  <tr><td>SpatialSearchClientStartTime</td><td>spatial-search top-level</td><td><code>HH:MM:SS | DD-MM-YYYY</code></td></tr>
+  <tr><td>SpatialSearchClientEndTime</td><td>spatial-search top-level</td><td><code>HH:MM:SS | DD-MM-YYYY</code> (or <code>-</code> if session aborted)</td></tr>
+  <tr><td>SpatialSearchSummaryStartTime</td><td>Records.Summary.StartTime</td><td>Game-internal start (HH:MM:SS)</td></tr>
+  <tr><td>SpatialSearchSummaryEndTime</td><td>Records.Summary.EndTime</td><td>Game-internal end (HH:MM:SS)</td></tr>
+  <tr><td>SpatialSearchBonusPayment</td><td>Records.Payment.bonus_payment</td><td>Resource count converted to bonus units</td></tr>
+</table>
+
+<h2>Pipeline</h2>
+<p>Single one-shot Python script: <code>scripts/cleaning/spatial_search_export.py</code>.</p>
+<ol>
+  <li><strong>Load wiki KeyTable.</strong> Filter to <code>RunningName == 'Wikipedia_Exp_14.04'</code> and <code>Version != 'Updated Test'</code>. Expected 163 rows after dropping <code>elay96@gmail.com</code> (IDs 69, 70).</li>
+  <li><strong>Load BSON.</strong> <code>bson.decode_all</code> on both files. Concatenate. Filter to <code>Version == 'Wikipedia_Exp_13.04'</code> AND <code>RunningName == 'Wikipedia_Exp_14.04'</code>. Expected 163 records.</li>
+  <li><strong>Build lookup</strong> <code>{prolific_uid: spatial_record}</code>. Hard-fail on duplicates (would indicate a data anomaly).</li>
+  <li><strong>Validate full match.</strong> For every wiki UID, assert there is exactly one matching spatial record. Hard-fail with the offending UIDs if not.</li>
+  <li><strong>Build Game.csv.</strong> For each wiki row, walk <code>spatial_record.Records.Game[]</code>. For each event:
+    <ul>
+      <li>Override the event's integer <code>ID</code> with the wiki <code>ID</code>.</li>
+      <li>Pick out the canonical 18 columns; missing fields become NaN/empty (preserve wiki Game.csv style).</li>
+    </ul>
+    Concatenate per-participant frames and sort by <code>(ID, Time)</code>.
+  </li>
+  <li><strong>Build KeyTable.csv.</strong> Merge wiki KeyTable rows with the spatial-search metadata fields listed above.</li>
+  <li><strong>Write outputs</strong> with UTF-8 encoding, no <code>index</code> column.</li>
+  <li><strong>Final validation block</strong> (printed to stdout):
+    <ul>
+      <li>KeyTable row count == 163.</li>
+      <li>Every <code>Game.csv</code> ID is present in <code>KeyTable.csv</code> ID set.</li>
+      <li>Total <code>Game.csv</code> rows == sum of <code>len(Records.Game)</code> across the 163 selected spatial records.</li>
+      <li>Per-participant trial structure summary: number of Round_start events per <code>(ID, GameCondition)</code> &mdash; expected 1 for Training_Maze, 5 for Diffuse, 5 for Clumpy. Anomalies are reported but not hard-failed.</li>
+    </ul>
+  </li>
+</ol>
+
+<h2>Non-goals</h2>
+<ul>
+  <li>No re-derivation of switch rates, dwell times, or any analysis-level metrics. Those belong in the m-series scripts that consume <code>Game.csv</code>.</li>
+  <li>No JSON / Parquet outputs in this pass.</li>
+  <li>No exclusion of test users beyond the M52 <code>IGNORED_PIDS = {69, 70}</code> rule (which is already handled by the wiki KeyTable filter).</li>
+  <li>No backfill of records that exist in spatial-search but never produced a wiki session (test users, dropouts).</li>
+  <li>No conversion of <code>Time</code> strings to timezone-aware ISO timestamps. The downstream scripts work with the raw HH:MM:SS format.</li>
+</ul>
+
+<h2>Open questions / assumptions</h2>
+<ul>
+  <li>Assumption: the existing wiki-side analysis pipeline keys on integer <code>ID</code>, so the spatial-search export inheriting that ID is the right primary key. (Confirmed by reviewing m1&ndash;m73.)</li>
+  <li>Assumption: the BSON-side <code>Age</code> / <code>Gender</code> in event payloads is identical to the wiki side. They sometimes differ (different self-reports across the two sessions) &mdash; we keep the spatial-search values as-is in <code>Game.csv</code>; the wiki <code>Age</code>/<code>Gender</code> are already in <code>data/cleaned_new/Game.csv</code> for cross-checking.</li>
+  <li>Each participant is assigned to <strong>one</strong> condition (Clumpy or Diffuse), so the validation block expects 5 Round_end events from a single condition column &mdash; not 5+5 across both. Participants with &ne; 5 Round_ends are reported as a soft warning, not a hard failure.</li>
+</ul>
+
+<h2>Acceptance criteria</h2>
+<ol>
+  <li><code>data/cleaned/spatial_search/Game.csv</code> exists, 714,413 rows, 18 columns as specified.</li>
+  <li><code>data/cleaned/spatial_search/KeyTable.csv</code> exists, 163 rows, 12 columns as specified.</li>
+  <li>The validation block at the end of the script prints all checks <span class="ok">PASS</span>.</li>
+  <li>A pandas join on <code>ID</code> between the new <code>Game.csv</code> and <code>data/cleaned_new/Game.csv</code> succeeds for all 163 spatial IDs (every spatial ID is in the wiki Game.csv).</li>
+</ol>
+
+</body>
+</html>
