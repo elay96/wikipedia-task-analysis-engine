@@ -1,0 +1,36 @@
+=== M75d classifier calibration report ===
+Trials used: ['100_1', '13_1', '1_1', '1_2', '8_1', '8_2']
+Total labelled samples: 3438
+After NaN drop: 3438  (exploit=1309, explore=2129)
+
+Logistic regression LOTO pooled AUC = 0.832
+Logistic regression LOTO pooled accuracy = 0.746
+Logistic regression in-sample accuracy   = 0.781
+Best single-feature baseline = resource_density > 29.000 -> acc = 0.775
+Old Enter-events baseline acc = 0.509
+
+Coefficients (on standardised features):
+  angular_speed                   coef = +0.789
+  sinuosity                       coef = +0.307
+  inst_speed                      coef = +0.111
+  speed_sd                        coef = -0.078
+  dist_to_nearest_resource        coef = -1.519
+  resource_density                coef = +1.825
+  intercept = -0.705
+
+Per-fold AUC:
+  100_1: 0.744
+  13_1: 0.725
+  1_1: 0.851
+  1_2: 0.625
+  8_1: 0.977
+  8_2: 0.995
+
+              precision    recall  f1-score   support
+
+     explore       0.75      0.87      0.81      2129
+     exploit       0.72      0.54      0.62      1309
+
+    accuracy                           0.75      3438
+   macro avg       0.74      0.71      0.71      3438
+weighted avg       0.74      0.75      0.74      3438

@@ -1,0 +1,79 @@
+=== M75e iteration log ===
+Trials: ['100_1', '13_1', '1_1', '1_2', '8_1', '8_2']
+Samples: 3438  (exploit=1309, explore=2129)
+
+name                                features         model              smooth     AUC    ACC
+it01_logreg_baseline                baseline_6     logreg          none        w=  0  AUC=0.832  ACC=0.746  tuned=0.770@0.69
+it02_logreg_baseline_smooth         baseline_6     logreg          median      w= 11  AUC=0.840  ACC=0.747  tuned=0.774@0.68
+it03_logreg_temporal                plus_temporal  logreg          none        w=  0  AUC=0.836  ACC=0.750  tuned=0.775@0.70
+it04_logreg_temporal_smooth         plus_temporal  logreg          median      w= 11  AUC=0.841  ACC=0.752  tuned=0.778@0.59
+it05_logreg_all                     all_features   logreg          none        w=  0  AUC=0.850  ACC=0.757  tuned=0.766@0.91
+it06_logreg_all_smooth              all_features   logreg          median      w= 11  AUC=0.853  ACC=0.759  tuned=0.769@0.87
+it09_gbm_all                        all_features   gbm             none        w=  0  AUC=0.892  ACC=0.813  tuned=0.814@0.62
+it10_gbm_all_smooth                 all_features   gbm             median      w= 11  AUC=0.903  ACC=0.820  tuned=0.825@0.37
+it13_gbm_fpt                        all_plus_fpt   gbm             none        w=  0  AUC=0.901  ACC=0.822  tuned=0.824@0.52
+it14_gbm_fpt_smooth11               all_plus_fpt   gbm             median      w= 11  AUC=0.911  ACC=0.835  tuned=0.839@0.46
+it15_gbm_fpt_smooth21               all_plus_fpt   gbm             median      w= 21  AUC=0.925  ACC=0.852  tuned=0.857@0.35
+it16_gbm_fpt_smooth31               all_plus_fpt   gbm             median      w= 31  AUC=0.929  ACC=0.857  tuned=0.879@0.39
+it22_gbm_fpt_smooth41               all_plus_fpt   gbm             median      w= 41  AUC=0.933  ACC=0.865  tuned=0.882@0.42
+it23_gbm_fpt_smooth51               all_plus_fpt   gbm             median      w= 51  AUC=0.936  ACC=0.880  tuned=0.883@0.45
+it24_gbm_fpt_smooth71               all_plus_fpt   gbm             median      w= 71  AUC=0.944  ACC=0.894  tuned=0.899@0.45
+it25_gbm_fpt_viterbi                all_plus_fpt   gbm             viterbi     w=  0  AUC=0.829  ACC=0.842  tuned=0.842@0.50
+it26_gbm_fpt_hysteresis             all_plus_fpt   gbm             hysteresis  w=  0  AUC=0.811  ACC=0.825  tuned=0.825@0.50
+it27_gbm_deep_fpt_smooth31          all_plus_fpt   gbm_deep        median      w= 31  AUC=0.926  ACC=0.850  tuned=0.876@0.37
+it28_gbm_slow_fpt_smooth31          all_plus_fpt   gbm_slow        median      w= 31  AUC=0.925  ACC=0.853  tuned=0.876@0.30
+it29_gbm_slow_fpt_smooth51          all_plus_fpt   gbm_slow        median      w= 51  AUC=0.933  ACC=0.876  tuned=0.879@0.34
+it30_rf_deeper_fpt_smooth31         all_plus_fpt   rf_deeper       median      w= 31  AUC=0.923  ACC=0.833  tuned=0.851@0.42
+it31_rf_deeper_fpt_smooth51         all_plus_fpt   rf_deeper       median      w= 51  AUC=0.935  ACC=0.831  tuned=0.881@0.36
+it37_gbm_fpt_smooth91               all_plus_fpt   gbm             median      w= 91  AUC=0.940  ACC=0.866  tuned=0.883@0.32
+it38_gbm_fpt_smooth121              all_plus_fpt   gbm             median      w=121  AUC=0.931  ACC=0.855  tuned=0.865@0.44
+it39_gbm_fpt_smooth151              all_plus_fpt   gbm             median      w=151  AUC=0.905  ACC=0.831  tuned=0.861@0.41
+it40_gbm_slow_smooth91              all_plus_fpt   gbm_slow        median      w= 91  AUC=0.939  ACC=0.863  tuned=0.886@0.30
+it41_gbm_slow_smooth121             all_plus_fpt   gbm_slow        median      w=121  AUC=0.932  ACC=0.854  tuned=0.871@0.34
+it42_rf_deeper_smooth91             all_plus_fpt   rf_deeper       median      w= 91  AUC=0.940  ACC=0.829  tuned=0.883@0.36
+it32_ens_gbm_rf_smooth31            all_plus_fpt   gbm+rf_deeper             median      w= 31  AUC=0.928  ACC=0.851  tuned=0.878@0.38
+it33_ens_gbm_rf_smooth51            all_plus_fpt   gbm+rf_deeper             median      w= 51  AUC=0.939  ACC=0.864  tuned=0.882@0.38
+it34_ens_gbm_rf_viterbi             all_plus_fpt   gbm+rf_deeper             viterbi     w=  0  AUC=0.818  ACC=0.834  tuned=0.834@0.50
+it35_ens_3way_smooth31              all_plus_fpt   gbm+gbm_slow+rf_deeper    median      w= 31  AUC=0.927  ACC=0.852  tuned=0.876@0.38
+it36_ens_3way_smooth51              all_plus_fpt   gbm+gbm_slow+rf_deeper    median      w= 51  AUC=0.938  ACC=0.868  tuned=0.884@0.38
+it43_ens_gbm_rf_smooth91            all_plus_fpt   gbm+rf_deeper             median      w= 91  AUC=0.943  ACC=0.856  tuned=0.883@0.32
+it44_ens_3way_smooth91              all_plus_fpt   gbm+gbm_slow+rf_deeper    median      w= 91  AUC=0.943  ACC=0.858  tuned=0.885@0.32
+it45_ens_3way_smooth121             all_plus_fpt   gbm+gbm_slow+rf_deeper    median      w=121  AUC=0.934  ACC=0.853  tuned=0.870@0.34
+
+=== Sorted by tuned-threshold accuracy ===
+  it24_gbm_fpt_smooth71               AUC=0.944  ACC=0.894  tunedACC=0.899@thr=0.45  CM=[[2012, 117], [246, 1063]]
+  it40_gbm_slow_smooth91              AUC=0.939  ACC=0.863  tunedACC=0.886@thr=0.30  CM=[[1965, 164], [306, 1003]]
+  it44_ens_3way_smooth91              AUC=0.943  ACC=0.858  tunedACC=0.885@thr=0.32  CM=[[1956, 173], [314, 995]]
+  it36_ens_3way_smooth51              AUC=0.938  ACC=0.868  tunedACC=0.884@thr=0.38  CM=[[1954, 175], [278, 1031]]
+  it37_gbm_fpt_smooth91               AUC=0.940  ACC=0.866  tunedACC=0.883@thr=0.32  CM=[[1951, 178], [281, 1028]]
+  it43_ens_gbm_rf_smooth91            AUC=0.943  ACC=0.856  tunedACC=0.883@thr=0.32  CM=[[1968, 161], [334, 975]]
+  it23_gbm_fpt_smooth51               AUC=0.936  ACC=0.880  tunedACC=0.883@thr=0.45  CM=[[1954, 175], [237, 1072]]
+  it42_rf_deeper_smooth91             AUC=0.940  ACC=0.829  tunedACC=0.883@thr=0.36  CM=[[1982, 147], [442, 867]]
+  it33_ens_gbm_rf_smooth51            AUC=0.939  ACC=0.864  tunedACC=0.882@thr=0.38  CM=[[1961, 168], [299, 1010]]
+  it22_gbm_fpt_smooth41               AUC=0.933  ACC=0.865  tunedACC=0.882@thr=0.42  CM=[[1914, 215], [249, 1060]]
+  it31_rf_deeper_fpt_smooth51         AUC=0.935  ACC=0.831  tunedACC=0.881@thr=0.36  CM=[[1959, 170], [412, 897]]
+  it29_gbm_slow_fpt_smooth51          AUC=0.933  ACC=0.876  tunedACC=0.879@thr=0.34  CM=[[1949, 180], [247, 1062]]
+  it16_gbm_fpt_smooth31               AUC=0.929  ACC=0.857  tunedACC=0.879@thr=0.39  CM=[[1907, 222], [269, 1040]]
+  it32_ens_gbm_rf_smooth31            AUC=0.928  ACC=0.851  tunedACC=0.878@thr=0.38  CM=[[1909, 220], [291, 1018]]
+  it28_gbm_slow_fpt_smooth31          AUC=0.925  ACC=0.853  tunedACC=0.876@thr=0.30  CM=[[1903, 226], [281, 1028]]
+  it27_gbm_deep_fpt_smooth31          AUC=0.926  ACC=0.850  tunedACC=0.876@thr=0.37  CM=[[1908, 221], [295, 1014]]
+  it35_ens_3way_smooth31              AUC=0.927  ACC=0.852  tunedACC=0.876@thr=0.38  CM=[[1907, 222], [287, 1022]]
+  it41_gbm_slow_smooth121             AUC=0.932  ACC=0.854  tunedACC=0.871@thr=0.34  CM=[[1954, 175], [328, 981]]
+  it45_ens_3way_smooth121             AUC=0.934  ACC=0.853  tunedACC=0.870@thr=0.34  CM=[[1970, 159], [347, 962]]
+  it38_gbm_fpt_smooth121              AUC=0.931  ACC=0.855  tunedACC=0.865@thr=0.44  CM=[[1956, 173], [325, 984]]
+  it39_gbm_fpt_smooth151              AUC=0.905  ACC=0.831  tunedACC=0.861@thr=0.41  CM=[[1928, 201], [381, 928]]
+  it15_gbm_fpt_smooth21               AUC=0.925  ACC=0.852  tunedACC=0.857@thr=0.35  CM=[[1890, 239], [270, 1039]]
+  it30_rf_deeper_fpt_smooth31         AUC=0.923  ACC=0.833  tunedACC=0.851@thr=0.42  CM=[[1916, 213], [361, 948]]
+  it25_gbm_fpt_viterbi                AUC=0.829  ACC=0.842  tunedACC=0.842@thr=0.50  CM=[[1881, 248], [294, 1015]]
+  it14_gbm_fpt_smooth11               AUC=0.911  ACC=0.835  tunedACC=0.839@thr=0.46  CM=[[1872, 257], [309, 1000]]
+  it34_ens_gbm_rf_viterbi             AUC=0.818  ACC=0.834  tunedACC=0.834@thr=0.50  CM=[[1884, 245], [325, 984]]
+  it10_gbm_all_smooth                 AUC=0.903  ACC=0.820  tunedACC=0.825@thr=0.37  CM=[[1818, 311], [307, 1002]]
+  it26_gbm_fpt_hysteresis             AUC=0.811  ACC=0.825  tunedACC=0.825@thr=0.50  CM=[[1854, 275], [326, 983]]
+  it13_gbm_fpt                        AUC=0.901  ACC=0.822  tunedACC=0.824@thr=0.52  CM=[[1846, 283], [328, 981]]
+  it09_gbm_all                        AUC=0.892  ACC=0.813  tunedACC=0.814@thr=0.62  CM=[[1809, 320], [322, 987]]
+  it04_logreg_temporal_smooth         AUC=0.841  ACC=0.752  tunedACC=0.778@thr=0.59  CM=[[1821, 308], [543, 766]]
+  it03_logreg_temporal                AUC=0.836  ACC=0.750  tunedACC=0.775@thr=0.70  CM=[[1800, 329], [531, 778]]
+  it02_logreg_baseline_smooth         AUC=0.840  ACC=0.747  tunedACC=0.774@thr=0.68  CM=[[1890, 239], [630, 679]]
+  it01_logreg_baseline                AUC=0.832  ACC=0.746  tunedACC=0.770@thr=0.69  CM=[[1861, 268], [604, 705]]
+  it06_logreg_all_smooth              AUC=0.853  ACC=0.759  tunedACC=0.769@thr=0.87  CM=[[1694, 435], [394, 915]]
+  it05_logreg_all                     AUC=0.850  ACC=0.757  tunedACC=0.766@thr=0.91  CM=[[1692, 437], [398, 911]]

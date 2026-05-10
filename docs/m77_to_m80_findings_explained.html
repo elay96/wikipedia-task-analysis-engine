@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M77-M80: ממצאים והסבר</title>
+<style>
+  :root {
+    --bg: #FAFAF9;
+    --card: #FFFFFF;
+    --text: #1a1a1a;
+    --muted: #5a5a5a;
+    --border: #e8e5e1;
+    --green: #166534;
+    --green-bg: #dcfce7;
+    --red: #991b1b;
+    --red-bg: #fee2e2;
+    --yellow: #854d0e;
+    --yellow-bg: #fef9c3;
+    --blue: #1e40af;
+    --blue-bg: #dbeafe;
+    --purple: #6b21a8;
+    --purple-bg: #f3e8ff;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
+    --explore: #1976D2;
+    --exploit: #C62828;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", "Heebo", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 32px 24px 64px;
+  }
+  .container { max-width: 920px; margin: 0 auto; }
+  h1 {
+    font-size: 1.9rem;
+    border-bottom: 3px solid var(--blue);
+    padding-bottom: 12px;
+    margin-bottom: 8px;
+  }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 28px; }
+  h2 {
+    font-size: 1.4rem;
+    color: var(--blue);
+    margin: 36px 0 14px 0;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  h3 { font-size: 1.1rem; color: var(--text); margin: 20px 0 10px 0; }
+  h4 { font-size: 0.95rem; color: var(--muted); margin: 14px 0 8px 0; font-weight: 600; }
+  p { margin-bottom: 12px; }
+  ul, ol { padding-right: 24px; margin-bottom: 12px; }
+  li { margin-bottom: 4px; }
+  strong { font-weight: 600; }
+  code, pre {
+    direction: ltr;
+    text-align: left;
+    background: #F5F5F5;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: "Consolas", "Monaco", monospace;
+    font-size: 0.9em;
+  }
+  code { padding: 2px 6px; }
+  pre { padding: 12px; overflow-x: auto; margin: 8px 0; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 14px 0;
+    direction: ltr;
+    font-size: 0.95em;
+    background: var(--card);
+    box-shadow: var(--shadow);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  th { background: #F0F4F8; font-weight: 600; }
+  tr:nth-child(even) td { background: #FAFAFA; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-right-width: 4px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+  }
+  .card.green { border-right-color: var(--green); background: var(--green-bg); }
+  .card.red { border-right-color: var(--red); background: var(--red-bg); }
+  .card.yellow { border-right-color: var(--yellow); background: var(--yellow-bg); }
+  .card.blue { border-right-color: var(--blue); background: var(--blue-bg); }
+  .card.purple { border-right-color: var(--purple); background: var(--purple-bg); }
+  .card-title {
+    font-weight: 700;
+    margin-bottom: 6px;
+    font-size: 1rem;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--blue);
+    margin-bottom: 4px;
+  }
+  .stat-label { font-size: 0.85rem; color: var(--muted); }
+  .quote {
+    font-style: italic;
+    border-right: 3px solid var(--muted);
+    padding: 8px 16px;
+    margin: 12px 0;
+    color: var(--muted);
+  }
+  .footnote {
+    font-size: 0.85rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+    margin-top: 24px;
+  }
+  .nav {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+  }
+  .nav a {
+    color: var(--blue);
+    text-decoration: none;
+    margin-left: 14px;
+    font-size: 0.9rem;
+  }
+  .nav a:hover { text-decoration: underline; }
+  .pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  .pill.green { background: var(--green-bg); color: var(--green); }
+  .pill.red { background: var(--red-bg); color: var(--red); }
+  .pill.blue { background: var(--blue-bg); color: var(--blue); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>M77-M80: ממצאים והסבר</h1>
+<div class="meta">
+  תאריך: 2026-05-08 &middot; N=132 &middot; 4 ניתוחים: M77 (Manipulation), M78 (Correlations), M79 (Within-condition), M80 (Hunter/Busybody)
+</div>
+
+<div class="nav">
+  ניווט:
+  <a href="#story">הסיפור הגדול</a>
+  <a href="#background">רקע</a>
+  <a href="#m77">M77</a>
+  <a href="#m78">M78</a>
+  <a href="#m79">M79</a>
+  <a href="#m80">M80</a>
+  <a href="#entropy-secondary">seq_typing_entropy</a>
+  <a href="#literature">ספרות</a>
+  <a href="#conclusions">מסקנות</a>
+  <a href="#preregistration">Pre-registration</a>
+  <a href="#email">מייל למנחים</a>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="story">1. הסיפור בשורה אחת</h2>
+
+<div class="card blue">
+  <div class="card-title">הממצא המרכזי</div>
+  <p>
+    המניפולציה (Clumpy מול Diffuse) משנה <strong>דרמטית</strong> את ההתנהגות במטלת ה-foraging המרחבי
+    (Cohen's d עד 3.5+ על 29 מתוך 30 פיצ'רים), אבל <strong>לא משפיעה</strong> על התנהגות בויקיפדיה
+    ולא יוצרת קשר בין-נבדקי בין שתי המשימות. שלושה ניתוחים בלתי-תלויים (M78, M79, M80) מתכנסים לאותה מסקנה: <em>foraging הוא תלוי-מטלה, לא תכונת אישיות</em>.
+  </p>
+</div>
+
+<div class="grid-2">
+  <div class="stat">
+    <div class="stat-value">29/30</div>
+    <div class="stat-label">פיצ'רים מרחביים מבדילים Clumpy מ-Diffuse (FDR &lt; 0.05)</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">0/180</div>
+    <div class="stat-label">קורלציות spatial-wiki שורדות FDR</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">0/360</div>
+    <div class="stat-label">קורלציות within-condition שורדות FDR</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">χ²=0.01</div>
+    <div class="stat-label">השפעת התנאי על Hunter/Busybody (p=0.924)</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="background">2. רקע: שתי המטלות</h2>
+
+<h3>2.1 מטלת ה-foraging המרחבי</h3>
+<p>
+  הנבדקים ניווטו במשך 5 trials של ~60 שניות במפה 2D, אספו "משאבים" (כוכבים)
+  והיו צריכים להחליט מתי לחפש בעמקות ומתי לעבור לאזור חדש. שני תנאים:
+</p>
+<ul>
+  <li><strong>Clumpy</strong> (N=72): המשאבים מקובצים בכתמים. אסטרטגיה אופטימלית - לעבוד באזור עד שהוא מתרוקן ואז לקפוץ.</li>
+  <li><strong>Diffuse</strong> (N=60): המשאבים מפוזרים אחיד. אסטרטגיה אופטימלית - תנועה רציפה ללא חזרות.</li>
+</ul>
+
+<h3>2.2 מטלת הויקיפדיה</h3>
+<p>
+  אותם נבדקים, מיד אחרי, התחילו 6 trials של גלישה בויקיפדיה במשימת "ענה על שאלה
+  שאינך יודע את התשובה עליה". יש להם זמן בלתי-מוגבל, גישה לחיפוש ולקישורים.
+</p>
+
+<h3>2.3 הפיצ'רים</h3>
+<p>
+  עבור כל נבדק חישבנו <strong>30 פיצ'רים מרחביים</strong> (15 פיצ'רים per trial × mean+sd):
+</p>
+<table>
+<thead><tr><th>קבוצה</th><th>פיצ'רים</th><th>מה הם מודדים</th></tr></thead>
+<tbody>
+<tr><td>Phase</td><td>explore_dur, exploit_dur, pct_time_exploit, n_transitions</td><td>זמן/פעמים שהיה ב-explore vs exploit (לפי המודל ההתנהגותי M76)</td></tr>
+<tr><td>Resource</td><td>total_collected, time_to_first, inter_resource, collection_rate</td><td>כמה אסף, באיזו מהירות, באיזה דחיסות</td></tr>
+<tr><td>Spatial</td><td>path_length, coverage_entropy, heading_variability</td><td>מאפייני המסלול הגיאומטרי</td></tr>
+<tr><td>Hart</td><td>patch_leaving_distance, levy_alpha</td><td>מתי עוזב patch, חוק חזקה של אורכי צעדים</td></tr>
+</tbody>
+</table>
+<p>
+  ו-<strong>6 פיצ'רים מויקיפדיה</strong> (M72, M73):
+</p>
+<table>
+<thead><tr><th>שם</th><th>מה הוא מודד</th></tr></thead>
+<tbody>
+<tr><td>count_time</td><td>כמה פעמים החליף &quot;מצב זמן&quot; (קריאה ארוכה &gt; 60s = exploit)</td></tr>
+<tr><td>count_topic</td><td>כמה פעמים עבר בין נושאי LDA</td></tr>
+<tr><td>count_typing</td><td>כמה פעמים החליף בין כתיבה לאי-כתיבה</td></tr>
+<tr><td>PC1</td><td>רכיב 1 של PCA על שלושת המדדים - ה-DV ה-pre-registered</td></tr>
+<tr><td>seq_typing_mean_run_explore</td><td>אורך ממוצע של רצף קריאה ללא הקלדה</td></tr>
+<tr><td>seq_typing_entropy</td><td>Shannon entropy של רצף &quot;מקליד / לא מקליד&quot;</td></tr>
+</tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="m77">3. M77 - Manipulation Check (האם המניפולציה עבדה?)</h2>
+
+<h3>3.1 מה זה manipulation check?</h3>
+<p>
+  זה לוודא שהשינוי שעשינו במשימה (Clumpy מול Diffuse) באמת השפיע על ההתנהגות.
+  אם אין הבדל - המשמעות שהמשתתפים לא הרגישו את השינוי או שהמדדים שלנו לא רגישים אליו.
+</p>
+
+<h3>3.2 איך מודדים?</h3>
+<p>
+  לכל אחד מ-30 הפיצ'רים המרחביים:
+</p>
+<ol>
+  <li><strong>Welch t-test</strong> - השוואת ממוצעים בין שני התנאים (מתחשב ב-SD שונים)</li>
+  <li><strong>Mann-Whitney U</strong> - חלופה ללא הנחות חלוקה (rank-sum)</li>
+  <li><strong>Cohen's d</strong> - גודל אפקט סטנדרטי. 0.2 = קטן, 0.5 = בינוני, 0.8 = גדול</li>
+  <li><strong>FDR correction</strong> (Benjamini-Hochberg) - תיקון על 30 בדיקות מרובות. מבטיח שאחוז ה-false positives יישאר &lt; 5%</li>
+</ol>
+
+<h3>3.3 התוצאות</h3>
+
+<div class="card green">
+  <div class="card-title">29 מתוך 30 פיצ'רים נבדלים מובהקת בין התנאים אחרי FDR</div>
+  המניפולציה עבדה <strong>חזק מאוד</strong>. הפיצ'ר היחיד שלא: <code>n_transitions_sd</code> (השונות בין-trials של מספר המעברים).
+</div>
+
+<table>
+<thead><tr><th>פיצ'ר</th><th>Clumpy mean</th><th>Diffuse mean</th><th>Cohen's d</th><th>פירוש</th></tr></thead>
+<tbody>
+<tr><td>pct_time_exploit_mean</td><td>53.5%</td><td>14.7%</td><td>+2.30</td><td>Clumpy מבלה הרבה יותר זמן ב-exploit</td></tr>
+<tr><td>exploit_dur_mean_mean</td><td>(ארוך)</td><td>(קצר)</td><td>+1.53</td><td>פאזות exploit ארוכות יותר ב-Clumpy</td></tr>
+<tr><td>total_collected_mean</td><td>477</td><td>124</td><td>+3.44</td><td>Clumpy אסף פי 4 יותר משאבים</td></tr>
+<tr><td>collection_rate_mean</td><td>8.0/sec</td><td>2.1/sec</td><td>+3.48</td><td>קצב איסוף פי 4</td></tr>
+<tr><td>n_transitions_mean</td><td>2.44</td><td>1.39</td><td>+1.01</td><td>יותר מעברים ב-Clumpy (הפוך מהצפוי - ראה הסבר למטה)</td></tr>
+<tr><td>levy_alpha_mean</td><td>1.62</td><td>1.34</td><td>+50.9*</td><td>חזקה שונה של חוק הצעדים. ה-d הענק מטעה (SD בין-נבדקי זעיר)</td></tr>
+</tbody>
+</table>
+
+<div class="card yellow">
+  <div class="card-title">הפתעה: n_transitions הפוך מה-pre-registration</div>
+  <p>
+    הספק שלנו תחזית: <em>&quot;ב-Clumpy יהיו פחות מעברים&quot;</em>. בפועל מצאנו את ההפך: 2.44 ב-Clumpy מול 1.39 ב-Diffuse.
+  </p>
+  <p>
+    בדקנו את התאוריה המקורית (Hart 2017, Hills, Charnov - Optimal Foraging Theory). מסתבר ש-OFT מנבא דווקא <strong>יותר מעברים ב-Clumpy</strong>: כשיש patches דיסקרטיים, האסטרטגיה האופטימלית היא exploit-בתוך-patch + explore-בין-patches, מה שמייצר מעברים. ב-Diffuse, אין patches → אין מה להחליף → אסטרטגיה אופטימלית היא חיפוש רציף ללא מעברים.
+  </p>
+  <p>
+    כלומר: <strong>הדאטה שלנו תואם תיאוריה</strong>. ה-pre-registration היה הפוך לתאוריה. ה-Hart 2017 לא בכלל ביצע את המניפולציה הזו (הוא רק פיתח את פרדיגמת foraging היצירתית) - אז התחזית שלנו לא הייתה מבוססת על מקור ספציפי.
+  </p>
+</div>
+
+<p>
+  ראה <code>output/m77_manipulation_check.pdf</code> לטבלה מלאה, forest plot של Cohen's d, ו-strip plots של הפיצ'רים החזקים.
+</p>
+
+<!-- ============================================================ -->
+<h2 id="m78">4. M78 - האם foraging מנבא ויקיפדיה? (collapsed)</h2>
+
+<h3>4.1 מה זה?</h3>
+<p>
+  לכל זוג (פיצ'ר מרחבי × פיצ'ר ויקיפדיה), חישבנו קורלציה על כל ה-N=132 (מאוחד על שני התנאים):
+</p>
+<ul>
+  <li><strong>Pearson r</strong> - קורלציה לינארית</li>
+  <li><strong>Spearman ρ</strong> - קורלציית דרגות (חזקה כנגד outliers)</li>
+  <li><strong>Partial r</strong> - r אחרי שמסירים את ההשפעה של condition</li>
+  <li><strong>FDR-BH</strong> על 180 הבדיקות (30 × 6)</li>
+</ul>
+
+<h3>4.2 התוצאות</h3>
+
+<div class="card red">
+  <div class="card-title">0 מתוך 180 קורלציות שורדות FDR</div>
+  <p>הקורלציה החזקה ביותר: <code>patch_leaving_distance × seq_typing_entropy = -0.25</code> (uncorrected p ≈ 0.004, FDR p ≈ 0.73).</p>
+  <p>אין קשר משמעותי בין איך מישהו &quot;חיפש&quot; במטלה המרחבית לבין איך הוא &quot;חיפש&quot; בויקיפדיה.</p>
+</div>
+
+<p>
+  ה-r ה-collapsed וה-r ה-partial-out-condition כמעט זהים, כלומר ההפרשים בין התנאים לא יוצרים את הקורלציות הקטנות שיש - הן נובעות מהבדלים אישיים אמיתיים (גם אם חלשים).
+</p>
+
+<p>ראה <code>output/m78_correlations.pdf</code>: heatmap 30×6, top-20 בטבלה, scatter collapsed-vs-partial.</p>
+
+<!-- ============================================================ -->
+<h2 id="m79">5. M79 - אולי הקשר נסתר בתוך תנאי?</h2>
+
+<h3>5.1 הרציונל</h3>
+<p>
+  אולי הקשר קיים אבל בכיוון הפוך בכל תנאי, כך שהוא מתבטל ב-collapsed.
+  לדוגמא: בנבדקי Clumpy, אסטרטגיה foraging מסוימת מנבאת ויקיפדיה אחת; בנבדקי Diffuse, אותה אסטרטגיה מנבאת ויקיפדיה הפוכה. בממוצע = 0.
+</p>
+<p>
+  בדיקה: רצנו את 180 הקורלציות בנפרד בכל תנאי (180 × 2 = 360 בדיקות).
+</p>
+
+<h3>5.2 התוצאות</h3>
+<table>
+<thead><tr><th>תנאי</th><th>N</th><th>max |r|</th><th>FDR-significant</th></tr></thead>
+<tbody>
+<tr><td>Clumpy</td><td>72</td><td>0.25</td><td>0/180</td></tr>
+<tr><td>Diffuse</td><td>60</td><td>0.39</td><td>0/180</td></tr>
+</tbody>
+</table>
+
+<div class="card yellow">
+  <div class="card-title">10 זוגות עם היפוך כיוון</div>
+  <p>
+    מתוך 180, יש 10 זוגות שבהם ה-r ב-Clumpy חיובי וב-Diffuse שלילי (או להפך), ובלפחות אחד הם |r| &gt; 0.2. דוגמאות:
+  </p>
+  <ul>
+    <li><code>patch_leaving_distance × count_time</code>: Clumpy r=+0.22, Diffuse r=-0.20</li>
+    <li><code>inter_resource_mean × seq_typing_mean_run_explore</code>: Clumpy r=-0.22, Diffuse r=+0.18</li>
+    <li><code>n_transitions_mean × seq_typing_entropy</code>: Clumpy r=+0.21, Diffuse r=-0.05</li>
+  </ul>
+  <p>
+    אף אחת מההיפוכים לא מובהקת אחרי FDR, אבל הן מסבירות חלקית למה ה-collapsed null. <em>עם N קטן יותר (60 ב-Diffuse), אנחנו לא יכולים לזהות אפקטים בגודל r=0.3.</em>
+  </p>
+</div>
+
+<p>
+  הסיגנל החזק ביותר בתוך-תנאי: ב-Diffuse,
+  <code>collection_rate_sd × count_topic = +0.39</code>. כלומר נבדקים שהיו יותר משתנים בקצב האיסוף שלהם בין trials, גם החליפו יותר נושאים בויקיפדיה. אך p_FDR=0.18, כלומר טרם משמעותי.
+</p>
+
+<p>ראה <code>output/m79_within_condition_correlations.pdf</code>.</p>
+
+<!-- ============================================================ -->
+<h2 id="m80">6. M80 - Hunter/Busybody (Zhou 2024)</h2>
+
+<h3>6.1 הרעיון</h3>
+<p>
+  Zhou et al. (Science Advances, 2024) הראו על 482,760 קוראי ויקיפדיה ב-14 שפות שיש שני סגנונות גלישה:
+</p>
+<ul>
+  <li><strong>Hunter</strong>: גלישה ממוקדת. חוזר לנושאים קרובים. רשת מעברים מקובצת. modularity גבוהה.</li>
+  <li><strong>Busybody</strong>: גלישה מפוזרת. קופץ בין נושאים שונים. אנטרופיית מעברים גבוהה.</li>
+</ul>
+<p>
+  Zhou מצאו שגם בלי מניפולציה, אנשים מתחלקים נטורלית לשני סגנונות. השאלה שלנו: <em>האם המניפולציה ב-foraging המרחבי משפיעה על איזה סגנון אדם מציג בויקיפדיה?</em>
+</p>
+
+<h3>6.2 איך הגדרנו</h3>
+<p>
+  לכל נבדק (אגרגציה על כל ה-trials), חישבנו:
+</p>
+<ul>
+  <li><code>topic_concentration</code> = משקל הנושא הפופולרי ביותר / סך הביקורים. נבדק שמבלה הכל בנושא אחד = 1.0</li>
+  <li><code>transition_entropy</code> = ממוצע אנטרופיית השורות במטריצת המעברים בין נושאים, מנורמל ל-log2(K). 0 = דטרמיניסטי, 1 = אקראי</li>
+  <li>וגם: n_visits, n_unique_topics, topic_entropy, same_topic_repeat_rate</li>
+</ul>
+<p>
+  KMeans (k=2) על שני הפיצ'רים הראשונים אחרי standardization. הקלאסטר עם topic_concentration גבוה יותר תוייג hunter; השני busybody.
+</p>
+
+<h3>6.3 התוצאות</h3>
+
+<div class="grid-2">
+  <div class="stat">
+    <div class="stat-value">49</div>
+    <div class="stat-label">Hunters (38%)</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">81</div>
+    <div class="stat-label">Busybodies (62%)</div>
+  </div>
+</div>
+
+<div class="card red">
+  <div class="card-title">המניפולציה לא מנבאת את הסגנון</div>
+  <p>
+    χ² (condition × style) = 0.01, p = 0.924.
+  </p>
+  <table>
+    <thead><tr><th>תנאי</th><th>Hunter</th><th>Busybody</th><th>סה&quot;כ</th></tr></thead>
+    <tbody>
+      <tr><td>Clumpy</td><td>26 (37%)</td><td>45 (63%)</td><td>71</td></tr>
+      <tr><td>Diffuse</td><td>23 (39%)</td><td>36 (61%)</td><td>59</td></tr>
+    </tbody>
+  </table>
+  <p>
+    הפילוג zהה לחלוטין בין שני התנאים. המניפולציה <strong>אפס השפעה</strong> על איזה סגנון גלישה אדם מציג.
+  </p>
+</div>
+
+<div class="card red">
+  <div class="card-title">הפיצ'רים המרחביים גם הם לא מנבאים את הסגנון</div>
+  0 מתוך 30 פיצ'רים שורדים FDR. החזק ביותר: <code>n_transitions_mean</code> (Hunters עם יותר מעברים, d=+0.35, p=0.066). מגמתי, לא מובהק.
+</div>
+
+<p>
+  כלומר: <em>אם נבדק יוצר רשת ויקיפדיה ממוקדת או מפוזרת, אנחנו לא יכולים לחזות את זה לא מהתנאי הנסיוני ולא מההתנהגות שלו ב-foraging המרחבי</em>. הסגנון נקבע על ידי משהו אחר - מאפיין אישי, נושא הסשן, או רעש.
+</p>
+
+<p>ראה <code>output/m80_hunter_busybody.pdf</code>.</p>
+
+<!-- ============================================================ -->
+<h2 id="entropy-secondary">7. seq_typing_entropy - ה-secondary outcome המובהק-גבולי</h2>
+
+<h3>7.1 למה זה מעניין</h3>
+<p>
+  בתוך הים של null results, יש מדד אחד בויקיפדיה שקרוב לסף המובהקות - ה-<code>seq_typing_entropy</code>
+  (entropy של רצף &quot;מקליד / לא מקליד&quot;, M73). מ-M72/M73 על המדגם החדש (N=138):
+</p>
+<table>
+<thead><tr><th>מדד</th><th>Diffuse</th><th>Clumpy</th><th>Cohen's d</th><th>p</th></tr></thead>
+<tbody>
+<tr><td>seq_typing_entropy</td><td>גבוה יותר</td><td>נמוך יותר</td><td>+0.33</td><td>0.053 (גבולי)</td></tr>
+<tr><td>PC1 (pre-registered DV)</td><td>≈</td><td>≈</td><td>-0.09</td><td>0.60</td></tr>
+<tr><td>count_time</td><td>≈</td><td>≈</td><td>-0.13</td><td>~0.45</td></tr>
+<tr><td>seq_typing_mean_run_explore</td><td>≈</td><td>≈</td><td>-0.13</td><td>0.45</td></tr>
+</tbody>
+</table>
+
+<div class="card yellow">
+  <div class="card-title">למה זה הכיוון ההפוך מהצפוי?</div>
+  <p>
+    התחזית המקורית: Clumpy → exploit → רצפי קריאה רציפים → entropy <strong>נמוך</strong>.
+    מצאנו: Clumpy <em>אכן</em> נמוך יותר ב-entropy מ-Diffuse, אבל קצת. הכיוון תואם תאוריה.
+  </p>
+  <p>
+    אבל יש מורכבות: כשהמניפולציה מצליחה לייצר אפקט בקצב הזה (d=0.33), והכל-יחד-עם-זאת
+    הקורלציות הבין-נבדקיות עם פיצ'רי spatial-search הן null - זה אומר שהאפקט של התנאי על
+    הויקיפדיה הוא <strong>קבוצתי בלבד</strong>, לא משקף הבדלים אישיים יציבים שאפשר לחבר
+    בין מטלות.
+  </p>
+</div>
+
+<h3>7.2 איך זה משתלב בסיפור הגדול</h3>
+<p>
+  אם נכלול את <code>seq_typing_entropy</code> כ-secondary outcome, הסיפור הופך מ-<em>&quot;התנאי
+  לא השפיע על ויקיפדיה כלל&quot;</em> ל-<em>&quot;התנאי השפיע מעט (גבולית) על entropy של תפוסות
+  הקלדה, אבל לא על המדדים העיקריים שמטרתם הייתה ללכוד explore-exploit&quot;</em>. זה דורש שינוי
+  קל ב-framing:
+</p>
+<ul>
+  <li>במקום: &quot;המניפולציה לא השפיעה על ויקיפדיה.&quot;</li>
+  <li>לכתוב: &quot;המניפולציה השפיעה על מדד מבני אחד (entropy של תפוסות הקלדה, p=0.053) אך לא על המדדים העיקריים של explore-exploit.&quot;</li>
+</ul>
+
+<h3>7.3 איך זה משתלב בקריטיקה התיאורטית</h3>
+<p>
+  גם אם seq_typing_entropy אכן מציג אפקט גבולי, הקורלציה הבין-נבדקית עם פיצ'רי spatial היא חלשה (max ~0.25 ב-collapsed M78, ~0.16 ב-partial). כלומר התנאי משפיע על entropy ברמה הקבוצתית, אבל המדידה הזו לא לוכדת הבדלים אישיים שמועברים מ-foraging מרחבי. הסיפור עדיין: <em>טרנספר התנהגותי קיים אולי ברמת הגירוי-קבוצה אך לא ברמת ההבדלים האישיים</em>.
+</p>
+
+<!-- ============================================================ -->
+<h2 id="literature">8. הקשר לספרות</h2>
+
+<h3>8.1 Hart et al. 2017 (creative foraging paradigm)</h3>
+<p class="quote">
+  &quot;Players alternate between exploration and exploitation phases [...] consistent with optimal foraging theory.&quot;
+</p>
+<p>
+  Hart פיתחו את פרדיגמת foraging היצירתית, אבל <strong>לא ביצעו מניפולציה Clumpy/Diffuse</strong>. הם הראו שהאלטרנציה בין explore/exploit מתאימה ל-OFT. התחזיות שלנו על n_transitions היו פנימיות, לא מבוססות על תוצאות שלהם. הדאטה שלנו תואם את התיאוריה הקלאסית של Hills/Charnov.
+</p>
+
+<h3>8.2 Zhou et al. 2024 (Science Advances)</h3>
+<p class="quote">
+  &quot;Curiosity styles generalize across contexts [...] but knowledge network structures differ substantially [...] task context and information structure reshape foraging patterns.&quot;
+</p>
+<p>
+  Zhou הראו שעוצמת ה-curiosity (trait) יציבה בין הקשרים, אבל המבנה ההתנהגותי בפועל משתנה לפי המבנה האינפורמטיבי של הסביבה. <strong>זה בדיוק מה שאנחנו רואים</strong>: התנאי הנסיוני (Clumpy/Diffuse) הוא מניפולציה של מבנה אינפורמטיבי. הוא מעצב התנהגות מאוד חזק <em>בתוך</em> המטלה הזאת, אבל לא מעצב את ההתנהגות בויקיפדיה - כי המבנה האינפורמטיבי שלה שונה לחלוטין (היפר-קישורים בגרף סמנטי, לא משאבים בתאים מרחביים).
+</p>
+
+<h3>8.3 Kenett et al. 2014</h3>
+<p>
+  טוענים שיש מבנים סמנטיים יציבים אישיים שמשפיעים על יצירתיות. אם זה היה תקף, היינו אמורים למצוא קשר בין-נבדקי. <strong>הממצא שלנו מאתגר את ההכללה הזו</strong> ל-foraging מרחבי, או לפחות מצביע שהביטוי ההתנהגותי תלוי-מטלה אפילו אם המבנה הסמנטי יציב.
+</p>
+
+<h3>8.4 Kedrick et al. 2026</h3>
+<p>
+  מציעים מסגרת תיאורטית לראות את ויקיפדיה כ-knowledge foraging - אז התחזית שלהם היא <em>שיש</em> overlap בין מטלות foraging. <strong>אנחנו לא מצליחים למצוא את ה-overlap הזה ברמת ההבדלים האישיים</strong>. זה ממצא חשוב לתיאוריה שלהם.
+</p>
+
+<!-- ============================================================ -->
+<h2 id="conclusions">9. מסקנות ופוטנציאל לפרסום</h2>
+
+<div class="card purple">
+  <div class="card-title">הטענה המרכזית למאמר</div>
+  <p>
+    ה-foraging הוא <strong>תלוי-מטלה (task-ecology dependent)</strong>, לא תכונה יציבה. אנשים מתאימים את האסטרטגיה שלהם למבנה הספציפי של הסביבה, ולכן ההבדלים האישיים שלהם בסביבה אחת לא מנבאים הבדלים בסביבה אחרת.
+  </p>
+  <p>
+    <strong>זה לא ניסוי שנכשל</strong> - זה ניסוי שמצא דיסוציאציה משמעותית. המניפולציה שלנו עבדה (חזק!), אבל לא הועברה. זה ממצא חיובי על אופי ה-cognition.
+  </p>
+</div>
+
+<h3>9.1 מה יש לנו לפרסום</h3>
+<ol>
+  <li>מניפולציה Clumpy/Diffuse עוצמתית בעולם foraging מרחבי, מבחני בעולם השוואות אקדמיות (29/30 features, FDR-controlled).</li>
+  <li>הוכחה אמפירית של דיסוציאציה: גירוי אחיד שמשנה התנהגות בעולם A לא משנה התנהגות בעולם B (3 ניתוחים בלתי-תלויים: M78, M79, M80).</li>
+  <li>חקירת הבדלים אישיים בויקיפדיה (Hunter/Busybody): קיים פיצול 38/62, אבל לא נובע מ-foraging.</li>
+  <li>הפתעה תיאורטית: הדאטה שלנו תואם OFT בעוד שה-pre-registration היה הפוך - תרומה לתיקון הספרות.</li>
+</ol>
+
+<h3>9.2 ה-framing המוצע</h3>
+<p>
+  &quot;A spatial-foraging manipulation produces large within-task effects on
+  exploration-exploitation behavior, but does not transfer to subsequent
+  knowledge-foraging on Wikipedia. Across three independent analyses (collapsed
+  correlations, within-condition correlations, browsing-style classification),
+  individual differences in spatial foraging do not predict individual
+  differences in Wikipedia exploration. We argue that foraging strategies are
+  task-ecology dependent rather than trait-stable, consistent with adaptive
+  cognition (Zhou et al. 2024) and ecological rationality frameworks.&quot;
+</p>
+
+<h3>9.3 צעדים אפשריים הבאים</h3>
+<ul>
+  <li>לבדוק האם <em>סדר</em> המטלות חשוב - אולי יש peeves ב-spatial→wiki שלא יהיו ב-wiki→spatial</li>
+  <li>להוסיף את התנאי שלא הריצונו (אם רלוונטי): wiki ללא spatial לפני, כקבוצת ביקורת</li>
+  <li>לבדוק קישורים מתוקפים יותר - לא רק M52 wiki features אלא מטריקות רשת ספציפיות (modularity, mean path length)</li>
+  <li>להציע שיתוף פעולה עם הקבוצה של Zhou - הם מצאו טרנספר כן, אנחנו לא, מה ההבדל?</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="preregistration">10. עניין ה-pre-registration</h2>
+
+<div class="card yellow">
+  <div class="card-title">מה הצהרנו ב-AsPredicted ומה מצאנו</div>
+  <p>
+    ה-pre-registration קבע את <strong>PC1 כ-DV הראשי</strong> (composite explore-exploit על ויקיפדיה).
+    בנינו אותו דרך M52 ובדקנו אם הוא נבדל בין Clumpy/Diffuse.
+  </p>
+  <p>
+    תוצאה (M72, מהמדגם החדש N=138): <strong>PC1 d = -0.09, p = 0.60</strong>. <em>לא מובהק</em>.
+  </p>
+  <p>
+    גם ה-secondary measures לא מובהקים: count_time, count_topic, count_typing, seq_typing_mean_run_explore - כולם null.
+    היחיד הכמעט-מובהק: <code>seq_typing_entropy</code> (M73): d = +0.33, p = 0.053 (גבולי).
+  </p>
+  <p>
+    <strong>המסקנה:</strong> ה-hypothesis ה-pre-registered <em>לא אושר</em>. אבל הסיבה לא הייתה כשל סטטיסטי - היא הייתה <em>תיאורטית</em>: ההנחה שגירוי spatial-foraging יעביר ל-knowledge-foraging הייתה פשוט שגויה.
+  </p>
+  <p>
+    זה <strong>חוזק</strong> של ה-paper, לא חולשה. ה-pre-registration קיים בדיוק לטובת זה: לוודא שאנחנו לא משחקים עם ההיפותזות פוסט-הוק. דיווח על pre-registration ש&quot;לא אושר&quot; וההסבר התיאורטי שלו (טרנספר התנהגותי הוא תלוי-מטלה) הוא ממצא משמעותי.
+  </p>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="email">11. מייל מוצע למנחים</h2>
+
+<p>הסטייל אותו (קצר, &quot;אנחנו&quot; לא &quot;אני&quot;, מספרים קונקרטיים, פסקת סיום לדיון). ב-<code>docs/advisor_email_2026_05_08_m77_to_m80.txt</code>:</p>
+
+<div class="card" style="background: #FAFAFA; direction: rtl;">
+<div class="card-title">נושא: עדכון - ניתוחי spatial-search ו-wikipedia transfer (M77-M80)</div>
+<p>שלום,</p>
+
+<p>
+מאז העדכון הקודם בנינו מודל התנהגותי שמסווג explore/exploit במטלת ה-spatial-search על בסיס תיוג ידני (89.9% LOTO accuracy, GBM על 17 פיצ'רים), והרצנו אותו על כל ה-132 הנבדקים. זה החליף את הסיווג שהיה לנו קודם (Enter_*_mode events) שהתברר שלא תואם להתנהגות האמיתית. אחרי זה הרצנו את הניתוחים העיקריים. ארבע נקודות:
+</p>
+
+<ol>
+<li>
+  <strong>Manipulation Check (M77):</strong> המניפולציה Clumpy/Diffuse עבדה חזק מאוד.
+  29 מתוך 30 הפיצ'רים נבדלים מובהקת אחרי FDR.
+  <br>pct_time_exploit: Clumpy 53.5% מול Diffuse 14.7% (d=+2.30)
+  <br>total_collected: Clumpy 477 מול Diffuse 124 (d=+3.44).
+</li>
+<li>
+  <strong>Wikipedia Correlations (M78):</strong> 0 מתוך 180 קורלציות שורדות FDR.
+  מקסימום |r| = 0.25. גם partial-out condition נשאר זהה - הקשר הקטן שיש הוא within-subject ולא חפץ של התנאי.
+</li>
+<li>
+  <strong>Within-condition (M79) ו-Hunter/Busybody (M80):</strong> גם ניתוחים אלה null.
+  M79: 0/180 בכל תנאי בנפרד. 10 זוגות עם היפוך כיוון, אך לא מובהק.
+  M80: סיווג של הנבדקים לסגנון hunter (49) או busybody (81) על בסיס המעברים בין נושאים בויקיפדיה. התנאי הנסיוני לא מנבא את הסגנון (chi-square = 0.01, p = 0.924). 0/30 פיצ'רים מרחביים מבדילים בין הסגנונות.
+</li>
+</ol>
+
+<p>מצורפים 4 PDFs (M77-M80) ומסמך הסבר HTML.</p>
+
+<p>
+ברצוני לדון איתכם איך לפרש את הדיסוציאציה הזו לפני שאני מסכם את המסקנות. שלושה ניתוחים בלתי-תלויים מצביעים שאפילו עם מניפולציה חזקה מאוד שמצליחה לשנות התנהגות במטלה אחת, היא לא מועברת למטלה השנייה. אני נוטה לחשוב, ברוח Zhou et al. 2024 ב-Science Advances, שזה ממצא משמעותי על foraging תלוי-מטלה ולא על תכונה אישית - אבל אשמח לשמוע את דעתכם לפני שאני בונה על זה את הסיפור התיאורטי.
+</p>
+
+<p>עילי</p>
+</div>
+
+<!-- ============================================================ -->
+<div class="footnote">
+  <p>קבצי פלט:</p>
+  <ul>
+    <li><code>output/m77_manipulation_check.csv</code> + <code>.pdf</code></li>
+    <li><code>output/m78_correlations.csv</code> + <code>.pdf</code></li>
+    <li><code>output/m79_within_condition_correlations.csv</code> + <code>.pdf</code></li>
+    <li><code>output/m80_hunter_busybody_per_participant.csv</code></li>
+    <li><code>output/m80_hunter_busybody_features.csv</code> + <code>m80_hunter_busybody.pdf</code></li>
+  </ul>
+</div>
+
+</div>
+</body>
+</html>

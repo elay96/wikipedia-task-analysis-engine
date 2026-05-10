@@ -4,3 +4,6 @@ __pycache__/
 
 # Brainstorming session files
 .superpowers/
+
+# Raw BSON dumps - too large for git (use scripts to regenerate cleaned CSVs)
+data/Spatial Search Data/

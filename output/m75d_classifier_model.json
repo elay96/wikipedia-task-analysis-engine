@@ -1,0 +1,56 @@
+{
+  "feature_names": [
+    "angular_speed",
+    "sinuosity",
+    "inst_speed",
+    "speed_sd",
+    "dist_to_nearest_resource",
+    "resource_density"
+  ],
+  "window_samples": 10,
+  "density_radius_world_px": 60.0,
+  "scaler_mean": [
+    121.53695931525684,
+    1.4099563442731535,
+    61.629853646990874,
+    10.226546456224483,
+    56.21330127649619,
+    63.06457242582897
+  ],
+  "scaler_scale": [
+    75.35413276432661,
+    0.7305325361339596,
+    33.046730575899055,
+    100.90394356326064,
+    118.35226557925346,
+    119.63874465200858
+  ],
+  "logistic_coef": [
+    0.789384556886538,
+    0.3073726905764436,
+    0.11091267790412832,
+    -0.07769719961870027,
+    -1.519262373879292,
+    1.8251518603603385
+  ],
+  "logistic_intercept": -0.7049611863140351,
+  "positive_class": "exploit",
+  "training_n_samples": 3438,
+  "training_trials": [
+    "100_1",
+    "13_1",
+    "1_1",
+    "1_2",
+    "8_1",
+    "8_2"
+  ],
+  "loto_pooled_auc": 0.8324082184220885,
+  "loto_pooled_accuracy": 0.7463641652123327,
+  "single_feature_baseline": {
+    "feature": "resource_density",
+    "threshold": 29.0,
+    "acc": 0.7754508435136708,
+    "n_used": 3438
+  },
+  "old_enter_events_baseline_acc": 0.5090168702734148
+}
