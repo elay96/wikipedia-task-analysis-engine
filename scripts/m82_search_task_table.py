@@ -317,6 +317,151 @@ def _top_correlations(corr_long, k):
     return out
 
 
+def _render_summary_section(groupstats, corr_long, k, n_total):
+    # --- Section 1: strongest correlation per SEARCH measure (All group) ---
+    task_label_map = {col: lbl for col, lbl in TASK_MEASURES}
+    search_label_map = {col: lbl for col, lbl, _ in SEARCH_MEASURES}
+
+    sig_star = ' <span style="color:#C62828;">&#9733;</span>'
+
+    all_corr = corr_long[(corr_long['k'] == k) & (corr_long['group'] == 'All')].copy()
+    all_corr['abs_rho'] = all_corr['rho'].abs()
+
+    li_items = []
+    for src, slabel, _ in SEARCH_MEASURES:
+        sub = all_corr[all_corr['search_measure'] == src].dropna(subset=['rho'])
+        if sub.empty:
+            continue
+        best = sub.loc[sub['abs_rho'].idxmax()]
+        rho_val = best['rho']
+        p_val = best['p']
+        sign = '+' if rho_val >= 0 else '&minus;'
+        rho_str = f'{sign}{abs(rho_val):.2f}'
+        marker = sig_star if (np.isfinite(p_val) and p_val < 0.05) else ''
+        tlabel = task_label_map.get(best['task_measure'], best['task_measure'])
+        li_items.append(
+            f'<li><strong>{slabel}</strong> &#8596; <code>{tlabel}</code>: '
+            f'&rho;={rho_str}, p={p_val:.3f}{marker}</li>'
+        )
+    section1_list = '\n    '.join(li_items)
+
+    # --- Section 2: deep vs shallow mean |rho| ---
+    deep_cols = {col for col, _, depth in SEARCH_MEASURES if depth == 'deep'}
+    shallow_cols = {col for col, _, depth in SEARCH_MEASURES if depth == 'shallow'}
+    deep_rhos = all_corr[all_corr['search_measure'].isin(deep_cols)]['abs_rho'].dropna()
+    shallow_rhos = all_corr[all_corr['search_measure'].isin(shallow_cols)]['abs_rho'].dropna()
+    deep_mean = deep_rhos.mean() if len(deep_rhos) else float('nan')
+    shallow_mean = shallow_rhos.mean() if len(shallow_rhos) else float('nan')
+    if np.isfinite(deep_mean) and np.isfinite(shallow_mean):
+        verdict = 'משמעותית יותר אינפורמטיביים' if deep_mean > shallow_mean else 'אינם נותנים יתרון ברור'
+        compare_text = (
+            f'המדדים העמוקים נותנים ממוצע |&rho;|={deep_mean:.2f} '
+            f'מול ממוצע |&rho;|={shallow_mean:.2f} למדדים השטחיים &mdash; {verdict}.'
+        )
+    else:
+        compare_text = 'אין מספיק נתונים להשוואה.'
+
+    # --- Section 3: largest group divergence ---
+    groups = GROUPS_K2 if k == 2 else GROUPS_K3
+    named_groups = [g for g in groups if g != 'All']
+    sub_corr = corr_long[(corr_long['k'] == k) & (corr_long['group'] != 'All')].dropna(subset=['rho'])
+
+    max_gap = -1.0
+    best_pair = None
+    for src, slabel, _ in SEARCH_MEASURES:
+        for tgt, tlabel in TASK_MEASURES:
+            pair_rows = sub_corr[
+                (sub_corr['search_measure'] == src) & (sub_corr['task_measure'] == tgt)
+            ]
+            if len(pair_rows) < 2:
+                continue
+            rhos = pair_rows[['group', 'rho']].set_index('group')['rho']
+            from itertools import combinations
+            for g1, g2 in combinations(pair_rows['group'].tolist(), 2):
+                if g1 not in rhos.index or g2 not in rhos.index:
+                    continue
+                r1, r2 = rhos[g1], rhos[g2]
+                if not (np.isfinite(r1) and np.isfinite(r2)):
+                    continue
+                gap = abs(r1 - r2)
+                if gap > max_gap:
+                    max_gap = gap
+                    best_pair = (slabel, tlabel, g1, r1, g2, r2)
+
+    if best_pair and max_gap >= 0.2:
+        slabel_b, tlabel_b, g1, r1, g2, r2 = best_pair
+        s1 = '+' if r1 >= 0 else '&minus;'
+        s2 = '+' if r2 >= 0 else '&minus;'
+        group_divergence_text = (
+            f'הפער הגדול ביותר בין הקבוצות: ב-{slabel_b} מול <code>{tlabel_b}</code> &mdash; '
+            f'{g1[0].upper() + g1[1:]}: &rho;={s1}{abs(r1):.2f}, '
+            f'{g2[0].upper() + g2[1:]}: &rho;={s2}{abs(r2):.2f} '
+            f'(פער של {max_gap:.2f}).'
+        )
+    else:
+        group_divergence_text = 'ההבדלים בין הקבוצות קטנים יחסית &mdash; תבניות הקורלציה דומות.'
+
+    # --- Section 4: largest Cohen's d effect ---
+    all_gs = groupstats[(groupstats['k'] == k) & (groupstats['group'] == 'All')].copy()
+    all_gs = all_gs.dropna(subset=['cohens_d'])
+    all_gs['abs_d'] = all_gs['cohens_d'].abs()
+    if not all_gs.empty:
+        best_d_row = all_gs.loc[all_gs['abs_d'].idxmax()]
+        d_val = best_d_row['cohens_d']
+        d_p = best_d_row['p']
+        d_sign = '+' if d_val >= 0 else '&minus;'
+        d_str = f'{d_sign}{abs(d_val):.2f}'
+        d_marker = sig_star if (np.isfinite(d_p) and d_p < 0.05) else ''
+        higher_cond = 'הערכים גבוהים יותר ב-Clumpy.' if d_val > 0 else 'הערכים גבוהים יותר ב-Diffuse.'
+        d_mlabel = search_label_map.get(best_d_row['measure'], best_d_row['measure'])
+        condition_effect_text = (
+            f'האפקט הגדול ביותר של התנאי על מדדי ה-SEARCH הוא ב-{d_mlabel}: '
+            f'd={d_str}, p={d_p:.3f}{d_marker}. {higher_cond}'
+        )
+    else:
+        condition_effect_text = 'אין מספיק נתונים לחישוב אפקט התנאי.'
+
+    # --- Section 5: bottom line ---
+    sentences = []
+    if np.isfinite(deep_mean) and np.isfinite(shallow_mean) and deep_mean > shallow_mean:
+        deep_labels = ', '.join(lbl for col, lbl, dep in SEARCH_MEASURES if dep == 'deep')
+        sentences.append(
+            f'המדדים העמוקים ({deep_labels}) מספקים סיגנל חזק יותר מהמדדים השטחיים.'
+        )
+    if best_pair and max_gap >= 0.2:
+        sentences.append(
+            f'החלוקה לקבוצות SEARCH style (k={k}) חושפת תבניות שונות בין הסגנונות, ולא רק שוני בעוצמה.'
+        )
+    else:
+        sentences.append(
+            f'תבניות הקורלציה דומות בין סגנונות החיפוש &mdash; '
+            f'סגנון החיפוש לא משנה את יחס SEARCH-TASK.'
+        )
+    bottom_line_text = ' '.join(sentences)
+
+    return f"""<section class="summary" dir="rtl">
+  <h2>מסקנות וניתוח התוצאות</h2>
+
+  <h3>1. הקורלציה הכי חזקה לכל מדד (קבוצת All)</h3>
+  <p>לכל אחד מארבעת מדדי ה-SEARCH, ה-TASK שמתואם איתו הכי חזק:</p>
+  <ul>
+    {section1_list}
+  </ul>
+
+  <h3>2. עומק מול שטחיות</h3>
+  <p>{compare_text}</p>
+
+  <h3>3. שונות בין סגנונות החיפוש</h3>
+  <p>{group_divergence_text}</p>
+
+  <h3>4. אפקט התנאי (Clumpy מול Diffuse)</h3>
+  <p>{condition_effect_text}</p>
+
+  <h3>5. בשורה התחתונה</h3>
+  <p>{bottom_line_text}</p>
+</section>"""
+
+
 TABLE_CSS = """\
 :root{--bg:#FFFFFF;--text:#1a1a1a;--muted:#666;--border:#D8D8D8;
 --header-bg:#F0F4F8;--row-alt:#FAFAFA;--accent:#1976D2;}
@@ -337,6 +482,12 @@ td.group-cell.dancer{color:""" + DANCER_COLOR + """;}
 td.cohensd.sig{font-weight:700;}
 td.r{width:56px;font-weight:600;}
 caption{caption-side:top;text-align:right;direction:rtl;padding:6px 4px 10px;color:var(--muted);font-size:12px;}
+section.summary{margin-top:32px;direction:rtl;text-align:right;font-size:14px;line-height:1.7;}
+section.summary h2{color:#1976D2;border-bottom:1px solid #E0E0E0;padding-bottom:4px;font-size:18px;}
+section.summary h3{color:#1a1a1a;margin-top:18px;font-size:15px;}
+section.summary code{direction:ltr;background:#F5F5F5;border:1px solid #E0E0E0;border-radius:4px;padding:1px 5px;font-family:Consolas,monospace;font-size:13px;}
+section.summary ul{margin-top:6px;padding-right:22px;}
+section.summary li{margin-bottom:3px;}
 """
 
 
@@ -372,6 +523,7 @@ def render_table_html(groupstats, corr_long, k, n_total):
     {rows}
   </tbody>
 </table>
+{_render_summary_section(groupstats, corr_long, k, n_total)}
 </body>
 </html>
 """
