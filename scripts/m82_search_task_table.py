@@ -78,11 +78,23 @@ BUSYBODY_COLOR = '#E65100'
 DANCER_COLOR = '#2E7D32'
 
 
+def load_search_features():
+    """Mean across the 5 trials of each per-trial SEARCH measure from M81."""
+    df = pd.read_csv(M81_PER_TRIAL)
+    df['condition'] = df['condition'].astype(str).str.lower()
+    cols = [c for c, _, _ in SEARCH_MEASURES]
+    grouped = df.groupby(['participant_id', 'condition'])[cols].mean().reset_index()
+    grouped['participant_id'] = grouped['participant_id'].astype(int)
+    return grouped
+
+
 def main():
     OUTPUT_DIR.mkdir(exist_ok=True)
     DOCS_DIR.mkdir(exist_ok=True)
     print('M82: building search-task table...')
-    # tasks 2-9 will populate this
+    search_df = load_search_features()
+    print(f'  search measures: {search_df.shape} (expect ~132 rows x 6 cols)')
+    print(search_df[[c for c, _, _ in SEARCH_MEASURES]].describe().round(2))
 
 
 if __name__ == '__main__':
