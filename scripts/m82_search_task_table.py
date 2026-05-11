@@ -384,6 +384,16 @@ def write_findings_html(groupstats, corr_long, per_pid):
     n_per_style_k3 = per_pid['style_k3'].value_counts().to_dict()
     n_per_style_k2 = per_pid['style_k2'].value_counts().to_dict()
 
+    def _fmt_counts(counts_dict, order):
+        parts = []
+        for name in order:
+            if name in counts_dict:
+                parts.append(f'{name[0].upper() + name[1:]}: {int(counts_dict[name])}')
+        return ', '.join(parts)
+
+    fmt_k2 = _fmt_counts(n_per_style_k2, ['hunter', 'busybody'])
+    fmt_k3 = _fmt_counts(n_per_style_k3, ['hunter', 'busybody', 'dancer'])
+
     def _top_block(top_dict, k):
         parts = []
         for src, info in top_dict.items():
@@ -445,8 +455,8 @@ ul {{ margin-top: 4px; }}
 <h2>2. נתונים</h2>
 <ul>
   <li>N = {n_total} משתתפים (קוהורט M81)</li>
-  <li>סגנון k=2: {n_per_style_k2}</li>
-  <li>סגנון k=3: {n_per_style_k3}</li>
+  <li>סגנון k=2: {fmt_k2}</li>
+  <li>סגנון k=3: {fmt_k3}</li>
 </ul>
 
 <h2>3. ממצאים - k=2</h2>
