@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>M82 - SEARCH x Style x TASK - Findings</title>
+<style>
+body { font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+       background: #FFFFFF; color: #1a1a1a; line-height: 1.6;
+       max-width: 980px; margin: 32px auto; padding: 0 24px; }
+h1 { color: #1a1a1a; border-bottom: 2px solid #1976D2; padding-bottom: 8px; }
+h2 { color: #1976D2; margin-top: 32px; border-bottom: 1px solid #E0E0E0;
+     padding-bottom: 4px; }
+h3 { color: #1a1a1a; margin-top: 22px; }
+h4 { color: #555; margin-top: 12px; margin-bottom: 4px; }
+code { direction: ltr; background: #F5F5F5; border: 1px solid #E0E0E0;
+       border-radius: 4px; padding: 2px 6px; font-family: Consolas, monospace; }
+ul { margin-top: 4px; }
+.info { background: #E3F2FD; border-right: 4px solid #1976D2;
+        padding: 12px 16px; margin: 12px 0; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<h1>M82 - SEARCH measures &times; Wikipedia style &times; TASK correlations</h1>
+
+<h2>1. הקונטקסט</h2>
+<p>
+  הניתוח בודק האם סגנון החיפוש של המשתתפים במסע ה-Wikipedia (Hunter / Busybody
+  ובגרסת k=3 גם Dancer) מנבא את ההתנהגות שלהם במשחק החיפוש המרחבי. אנחנו מציבים
+  זה ליד זה ארבעה מדדים מהמשחק - שניים שטחיים (מבוססי אירועים בלבד) ושניים עמוקים
+  (תוצרי מסווג ה-GBM מ-M81) - ובוחנים שלוש שאלות: (א) האם המדדים העמוקים נותנים
+  יותר אינפורמציה מהשטחיים; (ב) האם האפקט של תנאי ה-Clumpy/Diffuse שונה בין
+  הקבוצות; (ג) אילו מדדי SEARCH מתואמים לאילו מדדי TASK.
+</p>
+
+<h2>2. נתונים</h2>
+<ul>
+  <li>N = 130 משתתפים (קוהורט M81)</li>
+  <li>סגנון k=2: {'busybody': 81, 'hunter': 49}</li>
+  <li>סגנון k=3: {'dancer': 49, 'busybody': 41, 'hunter': 40}</li>
+</ul>
+
+<h2>3. ממצאים - k=2</h2>
+<h4>Time to 1st reward (s)</h4><ul><li><code>count_topic</code>: &rho;=+0.13, p=0.156, n=130</li><li><code>PC1</code>: &rho;=+0.11, p=0.201, n=130</li><li><code>seq_typing_entropy</code>: &rho;=-0.11, p=0.234, n=130</li></ul>
+<h4>Mean inter-reward time (s)</h4><ul><li><code>mean_reading_length_s</code>: &rho;=+0.22, p=0.037, n=94</li><li><code>seq_typing_entropy</code>: &rho;=+0.11, p=0.199, n=130</li><li><code>count_topic</code>: &rho;=-0.09, p=0.298, n=130</li></ul><p>&nbsp;&nbsp;<strong>Sub-group divergence (|&rho;|&ge;.30 &amp; p&lt;.05):</strong></p><ul><li>busybody &times; <code>mean_reading_length_s</code>: &rho;=+0.32, p=0.016</li></ul>
+<h4>% time in exploit</h4><ul><li><code>mean_reading_length_s</code>: &rho;=-0.15, p=0.136, n=94</li><li><code>seq_typing_entropy</code>: &rho;=-0.13, p=0.150, n=130</li><li><code>count_time</code>: &rho;=+0.03, p=0.736, n=130</li></ul>
+<h4>N transitions</h4><ul><li><code>mean_reading_length_s</code>: &rho;=-0.10, p=0.353, n=94</li><li><code>count_typing</code>: &rho;=+0.07, p=0.436, n=130</li><li><code>count_topic</code>: &rho;=-0.07, p=0.442, n=130</li></ul>
+
+<h2>4. ממצאים - k=3</h2>
+<h4>Time to 1st reward (s)</h4><ul><li><code>count_topic</code>: &rho;=+0.13, p=0.156, n=130</li><li><code>PC1</code>: &rho;=+0.11, p=0.201, n=130</li><li><code>seq_typing_entropy</code>: &rho;=-0.11, p=0.234, n=130</li></ul>
+<h4>Mean inter-reward time (s)</h4><ul><li><code>mean_reading_length_s</code>: &rho;=+0.22, p=0.037, n=94</li><li><code>seq_typing_entropy</code>: &rho;=+0.11, p=0.199, n=130</li><li><code>count_topic</code>: &rho;=-0.09, p=0.298, n=130</li></ul>
+<h4>% time in exploit</h4><ul><li><code>mean_reading_length_s</code>: &rho;=-0.15, p=0.136, n=94</li><li><code>seq_typing_entropy</code>: &rho;=-0.13, p=0.150, n=130</li><li><code>count_time</code>: &rho;=+0.03, p=0.736, n=130</li></ul><p>&nbsp;&nbsp;<strong>Sub-group divergence (|&rho;|&ge;.30 &amp; p&lt;.05):</strong></p><ul><li>dancer &times; <code>mean_reading_length_s</code>: &rho;=-0.42, p=0.024</li><li>dancer &times; <code>count_topic</code>: &rho;=+0.35, p=0.015</li><li>dancer &times; <code>PC1</code>: &rho;=+0.30, p=0.033</li></ul>
+<h4>N transitions</h4><ul><li><code>mean_reading_length_s</code>: &rho;=-0.10, p=0.353, n=94</li><li><code>count_typing</code>: &rho;=+0.07, p=0.436, n=130</li><li><code>count_topic</code>: &rho;=-0.07, p=0.442, n=130</li></ul><p>&nbsp;&nbsp;<strong>Sub-group divergence (|&rho;|&ge;.30 &amp; p&lt;.05):</strong></p><ul><li>dancer &times; <code>count_topic</code>: &rho;=+0.33, p=0.020</li><li>dancer &times; <code>PC1</code>: &rho;=+0.31, p=0.029</li></ul>
+
+<h2>5. הערות לקריאה</h2>
+<div class="info">
+  כל הקורלציות הן Spearman (rank-based, יציב לאאוטליירים).
+  p נקרא ב-uncorrected: זה EDA, לא אישור היפותזה. המסגרת השחורה / ה-bold
+  סביב תאים = p&lt;.05 nominal.
+</div>
+
+<h2>6. קישורים</h2>
+<ul>
+  <li>טבלה ראשית k=2: <code>output/m82_search_task_table_k2.html</code></li>
+  <li>טבלה ראשית k=3: <code>output/m82_search_task_table_k3.html</code></li>
+  <li>נתונים גולמיים: <code>output/m82_per_participant.csv</code></li>
+  <li>סטטיסטיקות פר קבוצה: <code>output/m82_groupstats.csv</code></li>
+  <li>כל הקורלציות (long): <code>output/m82_correlations_long.csv</code></li>
+</ul>
+
+</body>
+</html>

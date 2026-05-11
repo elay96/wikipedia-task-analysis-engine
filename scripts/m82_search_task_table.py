@@ -297,6 +297,26 @@ def _build_rows_for_k(groupstats, corr_long, k):
     return '\n    '.join(blocks)
 
 
+def _top_correlations(corr_long, k):
+    """For each SEARCH measure (within k), return top-3 |rho| rows from the
+    'All' group, plus a flag whether any sub-group surpasses |rho|>=0.30 with
+    p<0.05 (notable Hunter/Busybody/Dancer divergence)."""
+    out = {}
+    for src, label, _ in SEARCH_MEASURES:
+        all_rows = corr_long[(corr_long['k'] == k) &
+                              (corr_long['group'] == 'All') &
+                              (corr_long['search_measure'] == src)].copy()
+        all_rows['abs_rho'] = all_rows['rho'].abs()
+        top3 = all_rows.sort_values('abs_rho', ascending=False).head(3)
+        sub_rows = corr_long[(corr_long['k'] == k) &
+                              (corr_long['group'] != 'All') &
+                              (corr_long['search_measure'] == src)]
+        notable = sub_rows[(sub_rows['rho'].abs() >= 0.30) &
+                           (sub_rows['p'] < 0.05)]
+        out[src] = {'label': label, 'top3': top3, 'notable': notable}
+    return out
+
+
 TABLE_CSS = """\
 :root{--bg:#FFFFFF;--text:#1a1a1a;--muted:#666;--border:#D8D8D8;
 --header-bg:#F0F4F8;--row-alt:#FAFAFA;--accent:#1976D2;}
@@ -357,6 +377,107 @@ def render_table_html(groupstats, corr_long, k, n_total):
 """
 
 
+def write_findings_html(groupstats, corr_long, per_pid):
+    n_total = len(per_pid)
+    top_k2 = _top_correlations(corr_long, 2)
+    top_k3 = _top_correlations(corr_long, 3)
+    n_per_style_k3 = per_pid['style_k3'].value_counts().to_dict()
+    n_per_style_k2 = per_pid['style_k2'].value_counts().to_dict()
+
+    def _top_block(top_dict, k):
+        parts = []
+        for src, info in top_dict.items():
+            t3 = info['top3']
+            lines = ''.join(
+                f'<li><code>{row["task_measure"]}</code>: '
+                f'&rho;={row["rho"]:+.2f}, p={row["p"]:.3f}, n={int(row["n"])}</li>'
+                for _, row in t3.iterrows()
+            )
+            notable = info['notable']
+            notable_str = ''
+            if len(notable) > 0:
+                items = ''.join(
+                    f'<li>{row["group"]} &times; <code>{row["task_measure"]}</code>: '
+                    f'&rho;={row["rho"]:+.2f}, p={row["p"]:.3f}</li>'
+                    for _, row in notable.iterrows()
+                )
+                notable_str = (f'<p>&nbsp;&nbsp;<strong>Sub-group divergence '
+                               f'(|&rho;|&ge;.30 &amp; p&lt;.05):</strong></p>'
+                               f'<ul>{items}</ul>')
+            parts.append(f'<h4>{info["label"]}</h4><ul>{lines}</ul>{notable_str}')
+        return '\n'.join(parts)
+
+    html = f"""<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>M82 - SEARCH x Style x TASK - Findings</title>
+<style>
+body {{ font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+       background: #FFFFFF; color: #1a1a1a; line-height: 1.6;
+       max-width: 980px; margin: 32px auto; padding: 0 24px; }}
+h1 {{ color: #1a1a1a; border-bottom: 2px solid #1976D2; padding-bottom: 8px; }}
+h2 {{ color: #1976D2; margin-top: 32px; border-bottom: 1px solid #E0E0E0;
+     padding-bottom: 4px; }}
+h3 {{ color: #1a1a1a; margin-top: 22px; }}
+h4 {{ color: #555; margin-top: 12px; margin-bottom: 4px; }}
+code {{ direction: ltr; background: #F5F5F5; border: 1px solid #E0E0E0;
+       border-radius: 4px; padding: 2px 6px; font-family: Consolas, monospace; }}
+ul {{ margin-top: 4px; }}
+.info {{ background: #E3F2FD; border-right: 4px solid #1976D2;
+        padding: 12px 16px; margin: 12px 0; border-radius: 4px; }}
+</style>
+</head>
+<body>
+
+<h1>M82 - SEARCH measures &times; Wikipedia style &times; TASK correlations</h1>
+
+<h2>1. הקונטקסט</h2>
+<p>
+  הניתוח בודק האם סגנון החיפוש של המשתתפים במסע ה-Wikipedia (Hunter / Busybody
+  ובגרסת k=3 גם Dancer) מנבא את ההתנהגות שלהם במשחק החיפוש המרחבי. אנחנו מציבים
+  זה ליד זה ארבעה מדדים מהמשחק - שניים שטחיים (מבוססי אירועים בלבד) ושניים עמוקים
+  (תוצרי מסווג ה-GBM מ-M81) - ובוחנים שלוש שאלות: (א) האם המדדים העמוקים נותנים
+  יותר אינפורמציה מהשטחיים; (ב) האם האפקט של תנאי ה-Clumpy/Diffuse שונה בין
+  הקבוצות; (ג) אילו מדדי SEARCH מתואמים לאילו מדדי TASK.
+</p>
+
+<h2>2. נתונים</h2>
+<ul>
+  <li>N = {n_total} משתתפים (קוהורט M81)</li>
+  <li>סגנון k=2: {n_per_style_k2}</li>
+  <li>סגנון k=3: {n_per_style_k3}</li>
+</ul>
+
+<h2>3. ממצאים - k=2</h2>
+{_top_block(top_k2, 2)}
+
+<h2>4. ממצאים - k=3</h2>
+{_top_block(top_k3, 3)}
+
+<h2>5. הערות לקריאה</h2>
+<div class="info">
+  כל הקורלציות הן Spearman (rank-based, יציב לאאוטליירים).
+  p נקרא ב-uncorrected: זה EDA, לא אישור היפותזה. המסגרת השחורה / ה-bold
+  סביב תאים = p&lt;.05 nominal.
+</div>
+
+<h2>6. קישורים</h2>
+<ul>
+  <li>טבלה ראשית k=2: <code>output/m82_search_task_table_k2.html</code></li>
+  <li>טבלה ראשית k=3: <code>output/m82_search_task_table_k3.html</code></li>
+  <li>נתונים גולמיים: <code>output/m82_per_participant.csv</code></li>
+  <li>סטטיסטיקות פר קבוצה: <code>output/m82_groupstats.csv</code></li>
+  <li>כל הקורלציות (long): <code>output/m82_correlations_long.csv</code></li>
+</ul>
+
+</body>
+</html>
+"""
+    FINDINGS_OUT.write_text(html, encoding='utf-8')
+    print(f'wrote {FINDINGS_OUT.name}')
+
+
 def main():
     OUTPUT_DIR.mkdir(exist_ok=True)
     DOCS_DIR.mkdir(exist_ok=True)
@@ -384,6 +505,8 @@ def main():
     TABLE_K3_OUT.write_text(
         render_table_html(groupstats, corr_long, 3, n_total), encoding='utf-8')
     print(f'wrote {TABLE_K3_OUT.name}')
+
+    write_findings_html(groupstats, corr_long, per_pid)
 
 
 if __name__ == '__main__':
