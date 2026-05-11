@@ -100,6 +100,37 @@ def load_task_features():
     return out
 
 
+def load_styles():
+    """Load M80's style as style_k2; refit KMeans k=3 to add style_k3.
+
+    Both labels come from clustering standardised
+    (topic_concentration, transition_entropy). For k=3 we name the cluster
+    with the highest mean topic_concentration 'hunter', the lowest
+    'busybody', and the remaining one 'dancer'.
+    """
+    df = pd.read_csv(M80_STYLE)
+    df['participant_id'] = df['participant_id'].astype(int)
+    df = df.rename(columns={'style': 'style_k2'})
+
+    feats = ['topic_concentration', 'transition_entropy']
+    mask = df[feats].notna().all(axis=1)
+    X = df.loc[mask, feats].values
+    scaler = StandardScaler()
+    Xs = scaler.fit_transform(X)
+    km = KMeans(n_clusters=3, random_state=RANDOM_STATE, n_init=10)
+    labels = km.fit_predict(Xs)
+
+    means = [X[labels == k, 0].mean() for k in range(3)]
+    order = np.argsort(means)            # 0=lowest -> busybody, 2=highest -> hunter
+    name_for = {order[0]: 'busybody', order[1]: 'dancer', order[2]: 'hunter'}
+    df['style_k3'] = ''
+    df.loc[mask, 'style_k3'] = [name_for[lab] for lab in labels]
+    df.loc[df['style_k3'] == '', 'style_k3'] = np.nan
+
+    return df[['participant_id', 'style_k2', 'style_k3',
+               'topic_concentration', 'transition_entropy']]
+
+
 def main():
     OUTPUT_DIR.mkdir(exist_ok=True)
     DOCS_DIR.mkdir(exist_ok=True)
@@ -110,6 +141,10 @@ def main():
 
     task_df = load_task_features()
     print(f'  task measures: {task_df.shape} (expect ~132 rows x 7 cols)')
+
+    styles_df = load_styles()
+    print('  style_k2 counts:', styles_df['style_k2'].value_counts().to_dict())
+    print('  style_k3 counts:', styles_df['style_k3'].value_counts().to_dict())
 
 
 if __name__ == '__main__':
