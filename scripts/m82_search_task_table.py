@@ -394,9 +394,9 @@ def write_findings_html(groupstats, corr_long, per_pid):
     fmt_k2 = _fmt_counts(n_per_style_k2, ['hunter', 'busybody'])
     fmt_k3 = _fmt_counts(n_per_style_k3, ['hunter', 'busybody', 'dancer'])
 
-    def _top_block(top_dict, k):
+    def _top_block(top_dict):
         parts = []
-        for src, info in top_dict.items():
+        for info in top_dict.values():
             t3 = info['top3']
             lines = ''.join(
                 f'<li><code>{row["task_measure"]}</code>: '
@@ -460,10 +460,10 @@ ul {{ margin-top: 4px; }}
 </ul>
 
 <h2>3. ממצאים - k=2</h2>
-{_top_block(top_k2, 2)}
+{_top_block(top_k2)}
 
 <h2>4. ממצאים - k=3</h2>
-{_top_block(top_k3, 3)}
+{_top_block(top_k3)}
 
 <h2>5. הערות לקריאה</h2>
 <div class="info">
