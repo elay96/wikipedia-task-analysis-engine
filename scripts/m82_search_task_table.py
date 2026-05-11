@@ -88,6 +88,18 @@ def load_search_features():
     return grouped
 
 
+def load_task_features():
+    """Join the six TASK measures from M71, M72 and M73 on participant_id."""
+    m71 = pd.read_csv(M71_READING)[['participant_id', 'mean_reading_length_s']]
+    m72 = pd.read_csv(M72_TASK)[['participant_id', 'count_time',
+                                  'count_topic', 'count_typing', 'PC1']]
+    m73 = pd.read_csv(M73_ENTROPY)[['participant_id', 'seq_typing_entropy']]
+    out = m71.merge(m72, on='participant_id', how='outer') \
+             .merge(m73, on='participant_id', how='outer')
+    out['participant_id'] = out['participant_id'].astype(int)
+    return out
+
+
 def main():
     OUTPUT_DIR.mkdir(exist_ok=True)
     DOCS_DIR.mkdir(exist_ok=True)
@@ -95,6 +107,9 @@ def main():
     search_df = load_search_features()
     print(f'  search measures: {search_df.shape} (expect ~132 rows x 6 cols)')
     print(search_df[[c for c, _, _ in SEARCH_MEASURES]].describe().round(2))
+
+    task_df = load_task_features()
+    print(f'  task measures: {task_df.shape} (expect ~132 rows x 7 cols)')
 
 
 if __name__ == '__main__':
