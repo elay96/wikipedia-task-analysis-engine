@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>M82 - SEARCH x Style x TASK (k=3)</title>
+<style>:root{--bg:#FFFFFF;--text:#1a1a1a;--muted:#666;--border:#D8D8D8;
+--header-bg:#F0F4F8;--row-alt:#FAFAFA;--accent:#1976D2;}
+body{font-family:-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);
+color:var(--text);line-height:1.5;max-width:1280px;margin:28px auto;padding:0 24px;}
+h1{color:var(--text);border-bottom:2px solid var(--accent);padding-bottom:8px;font-size:22px;}
+table{border-collapse:collapse;width:100%;margin:14px 0;direction:ltr;font-size:12.5px;}
+th,td{border:1px solid var(--border);padding:6px 8px;text-align:center;vertical-align:middle;
+font-variant-numeric:tabular-nums;}
+th{background:var(--header-bg);font-weight:600;}
+td.measure-cell{text-align:left;padding-left:10px;font-weight:600;background:var(--row-alt);min-width:130px;}
+td.measure-cell.shallow{background:#FFF8E1;}
+td.measure-cell.deep{background:#E3F2FD;}
+td.group-cell{text-align:left;padding-left:10px;font-weight:500;}
+td.group-cell.hunter{color:#1976D2;}
+td.group-cell.busybody{color:#E65100;}
+td.group-cell.dancer{color:#2E7D32;}
+td.cohensd.sig{font-weight:700;}
+td.r{width:56px;font-weight:600;}
+caption{caption-side:top;text-align:right;direction:rtl;padding:6px 4px 10px;color:var(--muted);font-size:12px;}
+</style>
+</head>
+<body>
+<h1>M82 &mdash; SEARCH measures &times; Style (k=3) &times; TASK correlations</h1>
+<table>
+  <caption>k=3 (hunter, busybody, dancer). N=130 participants. EDA: p&lt;.05 uncorrected = bold (Cohen's d) or black outline (correlation cells).</caption>
+  <thead>
+    <tr>
+      <th rowspan="2">Measure</th><th rowspan="2">Depth</th><th rowspan="2">Group</th><th rowspan="2">N</th><th rowspan="2">Mean &plusmn; SD</th><th rowspan="2">Cohen's d<br>Clumpy &minus; Diffuse</th>
+      <th colspan="6">Correlation with TASK measure (Spearman &rho; &times; 100)</th>
+    </tr>
+    <tr><th>Read len</th><th>Sw: time</th><th>Sw: topic</th><th>Sw: typing</th><th>PC1</th><th>Entropy</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="measure-cell shallow" rowspan="4">Time to 1st reward (s)</td><td rowspan="4">shallow</td><td class="group-cell">All</td><td>130</td><td>6.05 &plusmn; 6.90</td><td class="cohensd sig">+2.47</td><td class="r" style="background:#FFF1F3;color:#1a1a1a;">&minus;10</td><td class="r" style="background:#F3FAFE;color:#1a1a1a;">+06</td><td class="r" style="background:#E8F4FD;color:#1a1a1a;">+13</td><td class="r" style="background:#FCFEFF;color:#1a1a1a;">+01</td><td class="r" style="background:#EAF5FD;color:#1a1a1a;">+11</td><td class="r" style="background:#FFF1F3;color:#1a1a1a;">&minus;11</td></tr>
+    <tr><td class="group-cell hunter">Hunter</td><td>40</td><td>4.95 &plusmn; 6.12</td><td class="cohensd sig">+2.48</td><td class="r" style="background:#F4FAFE;color:#1a1a1a;">+06</td><td class="r" style="background:#F2F9FE;color:#1a1a1a;">+07</td><td class="r" style="background:#FAFDFF;color:#1a1a1a;">+03</td><td class="r" style="background:#D7ECFC;color:#1a1a1a;">+20</td><td class="r" style="background:#F4FAFE;color:#1a1a1a;">+06</td><td class="r" style="background:#FFF7F8;color:#1a1a1a;">&minus;06</td></tr>
+    <tr><td class="group-cell busybody">Busybody</td><td>41</td><td>5.20 &plusmn; 6.94</td><td class="cohensd sig">+1.99</td><td class="r" style="background:#FFF4F5;color:#1a1a1a;">&minus;08</td><td class="r" style="background:#FFF9FA;color:#1a1a1a;">&minus;04</td><td class="r" style="background:#FFEAED;color:#1a1a1a;">&minus;15</td><td class="r" style="background:#FFD5DA;color:#1a1a1a;">&minus;26</td><td class="r" style="background:#FFEDF0;color:#1a1a1a;">&minus;13</td><td class="r" style="background:#FFD6DA;color:#1a1a1a;">&minus;26</td></tr>
+    <tr><td class="group-cell dancer">Dancer</td><td>49</td><td>7.66 &plusmn; 7.29</td><td class="cohensd sig">+2.97</td><td class="r" style="background:#FFF0F3;color:#1a1a1a;">&minus;11</td><td class="r" style="background:#F6FBFE;color:#1a1a1a;">+05</td><td class="r" style="background:#CBE6FC;color:#1a1a1a;">+24</td><td class="r" style="background:#FFF8F9;color:#1a1a1a;">&minus;05</td><td class="r" style="background:#D6ECFC;color:#1a1a1a;">+20</td><td class="r" style="background:#FFFFFF;color:#1a1a1a;">+00</td></tr>
+    <tr><td class="measure-cell shallow" rowspan="4">Mean inter-reward time (s)</td><td rowspan="4">shallow</td><td class="group-cell">All</td><td>130</td><td>0.28 &plusmn; 0.20</td><td class="cohensd sig">&minus;9.49</td><td class="r" style="background:#D1E9FC;color:#1a1a1a;outline: 2px solid #1a1a1a; outline-offset: -2px;">+22</td><td class="r" style="background:#FFFBFC;color:#1a1a1a;">&minus;03</td><td class="r" style="background:#FFF3F5;color:#1a1a1a;">&minus;09</td><td class="r" style="background:#FFF8F9;color:#1a1a1a;">&minus;05</td><td class="r" style="background:#FFF3F5;color:#1a1a1a;">&minus;09</td><td class="r" style="background:#EAF5FD;color:#1a1a1a;">+11</td></tr>
+    <tr><td class="group-cell hunter">Hunter</td><td>40</td><td>0.29 &plusmn; 0.21</td><td class="cohensd sig">&minus;13.96</td><td class="r" style="background:#F3FAFE;color:#1a1a1a;">+06</td><td class="r" style="background:#FFF8F9;color:#1a1a1a;">&minus;05</td><td class="r" style="background:#FCFDFF;color:#1a1a1a;">+02</td><td class="r" style="background:#FFD8DC;color:#1a1a1a;">&minus;25</td><td class="r" style="background:#FFFCFD;color:#1a1a1a;">&minus;02</td><td class="r" style="background:#F7FBFE;color:#1a1a1a;">+04</td></tr>
+    <tr><td class="group-cell busybody">Busybody</td><td>41</td><td>0.29 &plusmn; 0.19</td><td class="cohensd sig">&minus;12.18</td><td class="r" style="background:#C2E2FB;color:#1a1a1a;">+27</td><td class="r" style="background:#FFF8F9;color:#1a1a1a;">&minus;05</td><td class="r" style="background:#F3FAFE;color:#1a1a1a;">+06</td><td class="r" style="background:#E5F3FD;color:#1a1a1a;">+14</td><td class="r" style="background:#FBFDFF;color:#1a1a1a;">+02</td><td class="r" style="background:#C0E1FB;color:#1a1a1a;">+28</td></tr>
+    <tr><td class="group-cell dancer">Dancer</td><td>49</td><td>0.26 &plusmn; 0.20</td><td class="cohensd sig">&minus;7.07</td><td class="r" style="background:#B4DBFB;color:#1a1a1a;">+33</td><td class="r" style="background:#F9FCFF;color:#1a1a1a;">+03</td><td class="r" style="background:#FFD1D5;color:#1a1a1a;outline: 2px solid #1a1a1a; outline-offset: -2px;">&minus;28</td><td class="r" style="background:#FAFDFF;color:#1a1a1a;">+02</td><td class="r" style="background:#FFDCE0;color:#1a1a1a;">&minus;23</td><td class="r" style="background:#F5FAFE;color:#1a1a1a;">+05</td></tr>
+    <tr><td class="measure-cell deep" rowspan="4">% time in exploit</td><td rowspan="4">deep</td><td class="group-cell">All</td><td>130</td><td>36.12 &plusmn; 25.66</td><td class="cohensd sig">+2.31</td><td class="r" style="background:#FFEAED;color:#1a1a1a;">&minus;15</td><td class="r" style="background:#F9FCFF;color:#1a1a1a;">+03</td><td class="r" style="background:#FCFEFF;color:#1a1a1a;">+01</td><td class="r" style="background:#FCFDFF;color:#1a1a1a;">+02</td><td class="r" style="background:#FBFDFF;color:#1a1a1a;">+02</td><td class="r" style="background:#FFEEF1;color:#1a1a1a;">&minus;13</td></tr>
+    <tr><td class="group-cell hunter">Hunter</td><td>40</td><td>37.04 &plusmn; 25.97</td><td class="cohensd sig">+2.36</td><td class="r" style="background:#FFF4F6;color:#1a1a1a;">&minus;08</td><td class="r" style="background:#FFE9EC;color:#1a1a1a;">&minus;16</td><td class="r" style="background:#FFF1F3;color:#1a1a1a;">&minus;11</td><td class="r" style="background:#EAF5FD;color:#1a1a1a;">+11</td><td class="r" style="background:#FFF2F4;color:#1a1a1a;">&minus;10</td><td class="r" style="background:#F6FBFE;color:#1a1a1a;">+05</td></tr>
+    <tr><td class="group-cell busybody">Busybody</td><td>41</td><td>35.06 &plusmn; 28.79</td><td class="cohensd sig">+2.90</td><td class="r" style="background:#F1F9FE;color:#1a1a1a;">+07</td><td class="r" style="background:#EFF8FE;color:#1a1a1a;">+09</td><td class="r" style="background:#FFDCE0;color:#1a1a1a;">&minus;22</td><td class="r" style="background:#FFE9ED;color:#1a1a1a;">&minus;16</td><td class="r" style="background:#FFEDEF;color:#1a1a1a;">&minus;14</td><td class="r" style="background:#FFD6DA;color:#1a1a1a;">&minus;25</td></tr>
+    <tr><td class="group-cell dancer">Dancer</td><td>49</td><td>36.25 &plusmn; 23.02</td><td class="cohensd sig">+1.90</td><td class="r" style="background:#F6AFB1;color:#1a1a1a;outline: 2px solid #1a1a1a; outline-offset: -2px;">&minus;42</td><td class="r" style="background:#D9EDFC;color:#1a1a1a;">+19</td><td class="r" style="background:#B1D9FB;color:#1a1a1a;outline: 2px solid #1a1a1a; outline-offset: -2px;">+35</td><td class="r" style="background:#FFFFFF;color:#1a1a1a;">+00</td><td class="r" style="background:#BADEFB;color:#1a1a1a;outline: 2px solid #1a1a1a; outline-offset: -2px;">+30</td><td class="r" style="background:#FFDEE2;color:#1a1a1a;">&minus;22</td></tr>
+    <tr><td class="measure-cell deep" rowspan="4">N transitions</td><td rowspan="4">deep</td><td class="group-cell">All</td><td>130</td><td>1.98 &plusmn; 1.16</td><td class="cohensd sig">+1.01</td><td class="r" style="background:#FFF2F4;color:#1a1a1a;">&minus;10</td><td class="r" style="background:#FEFFFF;color:#1a1a1a;">+00</td><td class="r" style="background:#FFF6F7;color:#1a1a1a;">&minus;07</td><td class="r" style="background:#F2F9FE;color:#1a1a1a;">+07</td><td class="r" style="background:#FFFAFA;color:#1a1a1a;">&minus;04</td><td class="r" style="background:#FFFDFD;color:#1a1a1a;">&minus;01</td></tr>
+    <tr><td class="group-cell hunter">Hunter</td><td>40</td><td>2.17 &plusmn; 1.25</td><td class="cohensd sig">+1.22</td><td class="r" style="background:#E5F3FD;color:#1a1a1a;">+14</td><td class="r" style="background:#FFEAED;color:#1a1a1a;">&minus;15</td><td class="r" style="background:#FFDDE1;color:#1a1a1a;">&minus;22</td><td class="r" style="background:#E5F3FD;color:#1a1a1a;">+14</td><td class="r" style="background:#FFE6E9;color:#1a1a1a;">&minus;17</td><td class="r" style="background:#F5FAFE;color:#1a1a1a;">+05</td></tr>
+    <tr><td class="group-cell busybody">Busybody</td><td>41</td><td>1.83 &plusmn; 1.18</td><td class="cohensd sig">+1.07</td><td class="r" style="background:#FFF8F9;color:#1a1a1a;">&minus;05</td><td class="r" style="background:#FFFCFD;color:#1a1a1a;">&minus;02</td><td class="r" style="background:#FFCDD2;color:#1a1a1a;">&minus;30</td><td class="r" style="background:#FDFEFF;color:#1a1a1a;">+01</td><td class="r" style="background:#FFDDE1;color:#1a1a1a;">&minus;22</td><td class="r" style="background:#FFFFFF;color:#1a1a1a;">&minus;00</td></tr>
+    <tr><td class="group-cell dancer">Dancer</td><td>49</td><td>1.93 &plusmn; 1.07</td><td class="cohensd sig">+0.84</td><td class="r" style="background:#FBC2C5;color:#1a1a1a;">&minus;34</td><td class="r" style="background:#CAE6FC;color:#1a1a1a;">+24</td><td class="r" style="background:#B4DBFB;color:#1a1a1a;outline: 2px solid #1a1a1a; outline-offset: -2px;">+33</td><td class="r" style="background:#E1F1FD;color:#1a1a1a;">+16</td><td class="r" style="background:#B8DDFB;color:#1a1a1a;outline: 2px solid #1a1a1a; outline-offset: -2px;">+31</td><td class="r" style="background:#FFDCE0;color:#1a1a1a;">&minus;22</td></tr>
+  </tbody>
+</table>
+</body>
+</html>

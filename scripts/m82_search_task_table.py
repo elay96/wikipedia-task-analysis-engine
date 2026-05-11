@@ -210,6 +210,153 @@ def compute_correlations_long(per_pid):
     return pd.DataFrame(rows)
 
 
+def _rho_color(rho):
+    """Continuous red->white->blue scale. Input rho in [-1, 1]. Returns hex."""
+    if rho is None or not np.isfinite(rho):
+        return '#FFFFFF', '#1a1a1a'
+    r = float(np.clip(rho, -1.0, 1.0))
+    # Anchor colours mirror docs/m82_table_mockup.html.
+    if r >= 0:
+        anchors = [(0.0, (0xFF, 0xFF, 0xFF)), (0.15, (0xE3, 0xF2, 0xFD)),
+                   (0.30, (0xBB, 0xDE, 0xFB)), (0.50, (0x90, 0xCA, 0xF9)),
+                   (0.70, (0x42, 0xA5, 0xF5)), (1.00, (0x15, 0x65, 0xC0))]
+    else:
+        anchors = [(0.00, (0xFF, 0xFF, 0xFF)), (0.15, (0xFF, 0xEB, 0xEE)),
+                   (0.30, (0xFF, 0xCD, 0xD2)), (0.50, (0xEF, 0x9A, 0x9A)),
+                   (0.70, (0xE5, 0x73, 0x73)), (1.00, (0xC6, 0x28, 0x28))]
+        r = -r
+    for i in range(1, len(anchors)):
+        lo, lo_rgb = anchors[i - 1]
+        hi, hi_rgb = anchors[i]
+        if r <= hi:
+            f = 0.0 if hi == lo else (r - lo) / (hi - lo)
+            rgb = tuple(int(round(lo_rgb[j] + f * (hi_rgb[j] - lo_rgb[j])))
+                        for j in range(3))
+            bg = f'#{rgb[0]:02X}{rgb[1]:02X}{rgb[2]:02X}'
+            fg = '#FFFFFF' if (sum(rgb) < 320) else '#1a1a1a'
+            return bg, fg
+    return '#FFFFFF', '#1a1a1a'
+
+
+def _format_d_cell(d, p):
+    if not np.isfinite(d):
+        return '<td class="cohensd">-</td>'
+    sign = '+' if d >= 0 else '&minus;'
+    val = f'{sign}{abs(d):.2f}'
+    sig_class = ' sig' if (np.isfinite(p) and p < 0.05) else ''
+    return f'<td class="cohensd{sig_class}">{val}</td>'
+
+
+def _format_rho_cell(rho, p):
+    if not np.isfinite(rho):
+        return '<td class="r">-</td>'
+    bg, fg = _rho_color(rho)
+    sign = '+' if rho >= 0 else '&minus;'
+    val = f'{sign}{int(round(abs(rho) * 100)):02d}'
+    sig_outline = ('outline: 2px solid #1a1a1a; outline-offset: -2px;'
+                   if (np.isfinite(p) and p < 0.05) else '')
+    return (f'<td class="r" style="background:{bg};color:{fg};{sig_outline}">'
+            f'{val}</td>')
+
+
+def _build_rows_for_k(groupstats, corr_long, k):
+    """Yields HTML row blocks for one k value."""
+    groups = GROUPS_K2 if k == 2 else GROUPS_K3
+    blocks = []
+    for src, label, depth in SEARCH_MEASURES:
+        cell_class = 'measure-cell ' + depth
+        rowspan = len(groups)
+        first = True
+        for g in groups:
+            gs = groupstats[(groupstats['k'] == k) &
+                            (groupstats['group'] == g) &
+                            (groupstats['measure'] == src)].iloc[0]
+            group_class = (f'group-cell {g}' if g != 'All' else 'group-cell')
+            group_label = g[0].upper() + g[1:] if g != 'All' else 'All'
+
+            tr = ['<tr>']
+            if first:
+                tr.append(f'<td class="{cell_class}" rowspan="{rowspan}">{label}</td>'
+                          f'<td rowspan="{rowspan}">{depth}</td>')
+                first = False
+            tr.append(f'<td class="{group_class}">{group_label}</td>')
+            tr.append(f'<td>{int(gs["n"])}</td>')
+            if np.isfinite(gs['mean']) and np.isfinite(gs['sd']):
+                tr.append(f'<td>{gs["mean"]:.2f} &plusmn; {gs["sd"]:.2f}</td>')
+            else:
+                tr.append('<td>-</td>')
+            tr.append(_format_d_cell(gs['cohens_d'], gs['p']))
+            for tgt, _ in TASK_MEASURES:
+                row = corr_long[(corr_long['k'] == k) &
+                                (corr_long['group'] == g) &
+                                (corr_long['search_measure'] == src) &
+                                (corr_long['task_measure'] == tgt)].iloc[0]
+                tr.append(_format_rho_cell(row['rho'], row['p']))
+            tr.append('</tr>')
+            blocks.append(''.join(tr))
+    return '\n    '.join(blocks)
+
+
+TABLE_CSS = """\
+:root{--bg:#FFFFFF;--text:#1a1a1a;--muted:#666;--border:#D8D8D8;
+--header-bg:#F0F4F8;--row-alt:#FAFAFA;--accent:#1976D2;}
+body{font-family:-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);
+color:var(--text);line-height:1.5;max-width:1280px;margin:28px auto;padding:0 24px;}
+h1{color:var(--text);border-bottom:2px solid var(--accent);padding-bottom:8px;font-size:22px;}
+table{border-collapse:collapse;width:100%;margin:14px 0;direction:ltr;font-size:12.5px;}
+th,td{border:1px solid var(--border);padding:6px 8px;text-align:center;vertical-align:middle;
+font-variant-numeric:tabular-nums;}
+th{background:var(--header-bg);font-weight:600;}
+td.measure-cell{text-align:left;padding-left:10px;font-weight:600;background:var(--row-alt);min-width:130px;}
+td.measure-cell.shallow{background:""" + SHALLOW_BG + """;}
+td.measure-cell.deep{background:""" + DEEP_BG + """;}
+td.group-cell{text-align:left;padding-left:10px;font-weight:500;}
+td.group-cell.hunter{color:""" + HUNTER_COLOR + """;}
+td.group-cell.busybody{color:""" + BUSYBODY_COLOR + """;}
+td.group-cell.dancer{color:""" + DANCER_COLOR + """;}
+td.cohensd.sig{font-weight:700;}
+td.r{width:56px;font-weight:600;}
+caption{caption-side:top;text-align:right;direction:rtl;padding:6px 4px 10px;color:var(--muted);font-size:12px;}
+"""
+
+
+def render_table_html(groupstats, corr_long, k, n_total):
+    headers_search = '<th rowspan="2">Measure</th><th rowspan="2">Depth</th>' \
+                     '<th rowspan="2">Group</th><th rowspan="2">N</th>' \
+                     '<th rowspan="2">Mean &plusmn; SD</th>' \
+                     '<th rowspan="2">Cohen\'s d<br>Clumpy &minus; Diffuse</th>'
+    headers_task = ''.join(f'<th>{lbl}</th>' for _, lbl in TASK_MEASURES)
+    rows = _build_rows_for_k(groupstats, corr_long, k)
+    caption = (f'k={k} ({", ".join(g for g in (GROUPS_K2 if k == 2 else GROUPS_K3) if g != "All")}).'
+               f' N={n_total} participants. EDA: p&lt;.05 uncorrected '
+               '= bold (Cohen\'s d) or black outline (correlation cells).')
+    return f"""<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>M82 - SEARCH x Style x TASK (k={k})</title>
+<style>{TABLE_CSS}</style>
+</head>
+<body>
+<h1>M82 &mdash; SEARCH measures &times; Style (k={k}) &times; TASK correlations</h1>
+<table>
+  <caption>{caption}</caption>
+  <thead>
+    <tr>
+      {headers_search}
+      <th colspan="6">Correlation with TASK measure (Spearman &rho; &times; 100)</th>
+    </tr>
+    <tr>{headers_task}</tr>
+  </thead>
+  <tbody>
+    {rows}
+  </tbody>
+</table>
+</body>
+</html>
+"""
+
+
 def main():
     OUTPUT_DIR.mkdir(exist_ok=True)
     DOCS_DIR.mkdir(exist_ok=True)
@@ -229,6 +376,14 @@ def main():
     corr_long = compute_correlations_long(per_pid)
     corr_long.to_csv(CORR_OUT, index=False, float_format='%.6g')
     print(f'wrote {CORR_OUT.name}: {len(corr_long)} rows')
+
+    n_total = len(per_pid)
+    TABLE_K2_OUT.write_text(
+        render_table_html(groupstats, corr_long, 2, n_total), encoding='utf-8')
+    print(f'wrote {TABLE_K2_OUT.name}')
+    TABLE_K3_OUT.write_text(
+        render_table_html(groupstats, corr_long, 3, n_total), encoding='utf-8')
+    print(f'wrote {TABLE_K3_OUT.name}')
 
 
 if __name__ == '__main__':
