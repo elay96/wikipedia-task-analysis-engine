@@ -186,6 +186,30 @@ def compute_groupstats(per_pid):
     return pd.DataFrame(rows)
 
 
+def compute_correlations_long(per_pid):
+    """Spearman rho per (k, group, search_measure, task_measure)."""
+    rows = []
+    for k, groups, col in [(2, GROUPS_K2, 'style_k2'),
+                            (3, GROUPS_K3, 'style_k3')]:
+        for group in groups:
+            sub = per_pid if group == 'All' else per_pid[per_pid[col] == group]
+            for src, _, _ in SEARCH_MEASURES:
+                for tgt, _ in TASK_MEASURES:
+                    pair = sub[[src, tgt]].dropna()
+                    if len(pair) < 3:
+                        rows.append({'k': k, 'group': group,
+                                     'search_measure': src, 'task_measure': tgt,
+                                     'n': len(pair), 'rho': np.nan, 'p': np.nan})
+                        continue
+                    res = sp_stats.spearmanr(pair[src], pair[tgt])
+                    rows.append({'k': k, 'group': group,
+                                 'search_measure': src, 'task_measure': tgt,
+                                 'n': len(pair),
+                                 'rho': float(res.correlation),
+                                 'p': float(res.pvalue)})
+    return pd.DataFrame(rows)
+
+
 def main():
     OUTPUT_DIR.mkdir(exist_ok=True)
     DOCS_DIR.mkdir(exist_ok=True)
@@ -201,6 +225,10 @@ def main():
     groupstats = compute_groupstats(per_pid)
     groupstats.to_csv(GROUPSTATS_OUT, index=False, float_format='%.6g')
     print(f'wrote {GROUPSTATS_OUT.name}: {len(groupstats)} rows')
+
+    corr_long = compute_correlations_long(per_pid)
+    corr_long.to_csv(CORR_OUT, index=False, float_format='%.6g')
+    print(f'wrote {CORR_OUT.name}: {len(corr_long)} rows')
 
 
 if __name__ == '__main__':
