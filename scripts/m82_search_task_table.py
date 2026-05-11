@@ -142,6 +142,50 @@ def build_per_pid(search_df, task_df, styles_df):
     return df
 
 
+def _welch_d_and_p(values_clumpy, values_diffuse):
+    """Welch t-test + Cohen's d (pooled SD). Returns (d, t, p)."""
+    a = np.asarray(values_clumpy, dtype=float)
+    b = np.asarray(values_diffuse, dtype=float)
+    a = a[np.isfinite(a)]
+    b = b[np.isfinite(b)]
+    if len(a) < 2 or len(b) < 2:
+        return np.nan, np.nan, np.nan
+    s1, s2 = np.var(a, ddof=1), np.var(b, ddof=1)
+    pooled = np.sqrt(((len(a) - 1) * s1 + (len(b) - 1) * s2) /
+                     (len(a) + len(b) - 2))
+    d = (a.mean() - b.mean()) / pooled if pooled > 0 else np.nan
+    t_res = sp_stats.ttest_ind(a, b, equal_var=False)
+    return float(d), float(t_res.statistic), float(t_res.pvalue)
+
+
+def compute_groupstats(per_pid):
+    """Per (measure, group, k): N, mean, sd, n_clumpy, n_diffuse,
+    mean_clumpy, mean_diffuse, sd_clumpy, sd_diffuse, cohens_d, t, p."""
+    rows = []
+    for k, groups, col in [(2, GROUPS_K2, 'style_k2'),
+                            (3, GROUPS_K3, 'style_k3')]:
+        for group in groups:
+            sub = per_pid if group == 'All' else per_pid[per_pid[col] == group]
+            for src, _, _ in SEARCH_MEASURES:
+                v = sub[src].dropna().values
+                clumpy = sub.loc[sub['condition'] == 'clumpy', src].dropna().values
+                diffuse = sub.loc[sub['condition'] == 'diffuse', src].dropna().values
+                d, t, p = _welch_d_and_p(clumpy, diffuse)
+                rows.append({
+                    'k': k, 'group': group, 'measure': src,
+                    'n': len(v),
+                    'mean': float(v.mean()) if len(v) else np.nan,
+                    'sd': float(v.std(ddof=1)) if len(v) >= 2 else np.nan,
+                    'n_clumpy': len(clumpy), 'n_diffuse': len(diffuse),
+                    'mean_clumpy': float(clumpy.mean()) if len(clumpy) else np.nan,
+                    'mean_diffuse': float(diffuse.mean()) if len(diffuse) else np.nan,
+                    'sd_clumpy': float(clumpy.std(ddof=1)) if len(clumpy) >= 2 else np.nan,
+                    'sd_diffuse': float(diffuse.std(ddof=1)) if len(diffuse) >= 2 else np.nan,
+                    'cohens_d': d, 't': t, 'p': p,
+                })
+    return pd.DataFrame(rows)
+
+
 def main():
     OUTPUT_DIR.mkdir(exist_ok=True)
     DOCS_DIR.mkdir(exist_ok=True)
@@ -153,6 +197,10 @@ def main():
     per_pid = build_per_pid(search_df, task_df, styles_df)
     per_pid.to_csv(PER_PID_OUT, index=False, float_format='%.6g')
     print(f'wrote {PER_PID_OUT.name}: {len(per_pid)} rows, {len(per_pid.columns)} cols')
+
+    groupstats = compute_groupstats(per_pid)
+    groupstats.to_csv(GROUPSTATS_OUT, index=False, float_format='%.6g')
+    print(f'wrote {GROUPSTATS_OUT.name}: {len(groupstats)} rows')
 
 
 if __name__ == '__main__':
