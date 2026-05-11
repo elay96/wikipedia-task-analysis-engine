@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>M82 - Table layout mockup (draft)</title>
+<style>
+  :root {
+    --bg: #FFFFFF;
+    --text: #1a1a1a;
+    --muted: #666666;
+    --border: #D8D8D8;
+    --header-bg: #F0F4F8;
+    --row-alt: #FAFAFA;
+    --accent: #1976D2;
+    --shallow-bg: #FFF8E1;
+    --deep-bg: #E3F2FD;
+    --hunter: #1976D2;
+    --busybody: #E65100;
+  }
+  body {
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    max-width: 1280px;
+    margin: 28px auto;
+    padding: 0 24px;
+  }
+  h1 {
+    color: var(--text);
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 8px;
+    font-size: 22px;
+  }
+  h2 { color: var(--accent); margin-top: 32px; font-size: 16px; }
+  .draft-note {
+    background: #FFF3E0;
+    border-right: 4px solid #E65100;
+    padding: 10px 14px;
+    margin: 14px 0 20px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #5D4037;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 14px 0;
+    direction: ltr;
+    font-size: 12.5px;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 6px 8px;
+    text-align: center;
+    vertical-align: middle;
+    font-variant-numeric: tabular-nums;
+  }
+  th {
+    background: var(--header-bg);
+    font-weight: 600;
+    color: var(--text);
+  }
+  th.measure-col, th.group-col { text-align: left; padding-left: 10px; }
+  td.measure-cell {
+    text-align: left;
+    padding-left: 10px;
+    font-weight: 600;
+    background: var(--row-alt);
+    min-width: 130px;
+  }
+  td.measure-cell.shallow { background: var(--shallow-bg); }
+  td.measure-cell.deep { background: var(--deep-bg); }
+  td.group-cell {
+    text-align: left;
+    padding-left: 10px;
+    font-weight: 500;
+  }
+  td.group-cell.hunter   { color: var(--hunter); }
+  td.group-cell.busybody { color: var(--busybody); }
+  td.cohensd {
+    font-weight: 500;
+  }
+  td.cohensd.sig { font-weight: 700; }
+  /* heatmap cells */
+  td.r {
+    width: 56px;
+    font-weight: 600;
+    color: #1a1a1a;
+    position: relative;
+  }
+  /* color scale: red (neg) -> white (0) -> blue (pos), saturation by |r| */
+  /* sample fixed colors; in real script each cell gets computed bg */
+  .r-pos-90 { background: #1565C0; color: #FFFFFF; }
+  .r-pos-70 { background: #42A5F5; color: #FFFFFF; }
+  .r-pos-50 { background: #90CAF9; }
+  .r-pos-30 { background: #BBDEFB; }
+  .r-pos-15 { background: #E3F2FD; }
+  .r-pos-05 { background: #F5FAFF; }
+  .r-neg-05 { background: #FFF5F5; }
+  .r-neg-15 { background: #FFEBEE; }
+  .r-neg-30 { background: #FFCDD2; }
+  .r-neg-50 { background: #EF9A9A; }
+  .r-neg-70 { background: #E57373; color: #FFFFFF; }
+  .r-neg-90 { background: #C62828; color: #FFFFFF; }
+  td.r.sig {
+    outline: 2px solid #1a1a1a;
+    outline-offset: -2px;
+  }
+  caption {
+    caption-side: top;
+    text-align: left;
+    direction: rtl;
+    padding: 6px 4px 10px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .legend {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 8px 0 24px;
+    direction: ltr;
+    font-size: 12px;
+  }
+  .legend .bar {
+    display: inline-flex;
+    align-items: center;
+  }
+  .legend .swatch {
+    display: inline-block;
+    width: 28px; height: 14px;
+    border: 1px solid var(--border);
+    margin-left: 4px;
+  }
+  .legend code {
+    background: #F5F5F5;
+    padding: 1px 5px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+  }
+  .footnote {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 4px;
+    direction: rtl;
+  }
+</style>
+</head>
+<body>
+
+<h1>M82 &mdash; Table layout mockup</h1>
+<div class="draft-note">
+  <strong>טיוטה ויזואלית בלבד.</strong> כל המספרים בטבלה ממומצאים לצורך בחירת layout. הטבלה האמיתית תיוצר בסקריפט M82.
+  גרסה מוצגת: <code>k=2 (Hunter / Busybody)</code>. גרסת <code>k=3</code> תיראה זהה עם שורת Dancer נוספת.
+</div>
+
+<h2>טבלת EDA: SEARCH measures &times; groups &times; correlations with TASK</h2>
+
+<table>
+  <caption>
+    כל שורה = מדד SEARCH בתת-קבוצה. עמודות הקורלציה מציגות Pearson r &times; 100, צבועות לפי כיוון ועוצמה.
+    מסגרת שחורה = p &lt; .05 (EDA, ללא תיקון).
+  </caption>
+  <thead>
+    <tr>
+      <th class="measure-col" rowspan="2">Measure</th>
+      <th rowspan="2">Depth</th>
+      <th class="group-col" rowspan="2">Group</th>
+      <th rowspan="2">N</th>
+      <th rowspan="2">Mean &plusmn; SD</th>
+      <th rowspan="2">Cohen's <i>d</i><br>Clumpy &minus; Diffuse</th>
+      <th colspan="6">Correlation with TASK measure (r &times; 100)</th>
+    </tr>
+    <tr>
+      <th>Read len</th>
+      <th>Sw: time</th>
+      <th>Sw: topic</th>
+      <th>Sw: typing</th>
+      <th>PC1</th>
+      <th>Entropy</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- ============ Measure 1: Time to first reward ============ -->
+    <tr>
+      <td class="measure-cell shallow" rowspan="3">Time to 1st reward (s)</td>
+      <td rowspan="3">shallow</td>
+      <td class="group-cell">All</td>
+      <td>132</td>
+      <td>18.4 &plusmn; 7.2</td>
+      <td class="cohensd">&minus;0.18</td>
+      <td class="r r-pos-05">+02</td>
+      <td class="r r-pos-15">+15</td>
+      <td class="r r-pos-05">+09</td>
+      <td class="r r-pos-15">+11</td>
+      <td class="r r-pos-15 sig">+18</td>
+      <td class="r r-neg-05">&minus;04</td>
+    </tr>
+    <tr>
+      <td class="group-cell hunter">Hunter</td>
+      <td>74</td>
+      <td>17.2 &plusmn; 6.8</td>
+      <td class="cohensd">&minus;0.22</td>
+      <td class="r r-pos-05">+09</td>
+      <td class="r r-pos-30 sig">+21</td>
+      <td class="r r-pos-15">+12</td>
+      <td class="r r-pos-15">+19</td>
+      <td class="r r-pos-30 sig">+24</td>
+      <td class="r r-neg-05">&minus;08</td>
+    </tr>
+    <tr>
+      <td class="group-cell busybody">Busybody</td>
+      <td>58</td>
+      <td>20.0 &plusmn; 7.5</td>
+      <td class="cohensd">&minus;0.14</td>
+      <td class="r r-neg-05">&minus;06</td>
+      <td class="r r-pos-05">+08</td>
+      <td class="r r-pos-05">+04</td>
+      <td class="r r-pos-05">+02</td>
+      <td class="r r-pos-15">+10</td>
+      <td class="r r-pos-05">+02</td>
+    </tr>
+
+    <!-- ============ Measure 2: Inter-reward mean ============ -->
+    <tr>
+      <td class="measure-cell shallow" rowspan="3">Inter-reward mean (s)</td>
+      <td rowspan="3">shallow</td>
+      <td class="group-cell">All</td>
+      <td>132</td>
+      <td>9.6 &plusmn; 3.4</td>
+      <td class="cohensd sig">&minus;0.41</td>
+      <td class="r r-pos-15">+12</td>
+      <td class="r r-pos-15">+14</td>
+      <td class="r r-pos-15">+11</td>
+      <td class="r r-pos-15">+13</td>
+      <td class="r r-pos-30 sig">+22</td>
+      <td class="r r-neg-15">&minus;14</td>
+    </tr>
+    <tr>
+      <td class="group-cell hunter">Hunter</td>
+      <td>74</td>
+      <td>8.9 &plusmn; 2.9</td>
+      <td class="cohensd sig">&minus;0.51</td>
+      <td class="r r-pos-15">+19</td>
+      <td class="r r-pos-30 sig">+25</td>
+      <td class="r r-pos-15">+18</td>
+      <td class="r r-pos-30 sig">+21</td>
+      <td class="r r-pos-50 sig">+34</td>
+      <td class="r r-neg-30 sig">&minus;26</td>
+    </tr>
+    <tr>
+      <td class="group-cell busybody">Busybody</td>
+      <td>58</td>
+      <td>10.5 &plusmn; 3.8</td>
+      <td class="cohensd">&minus;0.22</td>
+      <td class="r r-pos-05">+03</td>
+      <td class="r r-pos-05">+04</td>
+      <td class="r r-pos-05">+02</td>
+      <td class="r pos-05">+05</td>
+      <td class="r r-pos-05">+07</td>
+      <td class="r r-neg-05">&minus;03</td>
+    </tr>
+
+    <!-- ============ Measure 3: % time exploit (deep) ============ -->
+    <tr>
+      <td class="measure-cell deep" rowspan="3">% time in exploit</td>
+      <td rowspan="3">deep</td>
+      <td class="group-cell">All</td>
+      <td>132</td>
+      <td>61.8 &plusmn; 12.3</td>
+      <td class="cohensd sig">+0.58</td>
+      <td class="r r-pos-30 sig">+24</td>
+      <td class="r r-neg-30 sig">&minus;28</td>
+      <td class="r r-neg-15">&minus;19</td>
+      <td class="r r-neg-30 sig">&minus;22</td>
+      <td class="r r-neg-50 sig">&minus;36</td>
+      <td class="r r-pos-30 sig">+27</td>
+    </tr>
+    <tr>
+      <td class="group-cell hunter">Hunter</td>
+      <td>74</td>
+      <td>65.1 &plusmn; 11.0</td>
+      <td class="cohensd sig">+0.72</td>
+      <td class="r r-pos-30 sig">+31</td>
+      <td class="r r-neg-50 sig">&minus;38</td>
+      <td class="r r-neg-30 sig">&minus;25</td>
+      <td class="r r-neg-30 sig">&minus;28</td>
+      <td class="r r-neg-70 sig">&minus;48</td>
+      <td class="r r-pos-50 sig">+34</td>
+    </tr>
+    <tr>
+      <td class="group-cell busybody">Busybody</td>
+      <td>58</td>
+      <td>57.6 &plusmn; 12.6</td>
+      <td class="cohensd">+0.31</td>
+      <td class="r r-pos-15">+12</td>
+      <td class="r r-neg-15">&minus;14</td>
+      <td class="r r-neg-05">&minus;09</td>
+      <td class="r r-neg-15">&minus;12</td>
+      <td class="r r-neg-30 sig">&minus;21</td>
+      <td class="r r-pos-15">+16</td>
+    </tr>
+
+    <!-- ============ Measure 4: n_transitions (deep) ============ -->
+    <tr>
+      <td class="measure-cell deep" rowspan="3">N transitions</td>
+      <td rowspan="3">deep</td>
+      <td class="group-cell">All</td>
+      <td>132</td>
+      <td>23.7 &plusmn; 9.1</td>
+      <td class="cohensd sig">&minus;0.47</td>
+      <td class="r r-neg-15">&minus;14</td>
+      <td class="r r-pos-30 sig">+26</td>
+      <td class="r r-pos-15">+19</td>
+      <td class="r r-pos-30 sig">+23</td>
+      <td class="r r-pos-50 sig">+32</td>
+      <td class="r r-neg-30 sig">&minus;24</td>
+    </tr>
+    <tr>
+      <td class="group-cell hunter">Hunter</td>
+      <td>74</td>
+      <td>20.4 &plusmn; 7.8</td>
+      <td class="cohensd sig">&minus;0.62</td>
+      <td class="r r-neg-30 sig">&minus;22</td>
+      <td class="r r-pos-50 sig">+34</td>
+      <td class="r r-pos-30 sig">+24</td>
+      <td class="r r-pos-30 sig">+29</td>
+      <td class="r r-pos-50 sig">+42</td>
+      <td class="r r-neg-50 sig">&minus;31</td>
+    </tr>
+    <tr>
+      <td class="group-cell busybody">Busybody</td>
+      <td>58</td>
+      <td>27.9 &plusmn; 9.5</td>
+      <td class="cohensd">&minus;0.28</td>
+      <td class="r r-neg-05">&minus;06</td>
+      <td class="r r-pos-15">+14</td>
+      <td class="r r-pos-05">+09</td>
+      <td class="r r-pos-15">+11</td>
+      <td class="r r-pos-15">+17</td>
+      <td class="r r-pos-05">+03</td>
+    </tr>
+
+  </tbody>
+</table>
+
+<h2>Legend</h2>
+<div class="legend">
+  <span class="bar">r &le; &minus;.50 <span class="swatch r-neg-70"></span></span>
+  <span class="bar">&minus;.30 <span class="swatch r-neg-30"></span></span>
+  <span class="bar">&minus;.15 <span class="swatch r-neg-15"></span></span>
+  <span class="bar">0 <span class="swatch r-pos-05"></span></span>
+  <span class="bar">+.15 <span class="swatch r-pos-15"></span></span>
+  <span class="bar">+.30 <span class="swatch r-pos-30"></span></span>
+  <span class="bar">r &ge; +.50 <span class="swatch r-pos-70"></span></span>
+  <span class="bar" style="margin-right: 16px;">| <code style="outline:2px solid #1a1a1a; outline-offset:-2px;">+24</code> &nbsp;= p &lt; .05 (uncorrected)</span>
+</div>
+<p class="footnote">
+  Cohen's <i>d</i> מסומן ב-<strong>bold</strong> כש-p &lt; .05 (Welch t-test Clumpy vs Diffuse בתוך הקבוצה).
+  הטבלה הסופית תכלול בנוסף גרסת k=3 (Hunter / Busybody / Dancer) באותו פורמט.
+</p>
+
+<h2>למה ה-layout הזה?</h2>
+<ul>
+  <li><strong>Depth מוצג כעמודה נפרדת + רקע צבעוני</strong> (צהוב=shallow, כחול-בהיר=deep) - מאפשר להשוות מהר אם מדד עמוק מספק יותר ממדד שטחי.</li>
+  <li><strong>Group כפונקציה של measure</strong> (לא להיפך) - שומר כל מדד עם 3 השורות שלו ביחד, מקל על השוואת All מול Hunter מול Busybody לאותו מדד.</li>
+  <li><strong>Cohen's <i>d</i> בעמודה אחת לפני הקורלציות</strong> - האפקט של ה-manipulation (Clumpy vs Diffuse) הוא תוצאת המחקר העיקרית, לכן הוא מובלט.</li>
+  <li><strong>6 קורלציות עם TASK בעמודות הימניות</strong> - heatmap עם מספר. סריקה מהירה גם ויזואלית וגם מספרית.</li>
+  <li><strong>מסגרת על תאים מובהקים</strong> במקום נטיפי כוכביות - שומר את הטבלה נקייה.</li>
+</ul>
+
+</body>
+</html>
