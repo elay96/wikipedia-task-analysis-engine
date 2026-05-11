@@ -131,20 +131,28 @@ def load_styles():
                'topic_concentration', 'transition_entropy']]
 
 
+def build_per_pid(search_df, task_df, styles_df):
+    """Inner-join SEARCH and styles on participant_id; left-join TASK."""
+    df = search_df.merge(styles_df, on='participant_id', how='inner')
+    df = df.merge(task_df, on='participant_id', how='left')
+    front = ['participant_id', 'condition', 'style_k2', 'style_k3',
+             'topic_concentration', 'transition_entropy']
+    rest = [c for c in df.columns if c not in front]
+    df = df[front + rest].sort_values('participant_id').reset_index(drop=True)
+    return df
+
+
 def main():
     OUTPUT_DIR.mkdir(exist_ok=True)
     DOCS_DIR.mkdir(exist_ok=True)
     print('M82: building search-task table...')
     search_df = load_search_features()
-    print(f'  search measures: {search_df.shape} (expect ~132 rows x 6 cols)')
-    print(search_df[[c for c, _, _ in SEARCH_MEASURES]].describe().round(2))
-
     task_df = load_task_features()
-    print(f'  task measures: {task_df.shape} (expect ~132 rows x 7 cols)')
-
     styles_df = load_styles()
-    print('  style_k2 counts:', styles_df['style_k2'].value_counts().to_dict())
-    print('  style_k3 counts:', styles_df['style_k3'].value_counts().to_dict())
+
+    per_pid = build_per_pid(search_df, task_df, styles_df)
+    per_pid.to_csv(PER_PID_OUT, index=False, float_format='%.6g')
+    print(f'wrote {PER_PID_OUT.name}: {len(per_pid)} rows, {len(per_pid.columns)} cols')
 
 
 if __name__ == '__main__':
