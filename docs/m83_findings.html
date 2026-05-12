@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>M83 - ציוני סקרנות של Zhou על קוהורט DIFFUSE</title>
+<style>
+  body { font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+         background:#FFFFFF; color:#1a1a1a; line-height:1.65;
+         max-width:1000px; margin:32px auto; padding:0 24px; }
+  h1 { color:#1a1a1a; border-bottom:2px solid #1976D2; padding-bottom:8px; }
+  h2 { color:#1976D2; margin-top:36px;
+       border-bottom:1px solid #E0E0E0; padding-bottom:4px; }
+  code, pre { direction:ltr; text-align:left; background:#F5F5F5;
+              border:1px solid #E0E0E0; border-radius:4px;
+              font-family: Consolas, monospace; }
+  code { padding:2px 6px; }
+  pre { padding:12px; overflow-x:auto; }
+  table { border-collapse:collapse; margin:12px 0; width:100%; direction:ltr; }
+  th, td { border:1px solid #CCC; padding:8px 12px; text-align:left; }
+  th { background:#F0F4F8; }
+  tr:nth-child(even) td { background:#FAFAFA; }
+  .info { background:#E3F2FD; border-right:4px solid #1976D2;
+          padding:12px 16px; margin:12px 0; border-radius:4px; }
+  .meta { color:#666; font-size:0.9em; margin-bottom:24px; }
+  .caveat { background:#FFF3E0; border-right:4px solid #FB8C00;
+            padding:12px 16px; margin:12px 0; border-radius:4px; }
+</style>
+</head>
+<body>
+<h1>M83 - ציוני Hunter/Busybody + Forward Flow על קוהורט DIFFUSE</h1>
+<div class="meta">
+  Scripts: <code>scripts/m83a_fetch_wiki_links.py</code>,
+  <code>scripts/m83b_compute_fasttext.py</code>,
+  <code>scripts/m83_zhou_diffuse_styles.py</code> &middot;
+  N = 60 משתתפים &middot; FDR-BH alpha = 0.05
+</div>
+
+<h2>1. תקציר</h2>
+<p>
+  הניתוח מיישם את המתודולוגיה של Zhou et al. (2024) על קוהורט המשתתפים שעברו את משימת
+  ה-Spatial Search בתנאי <strong>Diffuse</strong>. לכל משתתף חושב ציון רציף של Hunter/Busybody
+  (BH-score, מצרף 4 מדדי רשת על הגרף הסטטי של Wikipedia) וציון Forward Flow (מרחק קוסינוס סמנטי
+  ממוצע באמצעות fastText). שני הצירים נבחנו במתאם Spearman מול 30 הפיצ'רים המרחביים מ-M81,
+  עם תיקון FDR-BH על כל 60 ההשוואות.
+</p>
+
+<h2>2. מתודולוגיה</h2>
+<p>
+  <strong>ציר 1 (Hunter/Busybody):</strong> לכל משתתף בנינו תת-גרף מושרה מהגרף הסטטי של
+  Wikipedia: צמתים = הכתבות הייחודיות שהמשתתף קרא; קשתות = hyperlinks קיימים ב-Wikipedia.
+  מתוך הגרף חישבנו 4 מדדים (edges, clustering coefficient, global efficiency, characteristic
+  path length על ה-LCC), z-scored בתוך הקוהורט, וצירפנו ל-BH_score לפי הנוסחה של Zhou:
+  <code>z_edges + z_clust + z_eff - z_path</code>. ערך גבוה &rarr; Hunter (רשת צפופה); נמוך &rarr;
+  Busybody (פזורה).
+</p>
+<p>
+  <strong>ציר 2 (Dancer/Forward Flow):</strong> רצף הכתבות (כולל חזרות) הומר לוקטורים מסוג
+  fastText (mean over in-vocab tokens, L2-normalised). לכל מיקום i &ge; 2 חישבנו את המרחק הקוסינוס
+  הממוצע אל כל הכתבות הקודמות, וממצענו על פני המיקומים. ערך גבוה &rarr; קפיצות סמנטיות גדולות
+  (Dancer-like).
+</p>
+<div class="info">
+  שני הצירים בלתי-תלויים יחסית: Spearman(BH, FF) = +0.086 (p = 0.514).
+</div>
+
+<h2>3. הקוהורט</h2>
+<table>
+<tr><th>מאפיין</th><th>ערך</th></tr>
+<tr><td>N (Diffuse + n_unique &ge; 5 + M81 spatial available)</td><td>60</td></tr>
+<tr><td>חציון כתבות ייחודיות לעמ׳</td><td>9</td></tr>
+<tr><td>חציון קשתות לעמ׳</td><td>6</td></tr>
+<tr><td>חציון Forward Flow</td><td>0.061</td></tr>
+<tr><td>טווח BH_score</td><td>[-3.25, 6.44]</td></tr>
+</table>
+
+<h2>4. ציר Hunter/Busybody - 5 הקשרים החזקים</h2>
+<table>
+<tr><th>פיצ'ר מרחבי</th><th>rho</th><th>p</th><th>p_FDR</th><th>N</th></tr>
+<tr><td><code>exploit_dur_median_mean</code></td><td>+0.326</td><td>0.022</td><td>0.596</td><td>49</td></tr>
+<tr><td><code>exploit_dur_mean_mean</code></td><td>+0.320</td><td>0.025</td><td>0.596</td><td>49</td></tr>
+<tr><td><code>exploit_dur_median_sd</code></td><td>+0.314</td><td>0.048</td><td>0.596</td><td>40</td></tr>
+<tr><td><code>exploit_dur_mean_sd</code></td><td>+0.312</td><td>0.050</td><td>0.596</td><td>40</td></tr>
+<tr><td><code>patch_leaving_distance_mean</code></td><td>-0.309</td><td>0.033</td><td>0.596</td><td>48</td></tr>
+</table>
+
+<h2>5. ציר Dancer (Forward Flow) - 5 הקשרים החזקים</h2>
+<table>
+<tr><th>פיצ'ר מרחבי</th><th>rho</th><th>p</th><th>p_FDR</th><th>N</th></tr>
+<tr><td><code>coverage_entropy_mean</code></td><td>+0.173</td><td>0.186</td><td>0.808</td><td>60</td></tr>
+<tr><td><code>levy_alpha_sd</code></td><td>-0.168</td><td>0.199</td><td>0.808</td><td>60</td></tr>
+<tr><td><code>exploit_dur_median_mean</code></td><td>-0.157</td><td>0.281</td><td>0.808</td><td>49</td></tr>
+<tr><td><code>total_collected_mean</code></td><td>+0.140</td><td>0.287</td><td>0.808</td><td>60</td></tr>
+<tr><td><code>exploit_dur_mean_mean</code></td><td>-0.139</td><td>0.341</td><td>0.808</td><td>49</td></tr>
+</table>
+
+<h2>6. סיכום ופרשנות</h2>
+<p>
+  מתוך 60 ההשוואות, <strong>0</strong> שרדו תיקון FDR-BH ב-&alpha;=0.05. שורות מודגשות
+  בירוק בטבלאות מעלה הן ה-FDR-significant. הפרשנות הסיבתית מצומצמת בגלל המדגם הקטן והמתאם בלבד;
+  הניתוח מציע מועמדים לבחינה ממוקדת.
+</p>
+
+<h2>7. הסתייגויות</h2>
+<div class="caveat">
+  <ul>
+    <li><strong>N = 60</strong>: עוצמה סטטיסטית מוגבלת; קורלציות מתחת ל-|0.3| עשויות לא להגיע למובהקות.</li>
+    <li><strong>מיון רב</strong>: FDR-BH מקיף אבל 60 השוואות מתוך אותו מדגם עדיין רגישות לטעויות סוג I.</li>
+    <li><strong>Forward Flow</strong>: מבוסס fastText pre-trained; וקטור ממוצע פר כתבה אינו תופס הקשר תחבירי.</li>
+    <li><strong>גרף סטטי</strong>: נשלף ע"י Wikipedia API ועשוי להבדיל מ-snapshot המדויק של רגע הקריאה.</li>
+    <li><strong>סיווג בדיד</strong>: לא נעשה. במאמר Zhou הציונים רציפים, ונאמן למאמר השארנו אותם כך.</li>
+  </ul>
+</div>
+
+</body>
+</html>
