@@ -1,5 +1,14 @@
 import networkx as nx
-from m83_utils import title_to_slug, slug_to_title, network_metrics
+import numpy as np
+import pandas as pd
+from m83_utils import (
+    title_to_slug,
+    slug_to_title,
+    network_metrics,
+    forward_flow,
+    bh_score,
+    fdr_bh,
+)
 
 
 class TestTitleSlugRoundtrip:
@@ -57,3 +66,78 @@ class TestNetworkMetrics:
         assert m["char_path_length"] == 0.0
         assert m["global_efficiency"] == 0.0
         assert m["lcc_fraction"] == 1.0
+
+
+class TestForwardFlow:
+    def test_two_orthogonal_vectors_yield_distance_one(self):
+        vecs = [np.array([1.0, 0.0]), np.array([0.0, 1.0])]
+        assert abs(forward_flow(vecs) - 1.0) < 1e-9
+
+    def test_two_identical_vectors_yield_zero(self):
+        v = np.array([1.0, 0.0])
+        assert forward_flow([v, v]) == 0.0
+
+    def test_three_step_sequence_averaging(self):
+        e1 = np.array([1.0, 0.0])
+        e2 = np.array([0.0, 1.0])
+        e3 = np.array([1.0, 0.0])
+        assert abs(forward_flow([e1, e2, e3]) - 0.75) < 1e-9
+
+    def test_single_vector_returns_nan(self):
+        result = forward_flow([np.array([1.0, 0.0])])
+        assert np.isnan(result)
+
+    def test_empty_sequence_returns_nan(self):
+        assert np.isnan(forward_flow([]))
+
+
+class TestBHScore:
+    def test_constant_input_yields_zero(self):
+        df = pd.DataFrame({
+            "n_edges": [10, 10, 10],
+            "clustering": [0.3, 0.3, 0.3],
+            "global_efficiency": [0.5, 0.5, 0.5],
+            "char_path_length": [2.0, 2.0, 2.0],
+        })
+        scores = bh_score(df)
+        assert all(abs(s) < 1e-9 for s in scores)
+
+    def test_higher_edges_clustering_eff_pushes_hunter_positive(self):
+        df = pd.DataFrame({
+            "n_edges":             [1,   5,   10],
+            "clustering":          [0.1, 0.3, 0.5],
+            "global_efficiency":   [0.1, 0.3, 0.5],
+            "char_path_length":    [3.0, 2.0, 1.0],
+        })
+        scores = bh_score(df)
+        assert scores[2] > scores[1] > scores[0]
+        assert abs(sum(scores)) < 1e-9
+
+    def test_higher_path_alone_pushes_busybody_negative(self):
+        df = pd.DataFrame({
+            "n_edges":           [5, 5, 5],
+            "clustering":        [0.3, 0.3, 0.3],
+            "global_efficiency": [0.4, 0.4, 0.4],
+            "char_path_length":  [1.0, 2.0, 3.0],
+        })
+        scores = bh_score(df)
+        assert scores[2] < scores[1] < scores[0]
+
+
+class TestFDRBH:
+    def test_all_ones_become_ones(self):
+        adj = fdr_bh([1.0, 1.0, 1.0])
+        assert all(abs(a - 1.0) < 1e-9 for a in adj)
+
+    def test_classical_example_4_pvalues(self):
+        adj = fdr_bh([0.001, 0.01, 0.04, 0.5])
+        assert abs(adj[0] - 0.004) < 1e-9
+        assert abs(adj[1] - 0.02) < 1e-9
+        assert abs(adj[2] - 0.0533333333) < 1e-7
+        assert abs(adj[3] - 0.5) < 1e-9
+
+    def test_nan_inputs_remain_nan(self):
+        adj = fdr_bh([0.01, float("nan"), 0.5])
+        assert abs(adj[0] - 0.02) < 1e-9
+        assert np.isnan(adj[1])
+        assert abs(adj[2] - 0.5) < 1e-9
