@@ -138,3 +138,68 @@ def fetch_extract_by_revid(session: requests.Session, revid: int) -> ExtractResu
         return {"content": extract, "status": "ok", "error": None}
 
     return {"content": None, "status": "error", "error": "unexpected response shape"}
+
+
+class OutlinksResult(TypedDict):
+    links: list[str]
+    status: str
+    error: Optional[str]
+
+
+def fetch_outlinks(session: requests.Session, slug: str) -> OutlinksResult:
+    """Return main-namespace outlinks for `slug`. Paginates via plcontinue."""
+    base_params = {
+        "action": "query",
+        "prop": "links",
+        "titles": slug,
+        "plnamespace": 0,
+        "pllimit": "max",
+        "redirects": 1,
+        "format": "json",
+        "formatversion": 1,
+    }
+
+    collected: list[str] = []
+    plcontinue: Optional[str] = None
+    last_error: Optional[str] = None
+
+    while True:
+        params = dict(base_params)
+        if plcontinue:
+            params["plcontinue"] = plcontinue
+
+        data = None
+        for attempt in range(MAX_RETRIES):
+            try:
+                resp = session.get(API_ENDPOINT, params=params, timeout=TIMEOUT_SEC)
+                if resp.status_code == 429 or resp.status_code >= 500:
+                    last_error = f"HTTP {resp.status_code}"
+                    if attempt < MAX_RETRIES - 1:
+                        time.sleep(BACKOFF_BASE * (2 ** attempt))
+                    continue
+                resp.raise_for_status()
+                data = resp.json()
+                break
+            except (requests.RequestException, ValueError) as e:
+                last_error = str(e)
+                if attempt < MAX_RETRIES - 1:
+                    time.sleep(BACKOFF_BASE * (2 ** attempt))
+        if data is None:
+            return {"links": collected, "status": "error", "error": last_error}
+
+        time.sleep(THROTTLE_SEC)
+
+        pages = (data.get("query") or {}).get("pages") or {}
+        page_iter = list(pages.values())
+        if not page_iter:
+            return {"links": collected, "status": "error", "error": "no page in response"}
+        page = page_iter[0]
+        if "missing" in page:
+            return {"links": collected, "status": "not_found", "error": None}
+        for link in page.get("links", []) or []:
+            collected.append(link.get("title", ""))
+
+        cont = data.get("continue") or {}
+        plcontinue = cont.get("plcontinue")
+        if not plcontinue:
+            return {"links": collected, "status": "ok", "error": None}

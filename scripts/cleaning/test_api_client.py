@@ -2,7 +2,7 @@ from unittest.mock import MagicMock, patch
 
 import requests
 
-from api_client import build_session, fetch_revision_at
+from api_client import build_session, fetch_revision_at, fetch_outlinks
 
 
 def _mock_response(json_data, status_code=200):
@@ -214,3 +214,53 @@ class TestFetchExtractByRevid:
         assert result["status"] == "not_found"
         assert result["content"] is None
         assert result["error"] is None
+
+
+class TestFetchOutlinks:
+    def test_happy_path_returns_link_titles(self):
+        session = MagicMock()
+        session.get.return_value = _mock_response({
+            "query": {
+                "pages": {
+                    "1234": {
+                        "pageid": 1234,
+                        "title": "Capybara",
+                        "links": [
+                            {"ns": 0, "title": "Rodent"},
+                            {"ns": 0, "title": "Aquatic plant"},
+                        ],
+                    }
+                }
+            }
+        })
+        result = fetch_outlinks(session, "Capybara")
+        assert result["status"] == "ok"
+        assert result["error"] is None
+        assert "Rodent" in result["links"]
+        assert "Aquatic plant" in result["links"]
+
+    def test_missing_page_returns_not_found(self):
+        session = MagicMock()
+        session.get.return_value = _mock_response({
+            "query": {"pages": {"-1": {"missing": "", "title": "Does_not_exist"}}}
+        })
+        result = fetch_outlinks(session, "Does_not_exist")
+        assert result["status"] == "not_found"
+        assert result["links"] == []
+
+    def test_pagination_concatenates_pages(self):
+        session = MagicMock()
+        responses = [
+            _mock_response({
+                "query": {"pages": {"1": {"title": "X", "links": [{"ns": 0, "title": "A"}]}}},
+                "continue": {"plcontinue": "abc"},
+            }),
+            _mock_response({
+                "query": {"pages": {"1": {"title": "X", "links": [{"ns": 0, "title": "B"}]}}},
+            }),
+        ]
+        session.get.side_effect = responses
+        result = fetch_outlinks(session, "X")
+        assert result["status"] == "ok"
+        assert result["links"] == ["A", "B"]
+        assert session.get.call_count == 2
