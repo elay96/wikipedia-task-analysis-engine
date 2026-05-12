@@ -2,114 +2,259 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>M83 - ציוני סקרנות של Zhou על קוהורט DIFFUSE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M83 &mdash; Zhou Curiosity Styles &mdash; DIFFUSE Findings</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  body { font-family: -apple-system, "Segoe UI", Arial, sans-serif;
-         background:#FFFFFF; color:#1a1a1a; line-height:1.65;
-         max-width:1000px; margin:32px auto; padding:0 24px; }
-  h1 { color:#1a1a1a; border-bottom:2px solid #1976D2; padding-bottom:8px; }
-  h2 { color:#1976D2; margin-top:36px;
-       border-bottom:1px solid #E0E0E0; padding-bottom:4px; }
-  code, pre { direction:ltr; text-align:left; background:#F5F5F5;
-              border:1px solid #E0E0E0; border-radius:4px;
-              font-family: Consolas, monospace; }
-  code { padding:2px 6px; }
-  pre { padding:12px; overflow-x:auto; }
-  table { border-collapse:collapse; margin:12px 0; width:100%; direction:ltr; }
-  th, td { border:1px solid #CCC; padding:8px 12px; text-align:left; }
-  th { background:#F0F4F8; }
-  tr:nth-child(even) td { background:#FAFAFA; }
-  .info { background:#E3F2FD; border-right:4px solid #1976D2;
-          padding:12px 16px; margin:12px 0; border-radius:4px; }
-  .meta { color:#666; font-size:0.9em; margin-bottom:24px; }
-  .caveat { background:#FFF3E0; border-right:4px solid #FB8C00;
-            padding:12px 16px; margin:12px 0; border-radius:4px; }
+  :root {
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --text-secondary: #5a5a5a;
+    --border: #e8e5e1;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
+    --radius: 12px;
+    --green: #166534; --green-bg: #dcfce7; --green-border: #86efac;
+    --yellow: #854d0e; --yellow-bg: #fef9c3; --yellow-border: #fde047;
+    --red: #991b1b; --red-bg: #fee2e2; --red-border: #fca5a5;
+    --blue: #1e40af; --blue-bg: #dbeafe; --blue-border: #93c5fd;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(250,250,249,0.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 0 24px; }
+  .nav-inner { max-width: 880px; margin: 0 auto; display: flex; align-items: center; gap: 4px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-inner a { text-decoration: none; font-size: 0.82rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap; padding: 5px 12px; border-radius: 20px; transition: background 0.15s, color 0.15s; }
+  .nav-inner a:hover { background: #f0eee9; color: var(--text); }
+  .nav-sep { color: var(--border); font-size: 0.85rem; user-select: none; }
+
+  .page-body { padding: 40px 24px 80px; }
+  .container { max-width: 880px; margin: 0 auto; }
+
+  header { text-align: center; margin-bottom: 56px; padding-bottom: 40px; border-bottom: 2px solid var(--border); }
+  header h1 { font-family: 'Rubik', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--text); margin-bottom: 10px; letter-spacing: -0.5px; }
+  header .subtitle { font-size: 1rem; color: var(--text-secondary); font-weight: 300; }
+
+  .section { margin-bottom: 64px; }
+  .section-heading { font-family: 'Rubik', sans-serif; font-size: 1.45rem; font-weight: 700; color: var(--text); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .section-num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: var(--text); color: white; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px 28px; margin-bottom: 16px; border: 1px solid var(--border); }
+  .card:hover { box-shadow: var(--shadow-lg); }
+  .card-title { font-family: 'Rubik', sans-serif; font-size: 1.05rem; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+  .card p { color: var(--text-secondary); margin-bottom: 8px; font-size: 0.95rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { margin: 8px 0 0 0; padding-right: 20px; color: var(--text-secondary); font-size: 0.95rem; }
+  .card ul li { margin-bottom: 6px; }
+  .card strong { color: var(--text); }
+
+  code { direction: ltr; display: inline-block; background: #f4f3f1; border: 1px solid var(--border); border-radius: 6px; padding: 1px 7px; font-family: 'Courier New', Courier, monospace; font-size: 0.86em; color: var(--text); }
+
+  .callout { background: #f4f3f1; border-right: 4px solid var(--border); border-radius: 0 var(--radius) var(--radius) 0; padding: 14px 18px; margin: 12px 0; font-size: 0.92rem; color: var(--text-secondary); }
+  .callout strong { color: var(--text); }
+  .callout.info { background: var(--blue-bg); border-right-color: var(--blue-border); }
+  .callout.warn { background: var(--yellow-bg); border-right-color: var(--yellow-border); }
+
+  .badge { display: inline-block; font-size: 0.73rem; font-weight: 600; padding: 2px 10px; border-radius: 20px; white-space: nowrap; }
+  .badge-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .badge-red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+  .badge-blue { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+
+  .stat-row { display: flex; gap: 10px; flex-wrap: wrap; font-size: 0.93rem; color: var(--text-secondary); margin-bottom: 6px; align-items: center; }
+  .stat-row code { font-size: 0.86em; }
+
+  .bottom-line { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid var(--blue-border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 16px; }
+  .bottom-line .card-title { color: var(--blue); }
+  .bottom-line ol { padding-right: 22px; color: var(--text); }
+  .bottom-line ol li { margin-bottom: 10px; font-size: 0.97rem; line-height: 1.65; }
+  .bottom-line strong { color: var(--text); }
+
+  @media print { nav { display: none; } .card { box-shadow: none; } body { background: white; } }
+  @media (max-width: 600px) { header h1 { font-size: 1.6rem; } .section-heading { font-size: 1.2rem; } }
 </style>
 </head>
 <body>
-<h1>M83 - ציוני Hunter/Busybody + Forward Flow על קוהורט DIFFUSE</h1>
-<div class="meta">
-  Scripts: <code>scripts/m83a_fetch_wiki_links.py</code>,
-  <code>scripts/m83b_compute_fasttext.py</code>,
-  <code>scripts/m83_zhou_diffuse_styles.py</code> &middot;
-  N = 60 משתתפים &middot; FDR-BH alpha = 0.05
+
+<nav>
+  <div class="nav-inner">
+    <a href="#bottom-line">שורה תחתונה</a>
+    <span class="nav-sep" aria-hidden="true">&middot;</span>
+    <a href="#context">קונטקסט</a>
+    <span class="nav-sep" aria-hidden="true">&middot;</span>
+    <a href="#methodology">מתודולוגיה</a>
+    <span class="nav-sep" aria-hidden="true">&middot;</span>
+    <a href="#cohort">קוהורט</a>
+    <span class="nav-sep" aria-hidden="true">&middot;</span>
+    <a href="#bh">ציר BH</a>
+    <span class="nav-sep" aria-hidden="true">&middot;</span>
+    <a href="#ff">ציר FF</a>
+    <span class="nav-sep" aria-hidden="true">&middot;</span>
+    <a href="#caveats">הסתייגויות</a>
+    <span class="nav-sep" aria-hidden="true">&middot;</span>
+    <a href="#links">קישורים</a>
+  </div>
+</nav>
+
+<div class="page-body">
+<div class="container">
+
+<header>
+  <h1>M83 &mdash; Zhou Curiosity Styles</h1>
+  <div class="subtitle">Hunter/Busybody &amp; Forward Flow &times; M81 spatial features &middot; DIFFUSE cohort &middot; N=60</div>
+</header>
+
+<section class="section" id="bottom-line">
+  <h2 class="section-heading"><span class="section-num">0</span>שורה תחתונה</h2>
+  <div class="bottom-line">
+    <div class="card-title">מה אפשר להסיק</div>
+    <ol>
+      <li>
+        <strong>אין הבדל מובהק בדפוסי חיפוש מרחבי בין הסגנונות בקוהורט הנוכחי.</strong>
+        <strong>0 מתוך 60</strong> ההשוואות (2 צירי סקרנות &times; 30 פיצ'רים מרחביים) שרדו תיקון
+        FDR-BH ב-&alpha;=0.05. גם ה-p ה-uncorrected הנמוך ביותר (0.022) רחוק מסף מובהקות לאחר תיקון.
+      </li>
+      <li>
+        <strong>הכיוון של הקורלציות הכי חזקות עקבי עם התיאוריה של Zhou ועם האינטואיציה.</strong>
+        ציון Hunter גבוה מתואם חיובית עם <code>exploit_dur_median_mean</code> (&rho;=+0.33,
+        p=0.022) ושלילית עם <code>patch_leaving_distance_mean</code>
+        (&rho;=-0.31, p=0.033) - כלומר Hunters שהינו ארוך
+        יותר על כל מקור ומדלגים מרחקים קצרים יותר. זה הגיוני, אבל לא חזק דיו לעוצמת המדגם.
+      </li>
+      <li>
+        <strong>Cross-validation עם M80 תקין.</strong> ציון BH של M83 (מתודולוגיית רשת היפר-קישורים)
+        מתאם חיובית עם <code>topic_concentration</code> של M80 (LDA-based): &rho;=+0.235, p=0.073.
+        כיוון תיאורטי נכון - שתי המתודולוגיות מצביעות על אותם משתתפים כיותר Hunter-like.
+      </li>
+      <li>
+        <strong>Forward Flow (ציר Dancer) דליל.</strong> כל הקורלציות עם FF הן |&rho;|&lt;0.18
+        (הגבוהה ביותר: <code>coverage_entropy_mean</code>, &rho;=+0.173). ייתכן שהרצף
+        הקצר בקוהורט (חציון 9 כתבות לעמ׳) אינו מספיק לבטא
+        קפיצות סמנטיות בצורה אמינה.
+      </li>
+      <li>
+        <strong>מה הלאה?</strong> N=60 פשוט קטן מדי לסטטיסטיקה כזו (לאתר &rho;=0.3 ב-&alpha;=0.05/60
+        דרושים ~250 משתתפים). שלוש דרכים סבירות:
+        <strong>(א)</strong> איחוד עם קוהורט Clumpy (סה"כ N=130) עם תנאי כ-covariate;
+        <strong>(ב)</strong> pre-registered targeted test ממוקד על שני המועמדים החזקים
+        (<code>exploit_dur</code>, <code>patch_leaving_distance</code>) כדי לחסוך בתיקון multiplicity;
+        <strong>(ג)</strong> איסוף נוסף של משתתפים.
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="context">
+  <h2 class="section-heading"><span class="section-num">1</span>הקונטקסט</h2>
+  <div class="card">
+    <p>הניתוח מיישם את המתודולוגיה של Zhou et al. (2024, <em>Science Advances</em>) על קוהורט המשתתפים
+    שעברו את משימת ה-Spatial Search בתנאי <strong>Diffuse</strong>. השאלה: האם סגנון הסקרנות
+    שזיהינו במסע ה-Wikipedia (Hunter / Busybody / Dancer) מנבא הבדלים בדפוסי החיפוש המרחבי?</p>
+    <p>בניגוד ל-M80 (סיווג בדיד ל-k=2 או k=3 קבוצות), כאן השמרנו על <strong>ציונים רציפים</strong>
+    לכל משתתף, נאמן ל-Zhou במאמרו המקורי - הם לא נתנו תווית, רק ציונים על שני צירים בלתי-תלויים.</p>
+  </div>
+</section>
+
+<section class="section" id="methodology">
+  <h2 class="section-heading"><span class="section-num">2</span>מתודולוגיה</h2>
+  <div class="card">
+    <div class="card-title">ציר 1: Hunter / Busybody (BH-score)</div>
+    <p>לכל משתתף בנינו <strong>תת-גרף מושרה</strong> מתוך הגרף הסטטי של Wikipedia:</p>
+    <ul>
+      <li>צמתים = הכתבות הייחודיות שהמשתתף קרא</li>
+      <li>קשתות = hyperlinks קיימים ב-Wikipedia בין הכתבות האלו</li>
+    </ul>
+    <p>חישבנו 4 מדדים על הגרף: <code>n_edges</code>, <code>clustering coefficient</code>,
+    <code>global efficiency</code>, ו-<code>characteristic path length</code> על ה-LCC.
+    Z-scored בתוך הקוהורט, וצירפנו לפי הנוסחה של Zhou:
+    <code>BH = z_edges + z_clust + z_eff &minus; z_path</code>. ערך גבוה = Hunter (רשת צפופה);
+    נמוך = Busybody (פזורה).</p>
+  </div>
+  <div class="card">
+    <div class="card-title">ציר 2: Dancer (Forward Flow)</div>
+    <p>רצף הכתבות (כולל חזרות) הומר לוקטורים סמנטיים באמצעות
+    <strong>fastText pre-trained</strong> (Wiki-news-subwords-300). לכל כתבה: ממוצע
+    וקטורי-מילה (אחרי stop-words ו-tokenization) ואז L2-normalisation. עבור כל מיקום i &ge; 2
+    חישבנו את המרחק הקוסינוס הממוצע אל כל הכתבות הקודמות (per Gray 2019), וממצענו על פני
+    המיקומים. ערך גבוה = קפיצות סמנטיות גדולות (Dancer-like).</p>
+  </div>
+  <div class="card">
+    <div class="card-title">ניתוח סטטיסטי</div>
+    <p>Spearman correlation לכל אחד מ-30 הפיצ'רים המרחביים של M81 מול כל אחד משני הצירים
+    = 60 השוואות. תיקון <strong>FDR-BH</strong> משותף על כל 60 ההשוואות,
+    &alpha;=0.05.</p>
+    <div class="callout info">
+      <strong>אורתוגונליות בין הצירים:</strong> Spearman(BH, FF) =
+      <strong>+0.086</strong> (p = 0.514). שני הצירים בלתי-תלויים יחסית,
+      כצפוי לפי Zhou.
+    </div>
+  </div>
+</section>
+
+<section class="section" id="cohort">
+  <h2 class="section-heading"><span class="section-num">3</span>הקוהורט</h2>
+  <div class="card">
+    <ul>
+      <li><strong>N = 60</strong> משתתפים (Diffuse בלבד + n_unique_articles &ge; 5 + M81 spatial זמין)</li>
+      <li>חציון כתבות ייחודיות לעמ׳: <strong>9</strong></li>
+      <li>חציון קשתות לעמ׳: <strong>6</strong></li>
+      <li>חציון Forward Flow: <strong>0.061</strong></li>
+      <li>טווח BH_score: <strong>[-3.25, 6.44]</strong></li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="bh">
+  <h2 class="section-heading"><span class="section-num">4</span>ציר Hunter/Busybody &mdash; 5 הקשרים החזקים</h2>
+  <div class="card">
+<div class="stat-row"><code>exploit_dur_median_mean</code>: &rho;=+0.326, p=0.022, p_FDR=0.596, n=49</div>
+<div class="stat-row"><code>exploit_dur_mean_mean</code>: &rho;=+0.320, p=0.025, p_FDR=0.596, n=49</div>
+<div class="stat-row"><code>exploit_dur_median_sd</code>: &rho;=+0.314, p=0.048, p_FDR=0.596, n=40</div>
+<div class="stat-row"><code>exploit_dur_mean_sd</code>: &rho;=+0.312, p=0.050, p_FDR=0.596, n=40</div>
+<div class="stat-row"><code>patch_leaving_distance_mean</code>: &rho;=-0.309, p=0.033, p_FDR=0.596, n=48</div>
+  </div>
+</section>
+
+<section class="section" id="ff">
+  <h2 class="section-heading"><span class="section-num">5</span>ציר Dancer (Forward Flow) &mdash; 5 הקשרים החזקים</h2>
+  <div class="card">
+<div class="stat-row"><code>coverage_entropy_mean</code>: &rho;=+0.173, p=0.186, p_FDR=0.808, n=60</div>
+<div class="stat-row"><code>levy_alpha_sd</code>: &rho;=-0.168, p=0.199, p_FDR=0.808, n=60</div>
+<div class="stat-row"><code>exploit_dur_median_mean</code>: &rho;=-0.157, p=0.281, p_FDR=0.808, n=49</div>
+<div class="stat-row"><code>total_collected_mean</code>: &rho;=+0.140, p=0.287, p_FDR=0.808, n=60</div>
+<div class="stat-row"><code>exploit_dur_mean_mean</code>: &rho;=-0.139, p=0.341, p_FDR=0.808, n=49</div>
+  </div>
+</section>
+
+<section class="section" id="caveats">
+  <h2 class="section-heading"><span class="section-num">6</span>הסתייגויות</h2>
+  <div class="callout warn">
+    <ul style="margin-right:18px;">
+      <li><strong>N = 60</strong>: עוצמה סטטיסטית מוגבלת. לאתר &rho;=0.3 ב-&alpha;=0.05/60 דרושים כ-250 משתתפים.</li>
+      <li><strong>Multiple comparisons</strong>: FDR-BH הוא תיקון מקיף, אבל 60 השוואות עם N=60 מותירות מעט הסיכוי לגילוי אמיתי.</li>
+      <li><strong>Forward Flow</strong>: מבוסס fastText pre-trained; וקטור ממוצע פר כתבה אינו תופס הקשר תחבירי או מבנה משפט.</li>
+      <li><strong>גרף סטטי</strong>: נשלף מ-Wikipedia API ב-2026-05; עשוי להבדיל מהsnapshot המדויק של רגע הקריאה בניסוי.</li>
+      <li><strong>ללא סיווג בדיד</strong>: לא נתנו תוויות (Hunter/Busybody/Dancer) - השארנו ציונים רציפים, נאמן למאמר של Zhou.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="links">
+  <h2 class="section-heading"><span class="section-num">7</span>קישורים וקבצים</h2>
+  <div class="card">
+    <ul>
+      <li>סקריפט: <code>scripts/m83_zhou_diffuse_styles.py</code> (וגם <code>m83a_fetch_wiki_links.py</code>, <code>m83b_compute_fasttext.py</code>)</li>
+      <li>נתונים פר משתתף: <code>output/m83_per_participant.csv</code></li>
+      <li>כל ה-60 קורלציות: <code>output/m83_spearman_correlations.csv</code></li>
+      <li>דוח PDF מלא: <code>output/m83_zhou_diffuse_report.pdf</code></li>
+      <li>גרף הקישורים: <code>output/m83_wiki_link_graph.json</code> (244 כתבות, 1807 קשתות)</li>
+      <li>הembeddings: <code>output/m83_article_embeddings.npz</code> (244 &times; 300)</li>
+    </ul>
+  </div>
+</section>
+
 </div>
-
-<h2>1. תקציר</h2>
-<p>
-  הניתוח מיישם את המתודולוגיה של Zhou et al. (2024) על קוהורט המשתתפים שעברו את משימת
-  ה-Spatial Search בתנאי <strong>Diffuse</strong>. לכל משתתף חושב ציון רציף של Hunter/Busybody
-  (BH-score, מצרף 4 מדדי רשת על הגרף הסטטי של Wikipedia) וציון Forward Flow (מרחק קוסינוס סמנטי
-  ממוצע באמצעות fastText). שני הצירים נבחנו במתאם Spearman מול 30 הפיצ'רים המרחביים מ-M81,
-  עם תיקון FDR-BH על כל 60 ההשוואות.
-</p>
-
-<h2>2. מתודולוגיה</h2>
-<p>
-  <strong>ציר 1 (Hunter/Busybody):</strong> לכל משתתף בנינו תת-גרף מושרה מהגרף הסטטי של
-  Wikipedia: צמתים = הכתבות הייחודיות שהמשתתף קרא; קשתות = hyperlinks קיימים ב-Wikipedia.
-  מתוך הגרף חישבנו 4 מדדים (edges, clustering coefficient, global efficiency, characteristic
-  path length על ה-LCC), z-scored בתוך הקוהורט, וצירפנו ל-BH_score לפי הנוסחה של Zhou:
-  <code>z_edges + z_clust + z_eff - z_path</code>. ערך גבוה &rarr; Hunter (רשת צפופה); נמוך &rarr;
-  Busybody (פזורה).
-</p>
-<p>
-  <strong>ציר 2 (Dancer/Forward Flow):</strong> רצף הכתבות (כולל חזרות) הומר לוקטורים מסוג
-  fastText (mean over in-vocab tokens, L2-normalised). לכל מיקום i &ge; 2 חישבנו את המרחק הקוסינוס
-  הממוצע אל כל הכתבות הקודמות, וממצענו על פני המיקומים. ערך גבוה &rarr; קפיצות סמנטיות גדולות
-  (Dancer-like).
-</p>
-<div class="info">
-  שני הצירים בלתי-תלויים יחסית: Spearman(BH, FF) = +0.086 (p = 0.514).
 </div>
-
-<h2>3. הקוהורט</h2>
-<table>
-<tr><th>מאפיין</th><th>ערך</th></tr>
-<tr><td>N (Diffuse + n_unique &ge; 5 + M81 spatial available)</td><td>60</td></tr>
-<tr><td>חציון כתבות ייחודיות לעמ׳</td><td>9</td></tr>
-<tr><td>חציון קשתות לעמ׳</td><td>6</td></tr>
-<tr><td>חציון Forward Flow</td><td>0.061</td></tr>
-<tr><td>טווח BH_score</td><td>[-3.25, 6.44]</td></tr>
-</table>
-
-<h2>4. ציר Hunter/Busybody - 5 הקשרים החזקים</h2>
-<table>
-<tr><th>פיצ'ר מרחבי</th><th>rho</th><th>p</th><th>p_FDR</th><th>N</th></tr>
-<tr><td><code>exploit_dur_median_mean</code></td><td>+0.326</td><td>0.022</td><td>0.596</td><td>49</td></tr>
-<tr><td><code>exploit_dur_mean_mean</code></td><td>+0.320</td><td>0.025</td><td>0.596</td><td>49</td></tr>
-<tr><td><code>exploit_dur_median_sd</code></td><td>+0.314</td><td>0.048</td><td>0.596</td><td>40</td></tr>
-<tr><td><code>exploit_dur_mean_sd</code></td><td>+0.312</td><td>0.050</td><td>0.596</td><td>40</td></tr>
-<tr><td><code>patch_leaving_distance_mean</code></td><td>-0.309</td><td>0.033</td><td>0.596</td><td>48</td></tr>
-</table>
-
-<h2>5. ציר Dancer (Forward Flow) - 5 הקשרים החזקים</h2>
-<table>
-<tr><th>פיצ'ר מרחבי</th><th>rho</th><th>p</th><th>p_FDR</th><th>N</th></tr>
-<tr><td><code>coverage_entropy_mean</code></td><td>+0.173</td><td>0.186</td><td>0.808</td><td>60</td></tr>
-<tr><td><code>levy_alpha_sd</code></td><td>-0.168</td><td>0.199</td><td>0.808</td><td>60</td></tr>
-<tr><td><code>exploit_dur_median_mean</code></td><td>-0.157</td><td>0.281</td><td>0.808</td><td>49</td></tr>
-<tr><td><code>total_collected_mean</code></td><td>+0.140</td><td>0.287</td><td>0.808</td><td>60</td></tr>
-<tr><td><code>exploit_dur_mean_mean</code></td><td>-0.139</td><td>0.341</td><td>0.808</td><td>49</td></tr>
-</table>
-
-<h2>6. סיכום ופרשנות</h2>
-<p>
-  מתוך 60 ההשוואות, <strong>0</strong> שרדו תיקון FDR-BH ב-&alpha;=0.05. שורות מודגשות
-  בירוק בטבלאות מעלה הן ה-FDR-significant. הפרשנות הסיבתית מצומצמת בגלל המדגם הקטן והמתאם בלבד;
-  הניתוח מציע מועמדים לבחינה ממוקדת.
-</p>
-
-<h2>7. הסתייגויות</h2>
-<div class="caveat">
-  <ul>
-    <li><strong>N = 60</strong>: עוצמה סטטיסטית מוגבלת; קורלציות מתחת ל-|0.3| עשויות לא להגיע למובהקות.</li>
-    <li><strong>מיון רב</strong>: FDR-BH מקיף אבל 60 השוואות מתוך אותו מדגם עדיין רגישות לטעויות סוג I.</li>
-    <li><strong>Forward Flow</strong>: מבוסס fastText pre-trained; וקטור ממוצע פר כתבה אינו תופס הקשר תחבירי.</li>
-    <li><strong>גרף סטטי</strong>: נשלף ע"י Wikipedia API ועשוי להבדיל מ-snapshot המדויק של רגע הקריאה.</li>
-    <li><strong>סיווג בדיד</strong>: לא נעשה. במאמר Zhou הציונים רציפים, ונאמן למאמר השארנו אותם כך.</li>
-  </ul>
-</div>
-
 </body>
 </html>
