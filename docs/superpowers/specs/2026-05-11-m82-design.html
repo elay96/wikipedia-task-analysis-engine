@@ -2,230 +2,266 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>M82 - SEARCH measures x Style x TASK correlations (spec)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M82 — SEARCH × Style × TASK correlations (spec)</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  body { font-family: -apple-system, "Segoe UI", Arial, sans-serif;
-         background: #FFFFFF; color: #1a1a1a; line-height: 1.6;
-         max-width: 1000px; margin: 32px auto; padding: 0 24px; }
-  h1 { color: #1a1a1a; border-bottom: 2px solid #1976D2; padding-bottom: 8px; }
-  h2 { color: #1976D2; margin-top: 32px; border-bottom: 1px solid #E0E0E0;
-       padding-bottom: 4px; }
-  h3 { color: #1a1a1a; margin-top: 22px; font-size: 16px; }
-  code, pre { direction: ltr; text-align: left; background: #F5F5F5;
-              border: 1px solid #E0E0E0; border-radius: 4px;
-              font-family: Consolas, monospace; }
-  code { padding: 2px 6px; }
-  pre { padding: 12px; overflow-x: auto; }
-  table { border-collapse: collapse; margin: 12px 0; width: 100%;
-          direction: ltr; font-size: 13.5px; }
-  th, td { border: 1px solid #CCC; padding: 6px 10px; text-align: left;
-           vertical-align: top; }
-  th { background: #F0F4F8; }
-  tr:nth-child(even) { background: #FAFAFA; }
-  .info { background: #E3F2FD; border-right: 4px solid #1976D2;
-          padding: 12px 16px; margin: 12px 0; border-radius: 4px; }
-  .warn { background: #FFF3E0; border-right: 4px solid #E65100;
-          padding: 12px 16px; margin: 12px 0; border-radius: 4px; }
-  .meta { color: #666; font-size: 0.9em; margin-bottom: 24px; }
-  ul li { margin-bottom: 4px; }
+  :root {
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --text-secondary: #5a5a5a;
+    --border: #e8e5e1;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
+    --radius: 12px;
+    --green: #166534; --green-bg: #dcfce7; --green-border: #86efac;
+    --yellow: #854d0e; --yellow-bg: #fef9c3; --yellow-border: #fde047;
+    --red: #991b1b; --red-bg: #fee2e2; --red-border: #fca5a5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(250,250,249,0.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 0 24px; }
+  .nav-inner { max-width: 880px; margin: 0 auto; display: flex; align-items: center; gap: 4px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-inner a { text-decoration: none; font-size: 0.82rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap; padding: 5px 12px; border-radius: 20px; transition: background 0.15s, color 0.15s; }
+  .nav-inner a:hover { background: #f0eee9; color: var(--text); }
+  .nav-sep { color: var(--border); font-size: 0.85rem; user-select: none; }
+
+  .page-body { padding: 40px 24px 80px; }
+  .container { max-width: 880px; margin: 0 auto; }
+
+  header { text-align: center; margin-bottom: 56px; padding-bottom: 40px; border-bottom: 2px solid var(--border); }
+  header h1 { font-family: 'Rubik', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--text); margin-bottom: 10px; letter-spacing: -0.5px; }
+  header .subtitle { font-size: 1rem; color: var(--text-secondary); font-weight: 300; }
+
+  .section { margin-bottom: 64px; }
+  .section-heading { font-family: 'Rubik', sans-serif; font-size: 1.45rem; font-weight: 700; color: var(--text); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .section-num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: var(--text); color: white; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px 28px; margin-bottom: 16px; border: 1px solid var(--border); }
+  .card:hover { box-shadow: var(--shadow-lg); }
+  .card-title { font-family: 'Rubik', sans-serif; font-size: 1.05rem; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .card p { color: var(--text-secondary); margin-bottom: 8px; font-size: 0.95rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { margin: 8px 0 0 0; padding-right: 20px; color: var(--text-secondary); font-size: 0.95rem; }
+  .card ul li { margin-bottom: 4px; }
+  .card ol { margin: 8px 0 0 0; padding-right: 20px; color: var(--text-secondary); font-size: 0.95rem; }
+  .card ol li { margin-bottom: 6px; }
+  .card strong { color: var(--text); }
+
+  .table-wrap { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 16px; }
+  table { width: 100%; border-collapse: collapse; background: var(--card); font-size: 0.9rem; }
+  thead th { background: var(--text); color: white; padding: 12px 16px; font-weight: 600; text-align: right; white-space: nowrap; }
+  tbody td { padding: 11px 16px; border-bottom: 1px solid var(--border); text-align: right; vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(even) td { background: #f7f6f4; }
+
+  code { direction: ltr; display: inline-block; background: #f4f3f1; border: 1px solid var(--border); border-radius: 6px; padding: 1px 7px; font-family: 'Courier New', Courier, monospace; font-size: 0.86em; color: var(--text); }
+  pre { direction: ltr; font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; background: #1e1e1e; color: #d4d4d4; padding: 24px 28px; border-radius: var(--radius); line-height: 1.6; overflow-x: auto; margin-bottom: 16px; white-space: pre; }
+
+  .callout { background: #f4f3f1; border-right: 4px solid var(--border); border-radius: 0 var(--radius) var(--radius) 0; padding: 14px 18px; margin: 12px 0; font-size: 0.92rem; color: var(--text-secondary); }
+  .callout strong { color: var(--text); }
+  .callout.info { background: #eff6ff; border-right-color: #93c5fd; }
+  .callout.warn { background: #fff7ed; border-right-color: #fdba74; }
+
+  .meta { color: var(--text-secondary); font-size: 0.9rem; margin-top: 6px; }
+
+  @media print { nav { display: none; } .card, .table-wrap { box-shadow: none; } body { background: white; } pre { background: #f5f5f5; color: #333; border: 1px solid #ccc; } }
+  @media (max-width: 600px) { header h1 { font-size: 1.6rem; } .section-heading { font-size: 1.2rem; } }
 </style>
 </head>
 <body>
 
-<h1>M82 - SEARCH measures &times; Style &times; TASK correlations</h1>
-<div class="meta">
-  Spec date: 2026-05-11 &middot; Script: <code>scripts/m82_search_task_table.py</code> (planned)
-</div>
+<nav>
+  <div class="nav-inner">
+    <a href="#goal">מטרה</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#cohort">קוהורט</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#inputs">קלטים</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#search">SEARCH</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#task">TASK</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#groups">קבוצות</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#stats">סטטיסטיקה</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#outputs">פלטים</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#format">פורמט</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#script">סקריפט</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#oos">Out of scope</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#accept">קבלה</a>
+  </div>
+</nav>
 
-<h2>1. Goal</h2>
-<p>
-  EDA table summarising four SEARCH-task measures (two shallow, two deep) against
-  Hunter/Busybody groupings derived from Wikipedia browsing, and correlating each
-  SEARCH measure with six TASK-side measures. Output is intended for advisor
-  review to inform follow-up modelling decisions.
-</p>
-<p>
-  Concretely we want to answer:
-</p>
-<ol>
-  <li>Do the deep GBM-derived SEARCH measures (% time exploit, N transitions)
-      give more signal than the shallow event-based ones (time-to-first reward,
-      inter-reward mean)?</li>
-  <li>Does the Clumpy vs Diffuse manipulation effect on each SEARCH measure
-      depend on the participant's Wikipedia style (Hunter / Busybody, optionally
-      Dancer)?</li>
-  <li>Which SEARCH measures correlate with which TASK measures, overall and
-      within each style sub-group?</li>
-</ol>
+<div class="page-body">
+<div class="container">
 
-<h2>2. Cohort</h2>
-<p>
-  N=132 participants - the same cohort used in M81. Inclusion criteria
-  (already applied upstream):
-</p>
-<ul>
-  <li>5 spatial-search trials present in <code>data/cleaned/spatial_search/Game.csv</code></li>
-  <li><code>GameCondition</code> in <code>{Clumpy, Diffuse}</code></li>
-  <li>Present in <code>output/m72_new_per_participant.csv</code> (post-clean Wikipedia cohort)</li>
-</ul>
-<p>
-  Final N may be slightly below 132 if a participant is missing one of the
-  TASK-side files. We will report N per row of the output table.
-</p>
+<header>
+  <h1>M82 — SEARCH × Style × TASK</h1>
+  <div class="subtitle">מסמך תכנון · 11.05.2026 · <code>scripts/m82_search_task_table.py</code></div>
+</header>
 
-<h2>3. Inputs</h2>
-<table>
-  <tr><th>File</th><th>Columns used</th></tr>
-  <tr><td><code>output/m81_per_trial_features.csv</code></td>
-      <td><code>participant_id, trial, condition, time_to_first_resource,
-          inter_resource_mean, pct_time_exploit, n_transitions</code></td></tr>
-  <tr><td><code>output/m80_hunter_busybody_per_participant.csv</code></td>
-      <td><code>participant_id, topic_concentration, transition_entropy,
-          style</code> (= hunter|busybody, k=2)</td></tr>
-  <tr><td><code>output/m71_per_participant_reading_switches.csv</code></td>
-      <td><code>participant_id, mean_reading_length_s</code></td></tr>
-  <tr><td><code>output/m72_new_per_participant.csv</code></td>
-      <td><code>participant_id, count_time, count_topic, count_typing, PC1</code></td></tr>
-  <tr><td><code>output/m73_new_per_participant_entropy.csv</code></td>
-      <td><code>participant_id, seq_typing_entropy</code></td></tr>
-</table>
+<section class="section" id="goal">
+  <h2 class="section-heading"><span class="section-num">1</span>מטרה</h2>
+  <div class="card">
+    <p>טבלת EDA שמסכמת ארבעה מדדי SEARCH (שניים שטחיים ושניים עמוקים) מול חלוקת Hunter/Busybody שנגזרה מהמסע ב-Wikipedia, ומקרילציה כל מדד SEARCH עם שישה מדדי TASK. הפלט נועד לסקירת מנחים לפני החלטות מידול המשך.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">שאלות קונקרטיות</div>
+    <ol>
+      <li>האם מדדי ה-SEARCH העמוקים מ-GBM (<strong>% time exploit</strong>, <strong>N transitions</strong>) נותנים יותר סיגנל מהשטחיים (time-to-first reward, inter-reward mean)?</li>
+      <li>האם אפקט ה-Clumpy vs Diffuse על כל מדד SEARCH תלוי בסגנון ה-Wikipedia (Hunter / Busybody, אופציונלית Dancer)?</li>
+      <li>אילו מדדי SEARCH מתואמים לאילו מדדי TASK, הן ברמת All והן בתוך כל תת-קבוצה?</li>
+    </ol>
+  </div>
+</section>
 
-<h2>4. SEARCH measures (4)</h2>
-<p>
-  Each measure is one scalar per participant: mean across the 5 trials.
-  All four are already computed per-trial in <code>m81_per_trial_features.csv</code>
-  - this spec does NOT recompute them.
-</p>
-<table>
-  <tr><th>#</th><th>Name</th><th>Depth</th><th>Source column (per-trial)</th></tr>
-  <tr><td>1</td><td>Time to 1st reward (s)</td><td>shallow</td>
-      <td><code>time_to_first_resource</code></td></tr>
-  <tr><td>2</td><td>Mean inter-reward time (s)</td><td>shallow</td>
-      <td><code>inter_resource_mean</code></td></tr>
-  <tr><td>3</td><td>% time in exploit</td><td>deep</td>
-      <td><code>pct_time_exploit</code></td></tr>
-  <tr><td>4</td><td>N transitions</td><td>deep</td>
-      <td><code>n_transitions</code></td></tr>
-</table>
-<p>
-  Aggregation: <code>mean</code> across the 5 trials, skipping NaN. Participants
-  with all-NaN for a given measure get NaN in the output (and are excluded
-  from that row's statistics).
-</p>
+<section class="section" id="cohort">
+  <h2 class="section-heading"><span class="section-num">2</span>קוהורט</h2>
+  <div class="card">
+    <p><strong>N=132 משתתפים</strong> — אותו קוהורט ששימש ב-M81. קריטריוני הכללה (כבר הופעלו upstream):</p>
+    <ul>
+      <li>5 trials של spatial-search ב-<code>data/cleaned/spatial_search/Game.csv</code></li>
+      <li><code>GameCondition</code> ב-<code>{Clumpy, Diffuse}</code></li>
+      <li>מופיע ב-<code>output/m72_new_per_participant.csv</code> (קוהורט post-clean של Wikipedia)</li>
+    </ul>
+    <p style="margin-top:10px;">N סופי עשוי להיות מעט נמוך מ-132 אם משתתף חסר באחד מקבצי ה-TASK. נדווח N לכל שורה בטבלת הפלט.</p>
+  </div>
+</section>
 
-<h2>5. TASK measures (6)</h2>
-<table>
-  <tr><th>#</th><th>Name</th><th>Source</th></tr>
-  <tr><td>1</td><td><code>mean_reading_length_s</code></td>
-      <td>M71 (mean page-dwell time, seconds)</td></tr>
-  <tr><td>2</td><td><code>count_time</code></td>
-      <td>M72 (composite count: time-based switch detector)</td></tr>
-  <tr><td>3</td><td><code>count_topic</code></td>
-      <td>M72 (composite count: topic-based switch detector)</td></tr>
-  <tr><td>4</td><td><code>count_typing</code></td>
-      <td>M72 (composite count: typing-based switch detector)</td></tr>
-  <tr><td>5</td><td><code>PC1</code></td>
-      <td>M72 (first principal component of the composite DV)</td></tr>
-  <tr><td>6</td><td><code>seq_typing_entropy</code></td>
-      <td>M73 (Shannon entropy of typing-run length distribution)</td></tr>
-</table>
+<section class="section" id="inputs">
+  <h2 class="section-heading"><span class="section-num">3</span>קלטים</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>קובץ</th><th>עמודות בשימוש</th></tr></thead>
+      <tbody>
+        <tr><td><code>output/m81_per_trial_features.csv</code></td><td><code>participant_id, trial, condition, time_to_first_resource, inter_resource_mean, pct_time_exploit, n_transitions</code></td></tr>
+        <tr><td><code>output/m80_hunter_busybody_per_participant.csv</code></td><td><code>participant_id, topic_concentration, transition_entropy, style</code> (= hunter|busybody, k=2)</td></tr>
+        <tr><td><code>output/m71_per_participant_reading_switches.csv</code></td><td><code>participant_id, mean_reading_length_s</code></td></tr>
+        <tr><td><code>output/m72_new_per_participant.csv</code></td><td><code>participant_id, count_time, count_topic, count_typing, PC1</code></td></tr>
+        <tr><td><code>output/m73_new_per_participant_entropy.csv</code></td><td><code>participant_id, seq_typing_entropy</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
 
-<h2>6. Group assignment</h2>
-<h3>k=2 (Hunter / Busybody)</h3>
-<p>
-  Reuse the <code>style</code> column from
-  <code>m80_hunter_busybody_per_participant.csv</code>. No re-clustering.
-</p>
+<section class="section" id="search">
+  <h2 class="section-heading"><span class="section-num">4</span>מדדי SEARCH (4)</h2>
+  <div class="card">
+    <p>כל מדד הוא סקלר אחד למשתתף: ממוצע על פני 5 ה-trials. כל הארבעה כבר מחושבים per-trial ב-<code>m81_per_trial_features.csv</code> — ה-spec הזה לא מחשב אותם מחדש.</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>שם</th><th>Depth</th><th>עמודת מקור (per-trial)</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Time to 1st reward (s)</td><td>shallow</td><td><code>time_to_first_resource</code></td></tr>
+        <tr><td>2</td><td>Mean inter-reward time (s)</td><td>shallow</td><td><code>inter_resource_mean</code></td></tr>
+        <tr><td>3</td><td>% time in exploit</td><td>deep</td><td><code>pct_time_exploit</code></td></tr>
+        <tr><td>4</td><td>N transitions</td><td>deep</td><td><code>n_transitions</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout"><strong>Aggregation:</strong> <code>mean</code> על 5 ה-trials, מדלגים על NaN. משתתפים עם all-NaN למדד מסוים מקבלים NaN בפלט (ומוצאים מהסטטיסטיקות של אותה שורה).</div>
+</section>
 
-<h3>k=3 (Hunter / Busybody / Dancer)</h3>
-<p>
-  Refit KMeans (<code>n_clusters=3, n_init=10, random_state=42</code>) on the
-  same standardised features <code>[topic_concentration, transition_entropy]</code>.
-  Label assignment:
-</p>
-<ul>
-  <li>The cluster with the <strong>highest mean topic_concentration</strong> = <code>hunter</code></li>
-  <li>The cluster with the <strong>lowest mean topic_concentration</strong> = <code>busybody</code></li>
-  <li>The remaining cluster = <code>dancer</code></li>
-</ul>
-<p>
-  Output the new style labels in <code>m82_per_participant.csv</code> as
-  <code>style_k3</code>; the existing <code>style</code> column is renamed to
-  <code>style_k2</code>.
-</p>
+<section class="section" id="task">
+  <h2 class="section-heading"><span class="section-num">5</span>מדדי TASK (6)</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>שם</th><th>מקור</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><code>mean_reading_length_s</code></td><td>M71 (mean page-dwell time, seconds)</td></tr>
+        <tr><td>2</td><td><code>count_time</code></td><td>M72 (composite count: time-based switch detector)</td></tr>
+        <tr><td>3</td><td><code>count_topic</code></td><td>M72 (composite count: topic-based switch detector)</td></tr>
+        <tr><td>4</td><td><code>count_typing</code></td><td>M72 (composite count: typing-based switch detector)</td></tr>
+        <tr><td>5</td><td><code>PC1</code></td><td>M72 (first principal component of the composite DV)</td></tr>
+        <tr><td>6</td><td><code>seq_typing_entropy</code></td><td>M73 (Shannon entropy of typing-run length distribution)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
 
-<h2>7. Per-cell statistics</h2>
-<p>
-  The table has one row per (SEARCH measure &times; group). Groups are:
-  <code>{All, Hunter, Busybody}</code> for k=2, and
-  <code>{All, Hunter, Busybody, Dancer}</code> for k=3.
-</p>
-<table>
-  <tr><th>Column</th><th>Computation</th></tr>
-  <tr><td>N</td>
-      <td>Count of participants in this sub-group with non-NaN measure value.</td></tr>
-  <tr><td>Mean &plusmn; SD</td>
-      <td>Sample mean and SD of the SEARCH measure in this sub-group.</td></tr>
-  <tr><td>Cohen's d (Clumpy &minus; Diffuse)</td>
-      <td>Welch t-test within the sub-group: SEARCH measure in Clumpy vs Diffuse.
-          Effect size = (mean_clumpy &minus; mean_diffuse) / pooled SD.
-          <strong>Bold</strong> when p &lt; .05 (Welch, two-sided).</td></tr>
-  <tr><td>6 &times; Spearman &rho; (with TASK)</td>
-      <td>Spearman rank correlation between the SEARCH measure and each of the
-          six TASK measures, computed within the sub-group only. Displayed as
-          <code>round(&rho; &times; 100)</code>. Cell coloured on heatmap scale
-          (red = negative, blue = positive, saturation by |&rho;|). Black outline
-          when p &lt; .05 (uncorrected). No multiple-comparison correction -
-          this is EDA.</td></tr>
-</table>
+<section class="section" id="groups">
+  <h2 class="section-heading"><span class="section-num">6</span>שיוך לקבוצות</h2>
+  <div class="card">
+    <div class="card-title">k=2 (Hunter / Busybody)</div>
+    <p>שימוש חוזר בעמודת <code>style</code> מ-<code>m80_hunter_busybody_per_participant.csv</code>. ללא re-clustering.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">k=3 (Hunter / Busybody / Dancer)</div>
+    <p>התאמה מחדש של KMeans (<code>n_clusters=3, n_init=10, random_state=42</code>) על אותן פיצ'רים מתוקננים <code>[topic_concentration, transition_entropy]</code>. שיוך תוויות:</p>
+    <ul>
+      <li>הקלסטר עם <strong>topic_concentration ממוצע הכי גבוה</strong> = <code>hunter</code></li>
+      <li>הקלסטר עם <strong>topic_concentration ממוצע הכי נמוך</strong> = <code>busybody</code></li>
+      <li>הקלסטר הנותר = <code>dancer</code></li>
+    </ul>
+    <p style="margin-top:10px;">תוויות הסגנון החדשות בפלט <code>m82_per_participant.csv</code> בעמודת <code>style_k3</code>; עמודת <code>style</code> הקיימת תיקרא <code>style_k2</code>.</p>
+  </div>
+</section>
 
-<h2>8. Outputs</h2>
-<table>
-  <tr><th>File</th><th>Contents</th></tr>
-  <tr><td><code>output/m82_search_task_table_k2.html</code></td>
-      <td>Headline EDA table with 4 measures &times; 3 groups = 12 rows
-          (heatmap layout, light mode, RTL).</td></tr>
-  <tr><td><code>output/m82_search_task_table_k3.html</code></td>
-      <td>Same with k=3: 4 measures &times; 4 groups = 16 rows.</td></tr>
-  <tr><td><code>output/m82_per_participant.csv</code></td>
-      <td>One row per pid. Columns: <code>participant_id, condition,
-          style_k2, style_k3</code> + 4 SEARCH measures + 6 TASK measures.
-          For debugging / further analysis.</td></tr>
-  <tr><td><code>output/m82_correlations_long.csv</code></td>
-      <td>Long-format: <code>k, group, search_measure, task_measure, n, rho, p</code>.</td></tr>
-  <tr><td><code>output/m82_groupstats.csv</code></td>
-      <td>Per (measure, group, k): <code>n, mean, sd, n_clumpy, n_diffuse,
-          mean_clumpy, mean_diffuse, sd_clumpy, sd_diffuse, cohens_d, t, p</code>.</td></tr>
-  <tr><td><code>docs/m82_findings.html</code></td>
-      <td>Hebrew (RTL, light mode) explanation document: context, methods,
-          findings (populated after the run with strongest correlations and
-          notable Hunter/Busybody/Dancer differences), and decision-oriented
-          conclusions. Structure mirrors <code>docs/m81_model_explanation.html</code>.</td></tr>
-</table>
+<section class="section" id="stats">
+  <h2 class="section-heading"><span class="section-num">7</span>סטטיסטיקות פר-תא</h2>
+  <div class="card">
+    <p>הטבלה עם שורה אחת לכל (SEARCH measure × group). הקבוצות הן: <code>{All, Hunter, Busybody}</code> ל-k=2, ו-<code>{All, Hunter, Busybody, Dancer}</code> ל-k=3.</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>עמודה</th><th>חישוב</th></tr></thead>
+      <tbody>
+        <tr><td>N</td><td>ספירת משתתפים בתת-קבוצה עם ערך מדד שאינו NaN.</td></tr>
+        <tr><td>Mean ± SD</td><td>ממוצע מדגם וסטיית תקן של מדד ה-SEARCH בתת-הקבוצה.</td></tr>
+        <tr><td>Cohen's d (Clumpy − Diffuse)</td><td>Welch t-test בתוך תת-הקבוצה: מדד SEARCH ב-Clumpy מול Diffuse. גודל אפקט = (mean_clumpy − mean_diffuse) / pooled SD. <strong>bold</strong> כש-p &lt; .05 (Welch, two-sided).</td></tr>
+        <tr><td>6 × Spearman ρ (with TASK)</td><td>Spearman rank correlation בין מדד SEARCH לכל אחד מששת מדדי TASK, בתוך תת-הקבוצה בלבד. מוצג כ-<code>round(ρ × 100)</code>. תא צבוע ב-heatmap (אדום=שלילי, כחול=חיובי, רוויה לפי |ρ|). מסגרת שחורה כש-p &lt; .05 (uncorrected). ללא תיקון multiple-comparison — זה EDA.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
 
-<h2>9. HTML table format</h2>
-<p>
-  The two table HTMLs follow the layout shown in
-  <code>docs/m82_table_mockup.html</code> (already saved). Specifically:
-</p>
-<ul>
-  <li>Light mode, RTL, single page, full-width table.</li>
-  <li>Columns: Measure, Depth, Group, N, Mean&plusmn;SD, Cohen's d,
-      then six correlation columns (one per TASK measure).</li>
-  <li>Measure cell spans the rows for its sub-groups (<code>rowspan</code>).</li>
-  <li>Shallow measures: yellow-tinted measure-cell background.
-      Deep measures: blue-tinted background.</li>
-  <li>Hunter rows: blue group-label colour. Busybody rows: orange. Dancer
-      rows (k=3 only): green.</li>
-  <li>Correlation cells: continuous colour scale, white at &rho;=0.
-      Computed by interpolating between fixed anchor colours
-      (mirror of <code>m82_table_mockup.html</code>'s palette).</li>
-  <li>Black outline (<code>outline: 2px solid #1a1a1a</code>) when p &lt; .05.</li>
-  <li>Caption explains the colour scale and the outline meaning, plus
-      sample size and date.</li>
-</ul>
+<section class="section" id="outputs">
+  <h2 class="section-heading"><span class="section-num">8</span>פלטים</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>קובץ</th><th>תוכן</th></tr></thead>
+      <tbody>
+        <tr><td><code>output/m82_search_task_table_k2.html</code></td><td>טבלת EDA ראשית, 4 measures × 3 groups = 12 שורות (heatmap, light mode, RTL).</td></tr>
+        <tr><td><code>output/m82_search_task_table_k3.html</code></td><td>אותו דבר עם k=3: 4 measures × 4 groups = 16 שורות.</td></tr>
+        <tr><td><code>output/m82_per_participant.csv</code></td><td>שורה אחת ל-pid. עמודות: <code>participant_id, condition, style_k2, style_k3</code> + 4 SEARCH + 6 TASK. לדיבאג / ניתוח נוסף.</td></tr>
+        <tr><td><code>output/m82_correlations_long.csv</code></td><td>פורמט long: <code>k, group, search_measure, task_measure, n, rho, p</code>.</td></tr>
+        <tr><td><code>output/m82_groupstats.csv</code></td><td>פר (measure, group, k): <code>n, mean, sd, n_clumpy, n_diffuse, mean_clumpy, mean_diffuse, sd_clumpy, sd_diffuse, cohens_d, t, p</code>.</td></tr>
+        <tr><td><code>docs/m82_findings.html</code></td><td>מסמך הסבר בעברית (RTL, light mode): רקע, שיטות, ממצאים (יאוכלס לאחר ההרצה עם הקורלציות החזקות והבדלים בולטים בין Hunter/Busybody/Dancer), ומסקנות מוטות-החלטה. מבנה ראי ל-<code>docs/m81_model_explanation.html</code>.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
 
-<h2>10. Script structure</h2>
+<section class="section" id="format">
+  <h2 class="section-heading"><span class="section-num">9</span>פורמט טבלת HTML</h2>
+  <div class="card">
+    <p>שתי טבלאות ה-HTML עוקבות אחרי הפריסה ב-<code>docs/m82_table_mockup.html</code> (כבר נשמר). ספציפית:</p>
+    <ul>
+      <li>Light mode, RTL, דף יחיד, טבלה ברוחב מלא.</li>
+      <li>עמודות: Measure, Depth, Group, N, Mean±SD, Cohen's d, ואז שש עמודות קורלציה (אחת לכל מדד TASK).</li>
+      <li>תא Measure משתרע על שורות תת-הקבוצות (<code>rowspan</code>).</li>
+      <li>Shallow: רקע צהבהב לתא ה-measure. Deep: רקע כחלחל.</li>
+      <li>שורות Hunter: צבע תווית קבוצה כחול. Busybody: כתום. Dancer (k=3 בלבד): ירוק.</li>
+      <li>תאי קורלציה: סקלת צבע רציפה, לבן ב-ρ=0. אינטרפולציה בין צבעי עוגן קבועים (ראי לפלטה של <code>m82_table_mockup.html</code>).</li>
+      <li>מסגרת שחורה (<code>outline: 2px solid #1a1a1a</code>) כש-p &lt; .05.</li>
+      <li>Caption מסביר את סקלת הצבע ומשמעות המסגרת, בנוסף ל-N ותאריך.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="script">
+  <h2 class="section-heading"><span class="section-num">10</span>מבנה הסקריפט</h2>
 <pre>scripts/m82_search_task_table.py
 
 main():
@@ -244,35 +280,34 @@ main():
      Render m82_search_task_table_k{k}.html (string-based templating,
        no Jinja2 - keep dependency surface small)
   6. Render docs/m82_findings.html populated with computed numbers.</pre>
+</section>
 
-<h2>11. Out of scope</h2>
-<ul>
-  <li>No bootstrap CIs (single-cell ones would clutter the table).
-      Bootstrap can be added later in M83+ if a specific cell is followed up.</li>
-  <li>No interaction tests (e.g. style &times; condition ANOVA). The Cohen's d
-      column is computed within each group, which already captures the
-      direction. Formal interactions belong in confirmatory analysis.</li>
-  <li>No FDR correction. EDA; k=2 alone produces 4&times;3&times;6 = 72 correlations
-      and k=3 produces 4&times;4&times;6 = 96. BH over the joint set would over-shrink.
-      Black outline = nominal p &lt; .05 only, with a caption note that this is
-      uncorrected.</li>
-  <li>No condition-pooled regression / partial correlations. If a cell looks
-      strong we can follow up in a dedicated milestone.</li>
-</ul>
+<section class="section" id="oos">
+  <h2 class="section-heading"><span class="section-num">11</span>Out of scope</h2>
+  <div class="card">
+    <ul>
+      <li><strong>ללא bootstrap CIs</strong> — בתאים בודדים זה היה מבלגן את הטבלה. אפשר להוסיף ב-M83+ אם תא ספציפי מצדיק follow-up.</li>
+      <li><strong>ללא interaction tests</strong> (למשל style × condition ANOVA). עמודת Cohen's d מחושבת בתוך כל קבוצה, וזה לוכד את הכיוון. אינטראקציות פורמליות שייכות לניתוח confirmatory.</li>
+      <li><strong>ללא תיקון FDR</strong>. זה EDA; k=2 לבד מייצר 4×3×6 = 72 קורלציות ו-k=3 מייצר 4×4×6 = 96. BH על האיחוד היה מצמצם יתר על המידה. מסגרת שחורה = nominal p &lt; .05 בלבד, עם הערה ב-caption שזה uncorrected.</li>
+      <li><strong>ללא condition-pooled regression / partial correlations</strong>. אם תא נראה חזק נעשה follow-up במייל-סטון ייעודי.</li>
+    </ul>
+  </div>
+</section>
 
-<h2>12. Acceptance criteria</h2>
-<ul>
-  <li>Both HTML tables open in Chrome/Edge with correct RTL layout and
-      no layout breakage at 1280px width.</li>
-  <li>Every numeric cell has either a finite value or an em-dash ("-")
-      when N&lt;3 in the sub-group.</li>
-  <li>Re-running the script produces byte-identical output (deterministic;
-      KMeans seeded with random_state=42).</li>
-  <li><code>m82_per_participant.csv</code> contains 132 rows or fewer
-      (post-merge), with the documented columns.</li>
-  <li><code>m82_findings.html</code> mentions the top-3 absolute-&rho;
-      cells per measure and flags any cell with p &lt; .05.</li>
-</ul>
+<section class="section" id="accept">
+  <h2 class="section-heading"><span class="section-num">12</span>קריטריוני קבלה</h2>
+  <div class="card">
+    <ul>
+      <li>שתי טבלאות ה-HTML נפתחות ב-Chrome/Edge עם פריסת RTL נכונה וללא שבירת layout ברוחב 1280px.</li>
+      <li>לכל תא נומרי יש ערך סופי או em-dash ("—") כש-N &lt; 3 בתת-הקבוצה.</li>
+      <li>הרצה חוזרת של הסקריפט מייצרת פלט byte-identical (דטרמיניסטי; KMeans seeded עם random_state=42).</li>
+      <li><code>m82_per_participant.csv</code> מכיל 132 שורות או פחות (post-merge), עם העמודות המתועדות.</li>
+      <li><code>m82_findings.html</code> מזכיר את 3 התאים עם |ρ| הגבוה ביותר לכל measure ומסמן כל תא עם p &lt; .05.</li>
+    </ul>
+  </div>
+</section>
 
+</div>
+</div>
 </body>
 </html>

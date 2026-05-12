@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M82 — ניתוח מעמיק והמלצות</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --text-secondary: #5a5a5a;
+    --border: #e8e5e1;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
+    --radius: 12px;
+    --green: #166534; --green-bg: #dcfce7; --green-border: #86efac;
+    --yellow: #854d0e; --yellow-bg: #fef9c3; --yellow-border: #fde047;
+    --red: #991b1b; --red-bg: #fee2e2; --red-border: #fca5a5;
+    --hunter: #1e40af;
+    --busybody: #c2410c;
+    --dancer: #166534;
+    --shallow-bg: #fef9c3;
+    --deep-bg: #dbeafe;
+    --positive: #1e40af;
+    --negative: #b91c1c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(250,250,249,0.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 0 24px; }
+  .nav-inner { max-width: 880px; margin: 0 auto; display: flex; align-items: center; gap: 4px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-inner a { text-decoration: none; font-size: 0.82rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap; padding: 5px 12px; border-radius: 20px; transition: background 0.15s, color 0.15s; }
+  .nav-inner a:hover { background: #f0eee9; color: var(--text); }
+  .nav-sep { color: var(--border); font-size: 0.85rem; user-select: none; }
+
+  .page-body { padding: 40px 24px 80px; }
+  .container { max-width: 880px; margin: 0 auto; }
+
+  header { text-align: center; margin-bottom: 56px; padding-bottom: 40px; border-bottom: 2px solid var(--border); }
+  header h1 { font-family: 'Rubik', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--text); margin-bottom: 10px; letter-spacing: -0.5px; }
+  header .subtitle { font-size: 1rem; color: var(--text-secondary); font-weight: 300; }
+
+  .section { margin-bottom: 64px; }
+  .section-heading { font-family: 'Rubik', sans-serif; font-size: 1.45rem; font-weight: 700; color: var(--text); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .section-num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: var(--text); color: white; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+  h3.sub { font-family: 'Rubik', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--text); margin: 24px 0 12px; }
+
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px 28px; margin-bottom: 16px; border: 1px solid var(--border); }
+  .card:hover { box-shadow: var(--shadow-lg); }
+  .card-title { font-family: 'Rubik', sans-serif; font-size: 1.05rem; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .card p { color: var(--text-secondary); margin-bottom: 10px; font-size: 0.95rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { margin: 8px 0 0 0; padding-right: 20px; color: var(--text-secondary); font-size: 0.95rem; }
+  .card ul li { margin-bottom: 6px; }
+  .card ol { margin: 8px 0 0 0; padding-right: 20px; color: var(--text-secondary); font-size: 0.95rem; }
+  .card ol li { margin-bottom: 8px; }
+  .card strong { color: var(--text); }
+
+  .card.green-highlight { border: 1.5px solid var(--green-border); background: #f0fdf4; }
+  .card.red-highlight { border: 1.5px solid var(--red-border); background: #fff5f5; }
+  .card.yellow-highlight { border: 1.5px solid var(--yellow-border); background: #fefce8; }
+  .card.info-highlight { border: 1.5px solid #93c5fd; background: #eff6ff; }
+
+  code { direction: ltr; display: inline-block; background: #f4f3f1; border: 1px solid var(--border); border-radius: 6px; padding: 1px 7px; font-family: 'Courier New', Courier, monospace; font-size: 0.86em; color: var(--text); }
+
+  .badge { display: inline-block; font-size: 0.73rem; font-weight: 600; padding: 2px 10px; border-radius: 20px; white-space: nowrap; }
+  .badge-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .badge-yellow { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+  .badge-red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+  .pill { display: inline-block; padding: 1px 9px; border-radius: 14px; font-size: 0.74rem; font-weight: 600; }
+  .pill.shallow { background: var(--shallow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+  .pill.deep { background: var(--deep-bg); color: var(--hunter); border: 1px solid #93c5fd; }
+
+  .table-wrap { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow); margin: 14px 0; }
+  table { width: 100%; border-collapse: collapse; background: var(--card); font-size: 0.9rem; direction: ltr; }
+  thead th { background: var(--text); color: white; padding: 12px 14px; font-weight: 600; text-align: center; white-space: nowrap; }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--border); text-align: center; vertical-align: middle; font-variant-numeric: tabular-nums; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(even) td { background: #f7f6f4; }
+  td.left { text-align: left; }
+  td.shallow-cell { background: var(--shallow-bg) !important; font-weight: 600; }
+  td.deep-cell { background: var(--deep-bg) !important; font-weight: 600; }
+  .hunter { color: var(--hunter); font-weight: 600; }
+  .busybody { color: var(--busybody); font-weight: 600; }
+  .dancer { color: var(--dancer); font-weight: 600; }
+  .pos { color: var(--positive); font-weight: 700; }
+  .neg { color: var(--negative); font-weight: 700; }
+
+  .callout { background: #f4f3f1; border-right: 4px solid var(--border); border-radius: 0 var(--radius) var(--radius) 0; padding: 14px 18px; margin: 12px 0; font-size: 0.92rem; color: var(--text-secondary); }
+  .callout strong { color: var(--text); }
+  .callout.info { background: #eff6ff; border-right-color: #93c5fd; }
+  .callout.warn { background: #fff7ed; border-right-color: #fdba74; }
+  .callout.success { background: #f0fdf4; border-right-color: var(--green-border); }
+
+  .step { background: #f7f6f4; padding: 14px 18px; border-right: 3px solid var(--text); margin: 10px 0; border-radius: 0 var(--radius) var(--radius) 0; font-size: 0.95rem; color: var(--text-secondary); }
+  .step strong { color: var(--text); }
+  .step ul { margin: 6px 0 0; padding-right: 18px; }
+
+  .toc { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 24px; margin-bottom: 40px; box-shadow: var(--shadow); }
+  .toc-title { font-family: 'Rubik', sans-serif; font-weight: 600; margin-bottom: 10px; }
+  .toc ol { margin: 4px 0; padding-right: 22px; color: var(--text-secondary); font-size: 0.95rem; }
+  .toc ol li { margin-bottom: 4px; }
+  .toc a { color: var(--text); text-decoration: none; border-bottom: 1px dotted transparent; }
+  .toc a:hover { border-bottom-color: var(--text-secondary); }
+
+  @media print { nav { display: none; } .card, .table-wrap { box-shadow: none; } body { background: white; } }
+  @media (max-width: 600px) { header h1 { font-size: 1.6rem; } .section-heading { font-size: 1.2rem; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#sec-purpose">למה M82</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#sec-how-to-read">איך קוראים</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#sec-finding-1">ממצא #1</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#sec-finding-2">ממצא #2</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#sec-k2">k=2</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#sec-k3">k=3</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#sec-compare">השוואה</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#sec-conclusions">מסקנות</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#sec-recommendations">המלצות</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#sec-limitations">הגבלות</a>
+  </div>
+</nav>
+
+<div class="page-body">
+<div class="container">
+
+<header>
+  <h1>M82 — ניתוח מעמיק והמלצות</h1>
+  <div class="subtitle">מסמך עזר לקריאת הטבלה ולקבלת החלטות על הצעדים הבאים · N=130 · 11.05.2026</div>
+</header>
+
+<div class="toc">
+  <div class="toc-title">תוכן העניינים</div>
+  <ol>
+    <li><a href="#sec-purpose">למה M82? מה אנחנו בודקים</a></li>
+    <li><a href="#sec-how-to-read">איך קוראים את הטבלה — מדריך צעד-צעד</a></li>
+    <li><a href="#sec-finding-1">ממצא #1: המניפולציה עובדת בענק</a></li>
+    <li><a href="#sec-finding-2">ממצא #2: ברמת All — אין סיגנל כמעט בכלל</a></li>
+    <li><a href="#sec-k2">ניתוח k=2 (Hunter / Busybody)</a></li>
+    <li><a href="#sec-k3">ניתוח k=3 (Hunter / Busybody / Dancer)</a></li>
+    <li><a href="#sec-compare">השוואה: k=2 מול k=3</a></li>
+    <li><a href="#sec-conclusions">מסקנות מרכזיות</a></li>
+    <li><a href="#sec-recommendations">המלצות מעשיות לצעדים הבאים</a></li>
+    <li><a href="#sec-limitations">הגבלות וזהירויות</a></li>
+  </ol>
+</div>
+
+<section class="section" id="sec-purpose">
+  <h2 class="section-heading"><span class="section-num">1</span>למה M82? מה אנחנו בודקים</h2>
+  <div class="card">
+    <p>השאלה המחקרית של M82: <strong>האם סגנון החיפוש של המשתתפים במסע ב-Wikipedia נשמר גם במשחק החיפוש המרחבי?</strong>
+    כלומר — האם אדם שהוא "Hunter" במסע ב-Wikipedia (ממוקד, נשאר בנושא צר) מתנהג בצורה דומה גם כשהוא צריך לאסוף משאבים במשחק החיפוש?
+    זו שאלה על "סגנון חיפוש כללי" (general search style) — האם זו תכונה יציבה של אדם, או משהו שתלוי במשימה?</p>
+    <p>בשביל לענות, אנחנו מציבים זה ליד זה שני סוגי נתונים:</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">SEARCH measures — מהמשחק המרחבי (M81)</div>
+    <p>שניים שטחיים (שעון בלבד) ושניים עמוקים (תוצרי מסווג GBM):</p>
+    <ul>
+      <li><span class="pill shallow">shallow</span> <code>time_to_first_resource</code> — כמה זמן לקח להגיע ל-reward הראשון</li>
+      <li><span class="pill shallow">shallow</span> <code>inter_resource_mean</code> — הזמן הממוצע בין rewardים</li>
+      <li><span class="pill deep">deep</span> <code>pct_time_exploit</code> — אחוז הזמן שהמשתתף היה במצב exploit (אזור עתיר משאבים)</li>
+      <li><span class="pill deep">deep</span> <code>n_transitions</code> — כמה פעמים המשתתף עבר בין explore ל-exploit</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">TASK measures — מהמסע ב-Wikipedia (M71/M72/M73)</div>
+    <ul>
+      <li><code>mean_reading_length_s</code> — אורך קריאה ממוצע לעמוד</li>
+      <li><code>count_time</code>, <code>count_topic</code>, <code>count_typing</code> — שלושה גלאי switch (קריטריונים שונים)</li>
+      <li><code>PC1</code> — הציר הראשון של ה-PCA על מדדי ה-TASK (composite DV)</li>
+      <li><code>seq_typing_entropy</code> — אנטרופיה של רצפי ה-typing</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <p>לכל אחד מארבעת מדדי ה-SEARCH אנחנו בודקים:</p>
+    <ol>
+      <li><strong>מה גודל האפקט של התנאי (Clumpy מול Diffuse) על המדד הזה?</strong> — עמודת Cohen's <i>d</i></li>
+      <li><strong>איך המדד מתואם עם שישה מדדי ה-TASK?</strong> — שש עמודות הקורלציה</li>
+      <li><strong>האם הפטרן משתנה בין סגנונות החיפוש?</strong> — שלוש (k=2) או ארבע (k=3) שורות לכל מדד: All / Hunter / Busybody / Dancer</li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="sec-how-to-read">
+  <h2 class="section-heading"><span class="section-num">2</span>איך קוראים את הטבלה — מדריך צעד-צעד</h2>
+  <div class="card">
+    <p>נניח שאתה פותח את <code>m82_search_task_table_k2.html</code> ורואה את השורה הראשונה:</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>Measure</th><th>Depth</th><th>Group</th><th>N</th><th>Mean ± SD</th><th>Cohen's d</th>
+        <th>Read len</th><th>Sw: time</th><th>Sw: topic</th><th>Sw: typing</th><th>PC1</th><th>Entropy</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="shallow-cell left">Time to 1st reward (s)</td>
+          <td>shallow</td>
+          <td class="left">All</td>
+          <td>130</td>
+          <td>6.05 ± 6.90</td>
+          <td class="pos">+2.47</td>
+          <td>−10</td><td>+06</td><td>+13</td><td>+01</td><td>+11</td><td>−11</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="step"><strong>שלב 1 — שם המדד ועומק.</strong> <code>Time to 1st reward</code> זה מדד <strong>שטחי</strong> — מבוסס על אירועים בלבד (השעון בין start ל-reward הראשון). הצבע הצהוב מסמן shallow.</div>
+  <div class="step"><strong>שלב 2 — הקבוצה והגודל שלה.</strong> השורה הזו היא "All" = כל 130 המשתתפים יחד. בשורות הבאות בקבוצת המדד תראה "Hunter" ו-"Busybody" (אחרי הסינון).</div>
+  <div class="step"><strong>שלב 3 — Mean ± SD.</strong> ממוצע הזמן ל-reward הראשון על פני כל 130 המשתתפים: 6.05 שניות, עם סטיית תקן 6.90. ה-SD גדול יותר מהממוצע — סימן שיש שונות אדירה בין משתתפים. תמיד שווה לבדוק את ה-SD לפני ניתוח.</div>
+  <div class="step"><strong>שלב 4 — Cohen's d (העמודה הקריטית).</strong> d=+2.47 זה אפקט <strong>ענק</strong>. כלל אצבע:
+    <ul>
+      <li>|d|=0.20 = אפקט קטן</li>
+      <li>|d|=0.50 = אפקט בינוני</li>
+      <li>|d|=0.80 = אפקט גדול</li>
+      <li>|d|=2.00 = אפקט עצום (כמעט אף פעם לא רואים במחקר התנהגותי)</li>
+    </ul>
+    סימן חיובי = Clumpy גבוה יותר מ-Diffuse. תרגום: בתנאי Clumpy לקח למשתתפים יותר זמן להגיע ל-reward הראשון מאשר ב-Diffuse. הטקסט מודגש בולד = p&lt;.05.
+  </div>
+  <div class="step"><strong>שלב 5 — שש עמודות הקורלציה.</strong> כל מספר הוא Spearman ρ × 100. <code>−10</code> = ρ=−0.10 (קורלציה שלילית חלשה מאוד). <code>+13</code> = ρ=+0.13. הצבע מספר את הסיפור גם בלי לקרוא את המספר:
+    <ul>
+      <li>כחול עז = קורלציה חיובית חזקה</li>
+      <li>אדום עז = קורלציה שלילית חזקה</li>
+      <li>לבן = ρ=0</li>
+    </ul>
+    מסגרת שחורה סביב התא = p&lt;.05 (uncorrected).
+  </div>
+  <div class="step"><strong>שלב 6 — איך לסרוק עמודה.</strong> אם תרצה לדעת "האם Time to 1st reward מתואם עם reading length", תסתכל על העמודה <code>Read len</code> ועל שורת המדד הזה. במקרה זה, ρ=−0.10 (ועוד גרוע, בתת-הקבוצות חלש עוד יותר). מסקנה: <strong>לא</strong>, הקשר חלש.</div>
+  <div class="step"><strong>שלב 7 — איך לסרוק שורה.</strong> אם תרצה לדעת "מהו ה-TASK הכי מתואם עם המדד הזה?", תסתכל על כל 6 התאים בשורה ותחפש את הצבעוני ביותר. במקרה של Time to 1st reward: שום תא לא צבעוני ממש. כל הקורלציות חלשות.</div>
+
+  <div class="callout info"><strong>הטיפ הכי חשוב:</strong> תמיד תקרא את הטבלה משמאל לימין (LTR) — כי הנתונים בעברית RTL אבל המספרים עצמם בטבלה מסודרים LTR. התחל מ-Measure (שמאל) ולך ימינה דרך Group, N, Mean, Cohen's d, ולבסוף ל-6 הקורלציות.</div>
+</section>
+
+<section class="section" id="sec-finding-1">
+  <h2 class="section-heading"><span class="section-num">3</span>ממצא #1: המניפולציה עובדת בענק</h2>
+  <div class="card">
+    <p>כל ארבעת מדדי ה-SEARCH מציגים אפקט גדול של התנאי (Clumpy vs Diffuse). הסתכל על עמודת Cohen's <i>d</i> בשורות "All":</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Measure</th><th>Cohen's d</th><th>כיוון</th><th>פירוש</th></tr></thead>
+      <tbody>
+        <tr><td class="left shallow-cell">Time to 1st reward</td><td class="pos">+2.47</td><td>Clumpy ≫ Diffuse</td><td class="left">ב-Clumpy לוקח הרבה יותר זמן למצוא reward ראשון (10.93 ש' לעומת 0.18 ש')</td></tr>
+        <tr><td class="left shallow-cell">Inter-reward mean</td><td class="neg">−9.49</td><td>Diffuse ≫≫ Clumpy</td><td class="left">ב-Diffuse הזמן בין rewardים הרבה יותר ארוך (0.49 לעומת 0.10)</td></tr>
+        <tr><td class="left deep-cell">% time exploit</td><td class="pos">+2.31</td><td>Clumpy ≫ Diffuse</td><td class="left">ב-Clumpy נשארים יותר זמן באזור משאבים (54% לעומת 15%)</td></tr>
+        <tr><td class="left deep-cell">N transitions</td><td class="pos">+1.01</td><td>Clumpy &gt; Diffuse</td><td class="left">ב-Clumpy יש קצת יותר transitions (אבל אפקט חלש יותר מהשלושה האחרים)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card green-highlight">
+    <div class="card-title"><span class="badge badge-green">מה זה אומר?</span></div>
+    <p>המניפולציה של ה-condition משנה לחלוטין את התנהגות החיפוש המרחבי. במחקר התנהגותי רגיל d&gt;2 כמעט אף פעם לא קורה — זה אומר שהתפוצות בקושי חופפות. מבחינה תיאורטית: ה-SEARCH task הוא בעיקר תוצר של ה-environmental affordance (איפה המשאבים), ולא של "סגנון חיפוש" אישי.</p>
+  </div>
+
+  <div class="card">
+    <p><strong>השלכה אחת חשובה:</strong> כשאנחנו מחשבים קורלציה עם TASK measures בקבוצת "All", ה-condition נמצא ברקע. שני "אשכולות" של אנשים (Clumpy ו-Diffuse) יושבים על קצוות התפוצה של ה-SEARCH measures. זה יכול ליצור או למחוק קורלציות באופן מלאכותי. (ראה סעיף 10 — הגבלות, וההמלצה לעבור ל-partial correlation בסעיף 9.)</p>
+  </div>
+</section>
+
+<section class="section" id="sec-finding-2">
+  <h2 class="section-heading"><span class="section-num">4</span>ממצא #2: ברמת All — אין סיגנל כמעט בכלל</h2>
+  <div class="card">
+    <p>אם נסתכל על שורות "All" בלבד (כל 130 המשתתפים יחד), נראה ש-23 מתוך 24 הקורלציות הן בין −0.13 ל-+0.13. היחיד שעובר את הסף של מובהקות סטטיסטית (p&lt;.05) הוא:</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>SEARCH measure</th><th>TASK measure</th><th>ρ</th><th>p</th><th>n</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="left shallow-cell">Inter-reward mean</td>
+          <td><code>mean_reading_length_s</code></td>
+          <td class="pos">+0.22</td>
+          <td>.037</td>
+          <td>94</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <p>הקשר: זמן ארוך יותר בין rewardים במשחק ↔ קריאה ארוכה יותר לעמוד ב-Wikipedia. אינטרפרטציה אינטואיטיבית: "אנשים איטיים" — שיש להם קצב חיים איטי יחסית — איטיים בשני המשימות.</p>
+  </div>
+
+  <div class="card yellow-highlight">
+    <div class="card-title"><span class="badge badge-yellow">זהירות</span></div>
+    <p>זה ρ=+0.22 — אפקט קטן יחסית. הוא הופך למובהק רק כי N גדול יחסית (94). זה לא ממצא חזק, וקל שלא ישחזר. עם 24 השוואות מובהקות צפויות 24×.05=1.2 לפי המקרה. מצאנו 1. במילים אחרות: <strong>זה יכול להיות פשוט מקריות</strong>.</p>
+  </div>
+
+  <div class="card red-highlight">
+    <div class="card-title"><span class="badge badge-red">מה זה אומר?</span></div>
+    <p>כשמסתכלים על כל המשתתפים יחד, "סגנון חיפוש כללי" שעובר בין שתי המשימות <strong>לא נראה בנתונים</strong>. אם זו הייתה השאלה היחידה — היינו עוצרים פה ואומרים: "ההשערה לא נתמכת".</p>
+  </div>
+
+  <div class="card">
+    <p>אבל — <strong>זה בדיוק למה אנחנו מחלקים לקבוצות.</strong> אולי הקשר קיים, אבל רק לתת-קבוצה מסוימת. נמשיך.</p>
+  </div>
+</section>
+
+<section class="section" id="sec-k2">
+  <h2 class="section-heading"><span class="section-num">5</span>ניתוח k=2 (Hunter / Busybody)</h2>
+  <div class="card">
+    <p>החלוקה ל-k=2 לוקחת את 130 המשתתפים ומחלקת אותם ל-49 Hunters ו-81 Busybodies, על בסיס הקלסטרינג ב-M80.</p>
+  </div>
+
+  <h3 class="sub">5.1 <span class="hunter">Hunter</span> (k=2, N=49)</h3>
+  <div class="card">
+    <p>אם נסקור את שורות Hunter בטבלה (כל 4 המדדים × 6 ה-TASKים = 24 תאים): <strong>שום תא עם מסגרת שחורה</strong>. כל הקורלציות בטווח [−0.23, +0.23]. אפס מובהקות.</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Measure</th><th>שיא |ρ| ב-Hunter</th><th>עם איזה TASK</th><th>p</th></tr></thead>
+      <tbody>
+        <tr><td class="left shallow-cell">Time to 1st reward</td><td>0.11</td><td><code>count_typing</code></td><td>.44</td></tr>
+        <tr><td class="left shallow-cell">Inter-reward mean</td><td>0.18</td><td><code>count_typing</code></td><td>.21</td></tr>
+        <tr><td class="left deep-cell">% time exploit</td><td>0.11</td><td><code>count_typing</code></td><td>.46</td></tr>
+        <tr><td class="left deep-cell">N transitions</td><td>0.23</td><td><code>count_topic</code></td><td>.11</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout info"><strong>אינטרפרטציה — Hunter:</strong> בתוך תת-הקבוצה של "ציידים", ההתנהגות במשחק החיפוש המרחבי <strong>לא קשורה לכלום</strong> בהתנהגות שלהם ב-Wikipedia. אפס סיגנל. אפשרי הסבר: Hunters הם הומוגנים מדי בכל מימד — הם בחרו מסלול ממוקד וזהו, אין שונות אישית לחפש לפיה patterns.</div>
+
+  <h3 class="sub">5.2 <span class="busybody">Busybody</span> (k=2, N=81)</h3>
+  <div class="card">
+    <p>בתוך Busybodies יש 2 קורלציות מובהקות (p&lt;.05):</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>SEARCH</th><th>TASK</th><th>ρ</th><th>p</th><th>n</th><th>פירוש</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="left shallow-cell">Inter-reward mean</td>
+          <td><code>mean_reading_length_s</code></td>
+          <td class="pos">+0.32</td>
+          <td>.016</td>
+          <td>55</td>
+          <td class="left">זמן ארוך בין rewardים ↔ קריאה ארוכה</td>
+        </tr>
+        <tr>
+          <td class="left deep-cell">% time exploit</td>
+          <td><code>seq_typing_entropy</code></td>
+          <td class="neg">−0.22</td>
+          <td>.046</td>
+          <td>81</td>
+          <td class="left">יותר זמן ב-exploit ↔ פחות אנטרופיה ב-typing</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <p>ויש עוד שני "near-significant" (p בין .05 ל-.10): <code>n_transitions × reading_length</code> (ρ=−0.26, p=.053) ו-<code>n_transitions × PC1</code> (ρ=+0.19, p=.10).</p>
+  </div>
+
+  <div class="callout info"><strong>אינטרפרטציה — Busybody:</strong> Busybodies מראים סיגנל חלש אבל קונסיסטנטי: אנשים שלוקח להם יותר זמן בין rewardים גם קוראים עמודים יותר זמן. אנשים שמבלים יותר זמן באזורי משאבים גם מקלידים בצורה יותר "מסודרת" (אנטרופיה נמוכה יותר). שני הממצאים מצביעים על "אנשים מתונים/יסודיים" שהאיכות הזאת עוברת בין המשימות.</div>
+
+  <h3 class="sub">5.3 מסקנה לחלוקת k=2</h3>
+  <div class="card yellow-highlight">
+    <p>k=2 נותן signal חלש מאוד. רוב הקורלציות חלשות. הממצא היחיד שנשמע "אמיתי" הוא ה-correlation בין <code>inter_resource_mean</code> ל-<code>mean_reading_length_s</code> אצל Busybodies (ρ=+0.32), והוא בעצם רק חזרה של ה-correlation היחיד שראינו ברמת All. החלוקה ל-2 קבוצות לא מעמיקה את ההבנה מעבר לטריוויה של "אנשים איטיים = איטיים בשני המקומות".</p>
+  </div>
+</section>
+
+<section class="section" id="sec-k3">
+  <h2 class="section-heading"><span class="section-num">6</span>ניתוח k=3 (Hunter / Busybody / Dancer)</h2>
+  <div class="card">
+    <p>ב-k=3 הקלסטרינג מתחלק שונה. במקום 49 Hunters ו-81 Busybodies, אנחנו מקבלים:</p>
+    <ul>
+      <li><span class="hunter">Hunter</span>: 40 משתתפים (הקלסטר עם topic_concentration הכי גבוה)</li>
+      <li><span class="busybody">Busybody</span>: 41 משתתפים (הקלסטר עם topic_concentration הכי נמוך)</li>
+      <li><span class="dancer">Dancer</span>: 49 משתתפים (הקלסטר האמצעי)</li>
+    </ul>
+    <p style="margin-top:10px;">שים לב: ה-Hunter ב-k=3 הוא לא אותו Hunter כמו ב-k=2. ב-k=3 הוא מוגדר יותר צר. גם Busybody התכווץ. ה-Dancer הוא חדש — 49 משתתפים שב-k=2 התפזרו בין Hunter ו-Busybody.</p>
+  </div>
+
+  <h3 class="sub">6.1 <span class="hunter">Hunter</span> (k=3, N=40)</h3>
+  <div class="card">
+    <p>כמו ב-k=2, אפס מובהקויות. כל הקורלציות בטווח צר. ה-Hunter המוגדר יותר בקפדנות עוד יותר ריק:</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Measure</th><th>שיא |ρ| ב-Hunter k=3</th><th>p</th></tr></thead>
+      <tbody>
+        <tr><td class="left shallow-cell">Time to 1st reward</td><td>0.20 (<code>count_typing</code>)</td><td>.22</td></tr>
+        <tr><td class="left shallow-cell">Inter-reward mean</td><td>0.25 (<code>count_typing</code>)</td><td>.12</td></tr>
+        <tr><td class="left deep-cell">% time exploit</td><td>0.16 (<code>count_time</code>)</td><td>.32</td></tr>
+        <tr><td class="left deep-cell">N transitions</td><td>0.22 (<code>count_topic</code>)</td><td>.17</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout info"><strong>אינטרפרטציה — Hunter (k=3):</strong> ההומוגניות של Hunters עוד יותר חזקה כשמגדירים אותם בצורה הדוקה יותר. אין שונות בתוך הקבוצה שניתן ללכוד עם קורלציה.</div>
+
+  <h3 class="sub">6.2 <span class="busybody">Busybody</span> (k=3, N=41)</h3>
+  <div class="card">
+    <p>ב-k=3 ה-Busybody גם הצטמצם, וגם הקורלציות נחלשו. אפס מובהקויות. ארבעה "near-significant":</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>SEARCH</th><th>TASK</th><th>ρ</th><th>p</th></tr></thead>
+      <tbody>
+        <tr><td class="left shallow-cell">Time to 1st reward</td><td><code>count_typing</code></td><td class="neg">−0.26</td><td>.10</td></tr>
+        <tr><td class="left shallow-cell">Time to 1st reward</td><td><code>seq_typing_entropy</code></td><td class="neg">−0.26</td><td>.11</td></tr>
+        <tr><td class="left shallow-cell">Inter-reward mean</td><td><code>seq_typing_entropy</code></td><td class="pos">+0.28</td><td>.08</td></tr>
+        <tr><td class="left deep-cell">N transitions</td><td><code>count_topic</code></td><td class="neg">−0.30</td><td>.06</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout info"><strong>אינטרפרטציה — Busybody (k=3):</strong> חלק מהאות שראינו ב-Busybody של k=2 (קורלציות בערך 0.3) נשמר, אבל מאחר ש-N קטן יותר (41 לעומת 81), הוא לא מגיע למובהקות. הפטרן הכללי דומה: יסודיות עוברת בין משימות.</div>
+
+  <h3 class="sub">6.3 <span class="dancer">Dancer</span> (k=3, N=49) — <strong>הממצא העיקרי</strong></h3>
+  <div class="card">
+    <p>פה הסיפור משתנה. Dancer מציג <strong>חמש קורלציות מובהקות</strong> (p&lt;.05), וכולן באזור הצבעוני של הטבלה:</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>SEARCH</th><th>Depth</th><th>TASK</th><th>ρ</th><th>p</th><th>n</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="left deep-cell">% time exploit</td><td>deep</td><td><code>mean_reading_length_s</code></td><td class="neg">−0.42</td><td>.024</td><td>29</td></tr>
+        <tr><td class="left deep-cell">% time exploit</td><td>deep</td><td><code>count_topic</code></td><td class="pos">+0.35</td><td>.015</td><td>49</td></tr>
+        <tr><td class="left deep-cell">% time exploit</td><td>deep</td><td><code>PC1</code></td><td class="pos">+0.30</td><td>.033</td><td>49</td></tr>
+        <tr><td class="left deep-cell">N transitions</td><td>deep</td><td><code>count_topic</code></td><td class="pos">+0.33</td><td>.020</td><td>49</td></tr>
+        <tr><td class="left deep-cell">N transitions</td><td>deep</td><td><code>PC1</code></td><td class="pos">+0.31</td><td>.029</td><td>49</td></tr>
+        <tr><td class="left shallow-cell">Inter-reward mean</td><td>shallow</td><td><code>count_topic</code></td><td class="neg">−0.28</td><td>.049</td><td>49</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <p>שלוש תכונות בולטות בטבלה הזו:</p>
+    <ol>
+      <li><strong>חמש מתוך השש המובהקויות הן בעמודה Deep</strong>. כלומר — המדדים העמוקים (<code>pct_time_exploit</code>, <code>n_transitions</code>, שמבוססים על מסווג ה-GBM של M81) הם אלה שחושפים את הקשר. המדדים השטחיים נותנים סיגנל הרבה יותר חלש.</li>
+      <li><strong>הקורלציות גדולות יחסית</strong> (ρ בין 0.28 ל-0.42). זה לא הפטרן של "כמעט מובהק" אלא של אפקטים שראויים לתשומת לב.</li>
+      <li><strong>כיוון הקורלציות עקבי</strong>:
+        <ul>
+          <li>יותר זמן ב-exploit ויותר transitions ↔ <strong>יותר switches בנושאים ב-Wikipedia</strong> (count_topic ρ&gt;0)</li>
+          <li>יותר זמן ב-exploit ↔ <strong>קריאה קצרה יותר לעמוד</strong> (reading length ρ&lt;0)</li>
+          <li>יותר exploit ויותר transitions ↔ <strong>PC1 גבוה יותר</strong> (composite DV)</li>
+        </ul>
+        הקריאה: Dancers שהם "פעילים יותר" במשחק החיפוש (יותר transitions, יותר exploit) הם גם "פעילים יותר" ב-Wikipedia (יותר switches בנושאים, פחות קריאה לעמוד).
+      </li>
+    </ol>
+  </div>
+
+  <div class="card green-highlight">
+    <div class="card-title"><span class="badge badge-green">הממצא המרכזי</span></div>
+    <p>זו הקבוצה היחידה בכל הטבלה שמראה שהמדדים העמוקים מ-M81 (תוצרי ה-GBM) נותנים סיגנל חזק יותר מהמדדים השטחיים. אם השאלה התיאורטית שלך היא "האם השקעת הזמן במסווג ה-GBM שווה?", התשובה היא: <strong>כן, אבל רק לתת-קבוצה הזו</strong>.</p>
+  </div>
+
+  <h3 class="sub">6.4 מסקנה לחלוקת k=3</h3>
+  <div class="card green-highlight">
+    <p>k=3 חושף משהו ש-k=2 הסתיר. ב-k=2 ה-Dancer פוצל בין Hunter ל-Busybody, ובתערובת הזו הסיגנל שלו נמחק. ב-k=3 ה-Dancer מקבל שורה משלו והפטרן יוצא אל פני השטח: <strong>קורלציות בינוניות-חזקות בין מדדים עמוקים של SEARCH למדדי TASK</strong>.</p>
+  </div>
+
+  <div class="card">
+    <p>זה אומר אחד משלושת הדברים הבאים, ולא בטוח איזה:</p>
+    <ol>
+      <li><strong>Dancer הוא תת-טיפוס מעניין תיאורטית.</strong> אלה אנשים שיש להם סגנון חיפוש "בונה גשרים" — לא ממוקד מדי אבל לא אקראי. הסגנון הזה הוא שעובר בין משימות. (זו הקריאה הכי תיאורטית.)</li>
+      <li><strong>Dancer הוא artifact של k=3.</strong> כשאתה כופה על KMeans לחלק ל-3, הוא יוצר קלסטר אמצעי באופן מלאכותי שאוסף אנשים יותר מגוונים, ובמגוון הזה יש שונות שניתן לתפוס עם קורלציה. ב-Hunter וב-Busybody האנשים יותר הומוגניים, אז אין שונות לקורלציה לעבוד עליה.</li>
+      <li><strong>Dancer הוא רק תוצאה של גודל מדגם וכמות tests.</strong> אנחנו עושים 6 קורלציות לקבוצה × 4 מדדים = 24 tests לקבוצה. ב-Dancer 5 מתוך 24 מובהקות (21%). זה גבוה מ-5% הצפויים במקרה. אבל אם זה מוטה לפי גודל המדגם (49 לעומת 40 ב-Hunter) או לפי שונות, זה יכול להסביר חלק מהממצא.</li>
+    </ol>
+    <p style="margin-top:10px;">בסעיף ההמלצות נסביר איך לבדוק בין השלושה.</p>
+  </div>
+</section>
+
+<section class="section" id="sec-compare">
+  <h2 class="section-heading"><span class="section-num">7</span>השוואה: k=2 מול k=3</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th></th><th>k=2</th><th>k=3</th></tr></thead>
+      <tbody>
+        <tr><td class="left">N קבוצות (לא כולל All)</td><td>2</td><td>3</td></tr>
+        <tr><td class="left">סה"כ קורלציות מחושבות</td><td>4×3×6 = 72</td><td>4×4×6 = 96</td></tr>
+        <tr><td class="left">מובהקויות p&lt;.05 (לא כולל All)</td><td>2</td><td>7</td></tr>
+        <tr><td class="left">קבוצה הכי "חמה"</td><td><span class="busybody">Busybody</span> (2 sig)</td><td><span class="dancer">Dancer</span> (5 sig)</td></tr>
+        <tr><td class="left">|ρ| מקסימלי בקבוצה</td><td>0.32 (Busybody)</td><td>0.42 (Dancer)</td></tr>
+        <tr><td class="left">deep vs shallow בקבוצה החמה</td><td>1 sig deep + 1 sig shallow</td><td>5 sig deep + 1 sig shallow</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout info"><strong>הקריאה:</strong> k=3 לא רק חושף יותר מובהקויות, אלא חושף פטרן ספציפי — <strong>שדומיננטיות של deep measures מתגלה רק בתת-קבוצה אחת (Dancer)</strong>. זה ממצא ניאואנסי שלא היינו רואים אם היינו עוצרים ב-k=2.</div>
+</section>
+
+<section class="section" id="sec-conclusions">
+  <h2 class="section-heading"><span class="section-num">8</span>מסקנות מרכזיות</h2>
+  <div class="card">
+    <ol>
+      <li><strong>המניפולציה של ה-condition עובדת לחלוטין.</strong> Cohen's d=−9.49 על <code>inter_resource_mean</code> זה מטורף. מבחינת מבנה הסביבה (clumpy vs diffuse), המשתתפים מגיבים בצורה צפויה ועוצמתית. הבעיה הסטטיסטית: מאחר וה-condition לא רנדומלי בין מסע ל-Wikipedia ל-SEARCH task (כל משתתף מקבל את שניהם), אנחנו צריכים להיזהר מכפילויות בקורלציה.</li>
+      <li><strong>אין "סגנון חיפוש כללי" שעובר אוטומטית בין המשימות.</strong> ברמת ה-All, רק קורלציה אחת מובהקת מתוך 24 (ρ=+0.22). זה לא יותר מהמקרה. אם רק על זה היו מסתכלים, היינו אומרים "ההיפוטזה הופרכה".</li>
+      <li><strong>החלוקה לסגנונות (k=2) רק קצת עוזרת.</strong> Hunter בכלל לא מראה כלום (גם ב-k=2 וגם ב-k=3). Busybody מראה קורלציות בינוניות אבל בקושי מובהקות. ההבחנה Hunter-Busybody לא נראית כמשמעותית מבחינת השאלה שלנו.</li>
+      <li><strong>תת-הקבוצה Dancer (k=3) היא הממצא היחיד הראוי לתשומת לב.</strong> 5 קורלציות מובהקות בכיוונים עקביים, וקריטית — <strong>כולן במדדים העמוקים</strong> שדורשים את מסווג ה-GBM. זו התשובה לשאלה "האם המדדים העמוקים שווים את ההשקעה?" — כן, אבל רק כש-Dancers הם הפוקוס.</li>
+      <li><strong>הפטרן הספציפי של Dancer:</strong> מי שמבלה יותר זמן באזורי משאבים במשחק החיפוש ועושה יותר transitions, הוא גם מי שמחליף נושאים יותר ב-Wikipedia וקורא פחות לכל עמוד. קריאה תיאורטית: זה תואם את הציפייה ש-Dancers הם "active explorers" — הם מקבלים תועלת מ-exploration אבל גם יודעים לעצור ב-patches טובים.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="sec-recommendations">
+  <h2 class="section-heading"><span class="section-num">9</span>המלצות מעשיות לצעדים הבאים</h2>
+  <div class="card">
+    <p>ההמלצות מסודרות לפי סדר עדיפות:</p>
+  </div>
+
+  <h3 class="sub">9.1 לאמת את ממצא ה-Dancer (M83 מוצע)</h3>
+  <div class="step">
+    <strong>למה:</strong> ה-5 מובהקויות ב-Dancer הן הממצא העיקרי, אבל קל שיהיה מקריות (5 מתוך 24 = 21%, כש-5% צפוי).<br>
+    <strong>איך:</strong>
+    <ul>
+      <li><strong>Bootstrap CIs</strong> על Spearman ρ של 5 הקורלציות המובהקות. אם 95% CI לא מצליב את ה-0, הממצא יציב.</li>
+      <li><strong>Permutation test</strong>: בערבול אקראי של תוויות Dancer/לא-Dancer, כמה פעמים נראה 5 מובהקויות או יותר? אם פחות מ-5% מהפעמים — מובהק.</li>
+      <li>אופציונלית: <strong>cross-validation</strong> — לחלק את ה-49 ל-train (33) ו-test (16) ולבדוק רפליקציה.</li>
+    </ul>
+  </div>
+
+  <h3 class="sub">9.2 partial correlation מבוקרת condition (M84 מוצע)</h3>
+  <div class="step">
+    <strong>למה:</strong> ה-condition משפיע בעצמה אדירה על מדדי SEARCH (d&gt;2). כל קורלציה SEARCH↔TASK יכולה להיות "מזהם" של ה-condition. לדוגמה: אם Clumpy גם נותן יותר exploit time וגם נותן יותר topic switches (סיבה לא קשורה), נראה ρ חיובי שלא משקף קשר אמיתי בין הסגנונות.<br>
+    <strong>איך:</strong>
+    <ul>
+      <li>לחשב Spearman partial correlation עם condition כ-covariate. ספריות: <code>pingouin.partial_corr</code> ב-Python.</li>
+      <li>אם הקורלציות של Dancer שורדות את הניקוי — הן באמת על "סגנון", לא על "תנאי".</li>
+      <li>זה הצעד החשוב ביותר תיאורטית.</li>
+    </ul>
+  </div>
+
+  <h3 class="sub">9.3 לבחון אם Dancer הוא artifact של k=3 (M85 מוצע)</h3>
+  <div class="step">
+    <strong>למה:</strong> KMeans עם k=3 כופה 3 קבוצות. אם הנתונים באמת מתחלקים ל-2 ולא ל-3, ה-Dancer הוא "פח אשפה" אמצעי שהסיגנל בו הוא רעש.<br>
+    <strong>איך:</strong>
+    <ul>
+      <li>Silhouette score לכל k מ-2 עד 5 — איזה k באמת מתאים לנתונים?</li>
+      <li>Gap statistic — בדיקה רשמית ל-k אופטימלי.</li>
+      <li>אם k=2 או k=4 יותר מתאים מ-k=3, להתחיל לפקפק ב-Dancer.</li>
+      <li>אופציונלי: לנסות GMM (Gaussian Mixture) במקום KMeans — GMM מאפשר קלסטרים אליפטיים, יכול לחשוף מבנה אחר.</li>
+    </ul>
+  </div>
+
+  <h3 class="sub">9.4 לאפיין מי הם ה-Dancers (M86 מוצע)</h3>
+  <div class="step">
+    <strong>למה:</strong> אם Dancer הוא תת-טיפוס מעניין תיאורטית, צריך לדעת מה מאפיין אותם דמוגרפית/קוגניטיבית.<br>
+    <strong>איך:</strong>
+    <ul>
+      <li>השווה Dancer מול Hunter ו-Busybody על: גיל, מגדר, השכלה, ציוני performance ב-2 המשימות (סה"כ rewards במשחק, סה"כ pages ב-Wikipedia), משך מסע כולל.</li>
+      <li>אם Dancers שונים בצורה ברורה — זה תת-טיפוס תיאורטי. אם הם דומים לאחרים — יותר סיכוי שהם artifact.</li>
+    </ul>
+  </div>
+
+  <h3 class="sub">9.5 הצגה למרצים</h3>
+  <div class="step">
+    <strong>למה:</strong> שלושה יועצים שונים, ייתכן שיהיה מחלוקת על איך לפרש את התוצאות.<br>
+    <strong>איך:</strong>
+    <ul>
+      <li>להציג להם את הטבלה (k=3 רק) + את סעיף 6.3 של המסמך הזה.</li>
+      <li>שאלות מפורשות:
+        <ul>
+          <li>האם הסיפור של Dancer מספיק תיאורטי כדי לעשות עליו pre-registration לשלב הבא?</li>
+          <li>האם להוסיף partial correlation כניתוח חובה ב-pre-registration?</li>
+          <li>האם הם רוצים גם השוואות k=2 בפרסום או רק k=3?</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="sec-limitations">
+  <h2 class="section-heading"><span class="section-num">10</span>הגבלות וזהירויות</h2>
+  <div class="card">
+    <ul>
+      <li><strong>זה EDA, לא היפותזה.</strong> כל p-value בטבלה הוא uncorrected. אם נתקן ל-Bonferroni (96 tests × .05/96 = .00052), שום קורלציה ב-Dancer לא תשרוד. זה לא אומר שהן שקר — זה אומר שצריך validation בשלב הבא.</li>
+      <li><strong>N קטן בתת-קבוצות</strong>: Dancer = 49, Hunter ב-k=3 = 40. עם N=40 ו-α=.05, כדי לזהות ρ=0.30 בכוח של 80% צריך N=84. אנחנו בעצם underpowered.</li>
+      <li><strong>Multiple comparisons</strong>: 72 + 96 = 168 קורלציות. בגישה ה-EDA זה לגיטימי אבל דורש validation בשלב הבא.</li>
+      <li><strong>ה-condition הוא between-subjects אבל המסע ב-Wikipedia הוא לא תלוי במשחק החיפוש</strong>. כל משתתף עבר את שני המשימות, אבל ה-condition שלו רנדומלי לגבי הסגנון שלו ב-Wikipedia. זאת אומרת:
+        <ul>
+          <li>Hunter ב-Clumpy ו-Hunter ב-Diffuse שניהם Hunters, אבל ה-SEARCH measures שלהם שונים בענק (כי condition!).</li>
+          <li>זה הופך את הקורלציה החישובית למעורבבת בין "אפקט סגנון" ל-"אפקט תנאי". כל ההמלצה ל-partial correlation בסעיף 9.2 נובעת מזה.</li>
+        </ul>
+      </li>
+      <li><strong>N=130 ולא 132</strong>: PIDs 73 ו-103 נכללים ב-M81 (SEARCH features) אבל סוננו ב-M80 בגלל פילטר <code>n&lt;5 visits</code>. זה לא משפיע על הניתוח אבל שווה לציין במאמר.</li>
+      <li><strong>Reading length זמין רק ל-94 משתתפים</strong> מתוך 130 (בגלל זמינות נתונים ב-M71). כל קורלציה עם <code>reading_length</code> היא על subset מוגבל — לכן ה-N בעמודה הזו יותר קטן ויותר רגיש.</li>
+    </ul>
+  </div>
+
+  <div class="card red-highlight">
+    <div class="card-title"><span class="badge badge-red">שורה תחתונה</span></div>
+    <p>ה-Dancer story מספיק מעניין כדי לרדוף אחריו, אבל לא מספיק מבוסס כדי לפרסם. המלצה: לעשות את M83-M85 (validation + partial correlation + cluster check) לפני שמדברים על הממצא בכנס/במאמר.</p>
+  </div>
+
+  <div class="callout" style="margin-top:30px; text-align:center; font-size:0.86rem;">
+    קבצי הנתונים: <code>output/m82_search_task_table_k2.html</code> · <code>output/m82_search_task_table_k3.html</code> · <code>output/m82_per_participant.csv</code> · <code>output/m82_correlations_long.csv</code> · <code>output/m82_groupstats.csv</code>
+  </div>
+</section>
+
+</div>
+</div>
+</body>
+</html>

@@ -2,71 +2,221 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>M82 - SEARCH x Style x TASK - Findings</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M82 — SEARCH × Style × TASK — Findings</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-body { font-family: -apple-system, "Segoe UI", Arial, sans-serif;
-       background: #FFFFFF; color: #1a1a1a; line-height: 1.6;
-       max-width: 980px; margin: 32px auto; padding: 0 24px; }
-h1 { color: #1a1a1a; border-bottom: 2px solid #1976D2; padding-bottom: 8px; }
-h2 { color: #1976D2; margin-top: 32px; border-bottom: 1px solid #E0E0E0;
-     padding-bottom: 4px; }
-h3 { color: #1a1a1a; margin-top: 22px; }
-h4 { color: #555; margin-top: 12px; margin-bottom: 4px; }
-code { direction: ltr; background: #F5F5F5; border: 1px solid #E0E0E0;
-       border-radius: 4px; padding: 2px 6px; font-family: Consolas, monospace; }
-ul { margin-top: 4px; }
-.info { background: #E3F2FD; border-right: 4px solid #1976D2;
-        padding: 12px 16px; margin: 12px 0; border-radius: 4px; }
+  :root {
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --text-secondary: #5a5a5a;
+    --border: #e8e5e1;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
+    --radius: 12px;
+    --green: #166534; --green-bg: #dcfce7; --green-border: #86efac;
+    --yellow: #854d0e; --yellow-bg: #fef9c3; --yellow-border: #fde047;
+    --red: #991b1b; --red-bg: #fee2e2; --red-border: #fca5a5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(250,250,249,0.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 0 24px; }
+  .nav-inner { max-width: 880px; margin: 0 auto; display: flex; align-items: center; gap: 4px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-inner a { text-decoration: none; font-size: 0.82rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap; padding: 5px 12px; border-radius: 20px; transition: background 0.15s, color 0.15s; }
+  .nav-inner a:hover { background: #f0eee9; color: var(--text); }
+  .nav-sep { color: var(--border); font-size: 0.85rem; user-select: none; }
+
+  .page-body { padding: 40px 24px 80px; }
+  .container { max-width: 880px; margin: 0 auto; }
+
+  header { text-align: center; margin-bottom: 56px; padding-bottom: 40px; border-bottom: 2px solid var(--border); }
+  header h1 { font-family: 'Rubik', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--text); margin-bottom: 10px; letter-spacing: -0.5px; }
+  header .subtitle { font-size: 1rem; color: var(--text-secondary); font-weight: 300; }
+
+  .section { margin-bottom: 64px; }
+  .section-heading { font-family: 'Rubik', sans-serif; font-size: 1.45rem; font-weight: 700; color: var(--text); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .section-num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: var(--text); color: white; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px 28px; margin-bottom: 16px; border: 1px solid var(--border); }
+  .card:hover { box-shadow: var(--shadow-lg); }
+  .card-title { font-family: 'Rubik', sans-serif; font-size: 1.05rem; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+  .card p { color: var(--text-secondary); margin-bottom: 8px; font-size: 0.95rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { margin: 8px 0 0 0; padding-right: 20px; color: var(--text-secondary); font-size: 0.95rem; }
+  .card ul li { margin-bottom: 4px; }
+  .card strong { color: var(--text); }
+
+  code { direction: ltr; display: inline-block; background: #f4f3f1; border: 1px solid var(--border); border-radius: 6px; padding: 1px 7px; font-family: 'Courier New', Courier, monospace; font-size: 0.86em; color: var(--text); }
+
+  .callout { background: #f4f3f1; border-right: 4px solid var(--border); border-radius: 0 var(--radius) var(--radius) 0; padding: 14px 18px; margin: 12px 0; font-size: 0.92rem; color: var(--text-secondary); }
+  .callout strong { color: var(--text); }
+  .callout.info { background: #eff6ff; border-right-color: #93c5fd; }
+
+  .badge { display: inline-block; font-size: 0.73rem; font-weight: 600; padding: 2px 10px; border-radius: 20px; white-space: nowrap; }
+  .badge-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .badge-red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+
+  .findings-block { margin-bottom: 18px; }
+  .finding-title { font-family: 'Rubik', sans-serif; font-weight: 600; font-size: 0.98rem; color: var(--text); margin: 10px 0 6px; }
+  .stat-row { display: flex; gap: 10px; flex-wrap: wrap; font-size: 0.92rem; color: var(--text-secondary); margin-bottom: 4px; }
+  .stat-row code { font-size: 0.86em; }
+  .sub-div { margin-top: 10px; padding-right: 14px; border-right: 3px solid var(--yellow-border); }
+  .sub-div strong { color: var(--text); }
+
+  @media print { nav { display: none; } .card { box-shadow: none; } body { background: white; } }
+  @media (max-width: 600px) { header h1 { font-size: 1.6rem; } .section-heading { font-size: 1.2rem; } }
 </style>
 </head>
 <body>
 
-<h1>M82 - SEARCH measures &times; Wikipedia style &times; TASK correlations</h1>
+<nav>
+  <div class="nav-inner">
+    <a href="#context">קונטקסט</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#data">נתונים</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#k2">ממצאים k=2</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#k3">ממצאים k=3</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#notes">הערות קריאה</a>
+    <span class="nav-sep" aria-hidden="true">·</span>
+    <a href="#links">קישורים</a>
+  </div>
+</nav>
 
-<h2>1. הקונטקסט</h2>
-<p>
-  הניתוח בודק האם סגנון החיפוש של המשתתפים במסע ה-Wikipedia (Hunter / Busybody
-  ובגרסת k=3 גם Dancer) מנבא את ההתנהגות שלהם במשחק החיפוש המרחבי. אנחנו מציבים
-  זה ליד זה ארבעה מדדים מהמשחק - שניים שטחיים (מבוססי אירועים בלבד) ושניים עמוקים
-  (תוצרי מסווג ה-GBM מ-M81) - ובוחנים שלוש שאלות: (א) האם המדדים העמוקים נותנים
-  יותר אינפורמציה מהשטחיים; (ב) האם האפקט של תנאי ה-Clumpy/Diffuse שונה בין
-  הקבוצות; (ג) אילו מדדי SEARCH מתואמים לאילו מדדי TASK.
-</p>
+<div class="page-body">
+<div class="container">
 
-<h2>2. נתונים</h2>
-<ul>
-  <li>N = 130 משתתפים (קוהורט M81)</li>
-  <li>סגנון k=2: Hunter: 49, Busybody: 81</li>
-  <li>סגנון k=3: Hunter: 40, Busybody: 41, Dancer: 49</li>
-</ul>
+<header>
+  <h1>M82 — Findings</h1>
+  <div class="subtitle">SEARCH measures × Wikipedia style × TASK correlations · N=130</div>
+</header>
 
-<h2>3. ממצאים - k=2</h2>
-<h4>Time to 1st reward (s)</h4><ul><li><code>count_topic</code>: &rho;=+0.13, p=0.156, n=130</li><li><code>PC1</code>: &rho;=+0.11, p=0.201, n=130</li><li><code>seq_typing_entropy</code>: &rho;=-0.11, p=0.234, n=130</li></ul>
-<h4>Mean inter-reward time (s)</h4><ul><li><code>mean_reading_length_s</code>: &rho;=+0.22, p=0.037, n=94</li><li><code>seq_typing_entropy</code>: &rho;=+0.11, p=0.199, n=130</li><li><code>count_topic</code>: &rho;=-0.09, p=0.298, n=130</li></ul><p>&nbsp;&nbsp;<strong>Sub-group divergence (|&rho;|&ge;.30 &amp; p&lt;.05):</strong></p><ul><li>busybody &times; <code>mean_reading_length_s</code>: &rho;=+0.32, p=0.016</li></ul>
-<h4>% time in exploit</h4><ul><li><code>mean_reading_length_s</code>: &rho;=-0.15, p=0.136, n=94</li><li><code>seq_typing_entropy</code>: &rho;=-0.13, p=0.150, n=130</li><li><code>count_time</code>: &rho;=+0.03, p=0.736, n=130</li></ul>
-<h4>N transitions</h4><ul><li><code>mean_reading_length_s</code>: &rho;=-0.10, p=0.353, n=94</li><li><code>count_typing</code>: &rho;=+0.07, p=0.436, n=130</li><li><code>count_topic</code>: &rho;=-0.07, p=0.442, n=130</li></ul>
+<section class="section" id="context">
+  <h2 class="section-heading"><span class="section-num">1</span>הקונטקסט</h2>
+  <div class="card">
+    <p>הניתוח בודק האם <strong>סגנון החיפוש</strong> של המשתתפים במסע ה-Wikipedia (Hunter / Busybody, ובגרסת k=3 גם Dancer) מנבא את ההתנהגות שלהם במשחק החיפוש המרחבי. אנחנו מציבים זה ליד זה ארבעה מדדים מהמשחק — שניים <strong>שטחיים</strong> (מבוססי אירועים בלבד) ושניים <strong>עמוקים</strong> (תוצרי מסווג ה-GBM מ-M81) — ובוחנים שלוש שאלות:</p>
+    <ul>
+      <li>(א) האם המדדים העמוקים נותנים יותר אינפורמציה מהשטחיים</li>
+      <li>(ב) האם האפקט של תנאי ה-Clumpy/Diffuse שונה בין הקבוצות</li>
+      <li>(ג) אילו מדדי SEARCH מתואמים לאילו מדדי TASK</li>
+    </ul>
+  </div>
+</section>
 
-<h2>4. ממצאים - k=3</h2>
-<h4>Time to 1st reward (s)</h4><ul><li><code>count_topic</code>: &rho;=+0.13, p=0.156, n=130</li><li><code>PC1</code>: &rho;=+0.11, p=0.201, n=130</li><li><code>seq_typing_entropy</code>: &rho;=-0.11, p=0.234, n=130</li></ul>
-<h4>Mean inter-reward time (s)</h4><ul><li><code>mean_reading_length_s</code>: &rho;=+0.22, p=0.037, n=94</li><li><code>seq_typing_entropy</code>: &rho;=+0.11, p=0.199, n=130</li><li><code>count_topic</code>: &rho;=-0.09, p=0.298, n=130</li></ul>
-<h4>% time in exploit</h4><ul><li><code>mean_reading_length_s</code>: &rho;=-0.15, p=0.136, n=94</li><li><code>seq_typing_entropy</code>: &rho;=-0.13, p=0.150, n=130</li><li><code>count_time</code>: &rho;=+0.03, p=0.736, n=130</li></ul><p>&nbsp;&nbsp;<strong>Sub-group divergence (|&rho;|&ge;.30 &amp; p&lt;.05):</strong></p><ul><li>dancer &times; <code>mean_reading_length_s</code>: &rho;=-0.42, p=0.024</li><li>dancer &times; <code>count_topic</code>: &rho;=+0.35, p=0.015</li><li>dancer &times; <code>PC1</code>: &rho;=+0.30, p=0.033</li></ul>
-<h4>N transitions</h4><ul><li><code>mean_reading_length_s</code>: &rho;=-0.10, p=0.353, n=94</li><li><code>count_typing</code>: &rho;=+0.07, p=0.436, n=130</li><li><code>count_topic</code>: &rho;=-0.07, p=0.442, n=130</li></ul><p>&nbsp;&nbsp;<strong>Sub-group divergence (|&rho;|&ge;.30 &amp; p&lt;.05):</strong></p><ul><li>dancer &times; <code>count_topic</code>: &rho;=+0.33, p=0.020</li><li>dancer &times; <code>PC1</code>: &rho;=+0.31, p=0.029</li></ul>
+<section class="section" id="data">
+  <h2 class="section-heading"><span class="section-num">2</span>נתונים</h2>
+  <div class="card">
+    <ul>
+      <li><strong>N = 130</strong> משתתפים (קוהורט M81)</li>
+      <li>סגנון <strong>k=2</strong>: Hunter: 49, Busybody: 81</li>
+      <li>סגנון <strong>k=3</strong>: Hunter: 40, Busybody: 41, Dancer: 49</li>
+    </ul>
+  </div>
+</section>
 
-<h2>5. הערות לקריאה</h2>
-<div class="info">
-  כל הקורלציות הן Spearman (rank-based, יציב לאאוטליירים).
-  p נקרא ב-uncorrected: זה EDA, לא אישור היפותזה. המסגרת השחורה / ה-bold
-  סביב תאים = p&lt;.05 nominal.
+<section class="section" id="k2">
+  <h2 class="section-heading"><span class="section-num">3</span>ממצאים — k=2</h2>
+
+  <div class="card">
+    <div class="card-title">Time to 1st reward (s)</div>
+    <div class="stat-row"><code>count_topic</code>: ρ=+0.13, p=0.156, n=130</div>
+    <div class="stat-row"><code>PC1</code>: ρ=+0.11, p=0.201, n=130</div>
+    <div class="stat-row"><code>seq_typing_entropy</code>: ρ=−0.11, p=0.234, n=130</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Mean inter-reward time (s)</div>
+    <div class="stat-row"><code>mean_reading_length_s</code>: ρ=+0.22, p=0.037, n=94</div>
+    <div class="stat-row"><code>seq_typing_entropy</code>: ρ=+0.11, p=0.199, n=130</div>
+    <div class="stat-row"><code>count_topic</code>: ρ=−0.09, p=0.298, n=130</div>
+    <div class="sub-div"><strong>Sub-group divergence</strong> (|ρ|≥.30 &amp; p&lt;.05):
+      <div class="stat-row" style="margin-top:6px;">busybody × <code>mean_reading_length_s</code>: ρ=+0.32, p=0.016</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">% time in exploit</div>
+    <div class="stat-row"><code>mean_reading_length_s</code>: ρ=−0.15, p=0.136, n=94</div>
+    <div class="stat-row"><code>seq_typing_entropy</code>: ρ=−0.13, p=0.150, n=130</div>
+    <div class="stat-row"><code>count_time</code>: ρ=+0.03, p=0.736, n=130</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">N transitions</div>
+    <div class="stat-row"><code>mean_reading_length_s</code>: ρ=−0.10, p=0.353, n=94</div>
+    <div class="stat-row"><code>count_typing</code>: ρ=+0.07, p=0.436, n=130</div>
+    <div class="stat-row"><code>count_topic</code>: ρ=−0.07, p=0.442, n=130</div>
+  </div>
+</section>
+
+<section class="section" id="k3">
+  <h2 class="section-heading"><span class="section-num">4</span>ממצאים — k=3</h2>
+
+  <div class="card">
+    <div class="card-title">Time to 1st reward (s)</div>
+    <div class="stat-row"><code>count_topic</code>: ρ=+0.13, p=0.156, n=130</div>
+    <div class="stat-row"><code>PC1</code>: ρ=+0.11, p=0.201, n=130</div>
+    <div class="stat-row"><code>seq_typing_entropy</code>: ρ=−0.11, p=0.234, n=130</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Mean inter-reward time (s)</div>
+    <div class="stat-row"><code>mean_reading_length_s</code>: ρ=+0.22, p=0.037, n=94</div>
+    <div class="stat-row"><code>seq_typing_entropy</code>: ρ=+0.11, p=0.199, n=130</div>
+    <div class="stat-row"><code>count_topic</code>: ρ=−0.09, p=0.298, n=130</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">% time in exploit</div>
+    <div class="stat-row"><code>mean_reading_length_s</code>: ρ=−0.15, p=0.136, n=94</div>
+    <div class="stat-row"><code>seq_typing_entropy</code>: ρ=−0.13, p=0.150, n=130</div>
+    <div class="stat-row"><code>count_time</code>: ρ=+0.03, p=0.736, n=130</div>
+    <div class="sub-div"><strong>Sub-group divergence</strong> (|ρ|≥.30 &amp; p&lt;.05):
+      <div class="stat-row" style="margin-top:6px;">dancer × <code>mean_reading_length_s</code>: ρ=−0.42, p=0.024</div>
+      <div class="stat-row">dancer × <code>count_topic</code>: ρ=+0.35, p=0.015</div>
+      <div class="stat-row">dancer × <code>PC1</code>: ρ=+0.30, p=0.033</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">N transitions</div>
+    <div class="stat-row"><code>mean_reading_length_s</code>: ρ=−0.10, p=0.353, n=94</div>
+    <div class="stat-row"><code>count_typing</code>: ρ=+0.07, p=0.436, n=130</div>
+    <div class="stat-row"><code>count_topic</code>: ρ=−0.07, p=0.442, n=130</div>
+    <div class="sub-div"><strong>Sub-group divergence</strong> (|ρ|≥.30 &amp; p&lt;.05):
+      <div class="stat-row" style="margin-top:6px;">dancer × <code>count_topic</code>: ρ=+0.33, p=0.020</div>
+      <div class="stat-row">dancer × <code>PC1</code>: ρ=+0.31, p=0.029</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="notes">
+  <h2 class="section-heading"><span class="section-num">5</span>הערות לקריאה</h2>
+  <div class="callout info">
+    <strong>הערה:</strong> כל הקורלציות הן Spearman (rank-based, יציב לאאוטליירים).
+    p נקרא ב-uncorrected: זה EDA, לא אישור היפותזה. המסגרת השחורה / ה-bold סביב תאים = p&lt;.05 nominal.
+  </div>
+</section>
+
+<section class="section" id="links">
+  <h2 class="section-heading"><span class="section-num">6</span>קישורים</h2>
+  <div class="card">
+    <ul>
+      <li>טבלה ראשית k=2: <code>output/m82_search_task_table_k2.html</code></li>
+      <li>טבלה ראשית k=3: <code>output/m82_search_task_table_k3.html</code></li>
+      <li>נתונים גולמיים: <code>output/m82_per_participant.csv</code></li>
+      <li>סטטיסטיקות פר קבוצה: <code>output/m82_groupstats.csv</code></li>
+      <li>כל הקורלציות (long): <code>output/m82_correlations_long.csv</code></li>
+    </ul>
+  </div>
+</section>
+
 </div>
-
-<h2>6. קישורים</h2>
-<ul>
-  <li>טבלה ראשית k=2: <code>output/m82_search_task_table_k2.html</code></li>
-  <li>טבלה ראשית k=3: <code>output/m82_search_task_table_k3.html</code></li>
-  <li>נתונים גולמיים: <code>output/m82_per_participant.csv</code></li>
-  <li>סטטיסטיקות פר קבוצה: <code>output/m82_groupstats.csv</code></li>
-  <li>כל הקורלציות (long): <code>output/m82_correlations_long.csv</code></li>
-</ul>
-
+</div>
 </body>
 </html>
