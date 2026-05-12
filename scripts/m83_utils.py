@@ -141,3 +141,11 @@ def fdr_bh(pvals: Sequence[float]) -> list:
     out_finite[order] = adj
     out[finite_idx] = out_finite
     return out.tolist()
+
+
+def collect_diffuse_slugs(game_df: pd.DataFrame) -> set:
+    """Unique ArticleSlug from article_open rows in Condition=='diffuse'."""
+    cond = game_df["Condition"].astype(str).str.lower() == "diffuse"
+    opens = game_df[cond & (game_df["Action"] == "article_open")]
+    slugs = opens["ArticleSlug"].dropna().astype(str).unique()
+    return set(slugs)

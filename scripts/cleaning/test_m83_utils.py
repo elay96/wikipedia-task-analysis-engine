@@ -8,6 +8,7 @@ from m83_utils import (
     forward_flow,
     bh_score,
     fdr_bh,
+    collect_diffuse_slugs,
 )
 
 
@@ -141,3 +142,16 @@ class TestFDRBH:
         assert abs(adj[0] - 0.02) < 1e-9
         assert np.isnan(adj[1])
         assert abs(adj[2] - 0.5) < 1e-9
+
+
+class TestCollectDiffuseSlugs:
+    def test_returns_unique_slugs_only_for_diffuse_article_opens(self):
+        df = pd.DataFrame({
+            "ID":         [1, 1, 2, 3, 3],
+            "Condition":  ["diffuse", "diffuse", "clumpy", "diffuse", "diffuse"],
+            "Action":     ["article_open", "article_open", "article_open",
+                           "article_open", "search"],
+            "ArticleSlug": ["A", "B", "C", "A", "ignored"],
+        })
+        slugs = collect_diffuse_slugs(df)
+        assert slugs == {"A", "B"}
