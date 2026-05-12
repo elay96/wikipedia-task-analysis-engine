@@ -7,3 +7,7 @@ __pycache__/
 
 # Raw BSON dumps - too large for git (use scripts to regenerate cleaned CSVs)
 data/Spatial Search Data/
+
+# m83a resume-on-rerun checkpoint (raw API responses, regenerable; the final
+# JSON adjacency is committed)
+output/m83_wiki_link_graph_partial.jsonl
