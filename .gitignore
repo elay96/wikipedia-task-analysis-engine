@@ -11,3 +11,6 @@ data/Spatial Search Data/
 # m83a resume-on-rerun checkpoint (raw API responses, regenerable; the final
 # JSON adjacency is committed)
 output/m83_wiki_link_graph_partial.jsonl
+
+# yoed_eda Wikipedia content cache (regenerable from live API via s2_reconstruct_pages.py)
+yoed_eda/cache/
