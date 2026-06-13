@@ -5,17 +5,13 @@ outlinks). Adds a current-revision category fetch (categories are stable, so
 this approximates the historical category set; documented in the report)."""
 from __future__ import annotations
 
-import json
 from datetime import datetime, timezone
 from pathlib import Path
 
 import _bootstrap  # noqa: F401
 import pandas as pd
 
-from api_client import (  # from scripts/cleaning
-    API_ENDPOINT, TIMEOUT_SEC, build_session, fetch_extract_by_revid,
-    fetch_outlinks, fetch_revision_at,
-)
+from api_client import API_ENDPOINT, TIMEOUT_SEC  # from scripts/cleaning
 
 
 def epoch_ms_to_iso(ms) -> str | None:

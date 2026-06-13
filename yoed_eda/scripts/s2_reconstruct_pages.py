@@ -48,6 +48,7 @@ def main() -> None:
     # Fetch content once per unique resolved revid.
     revids = sorted({int(r) for r in visit_rev["revid"].dropna().unique()})
     slug_by_revid = (visit_rev.dropna(subset=["revid"])
+                     .assign(revid=lambda d: d["revid"].astype(int))
                      .drop_duplicates("revid").set_index("revid")["article"].to_dict())
     n_new = n_fail = 0
     for revid in revids:
