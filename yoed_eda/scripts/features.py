@@ -5,7 +5,7 @@ import numpy as np
 import networkx as nx
 
 import _bootstrap  # noqa: F401
-from m83_utils import network_metrics, forward_flow  # from repo scripts/
+from m83_utils import forward_flow  # from repo scripts/
 
 
 def step_distances(vectors):
@@ -58,11 +58,6 @@ def semantic_features(vectors) -> dict:
         "var_step_distance": var_d,
         "forward_flow": forward_flow(vectors) if len(vectors) >= 2 else float("nan"),
     }
-
-
-def graph_features(G: nx.Graph) -> dict:
-    """Zhou network metrics (feeds bh_score across participants in analysis)."""
-    return network_metrics(G)
 
 
 def _isnan(x) -> bool:
