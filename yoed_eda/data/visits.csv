@@ -1,0 +1,837 @@
+participant_id,session_id,visit_id,order_in_session,article,title,url,start_time_ms,dwell_ms,is_main_page,is_disambiguation
+206134967,6f837004-aa38-4672-a8df-d829c4be1d2b,1168,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764411186897,7857,True,False
+206134967,6f837004-aa38-4672-a8df-d829c4be1d2b,1169,1,Chat_bot,Chatbot,/proxy/wiki/wiki/Chat_bot,1764411194754,26145,False,False
+206134967,6f837004-aa38-4672-a8df-d829c4be1d2b,1170,2,Intelligent_agent,Intelligent agent,/proxy/wiki/wiki/Intelligent_agent,1764411220899,68382,False,False
+206134967,6f837004-aa38-4672-a8df-d829c4be1d2b,1171,3,Social_impact_of_YouTube,Social impact of YouTube,/proxy/wiki/wiki/Social_impact_of_YouTube,1764411289281,31834,False,False
+206134967,6f837004-aa38-4672-a8df-d829c4be1d2b,1172,4,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1764411321115,82817,False,False
+206134967,6f837004-aa38-4672-a8df-d829c4be1d2b,1173,5,Transhumanism,Transhumanism,/proxy/wiki/wiki/Transhumanism,1764411403932,32873,False,False
+206134967,6f837004-aa38-4672-a8df-d829c4be1d2b,1176,6,Well_being,Well-being,/proxy/wiki/wiki/Well_being,1764411436805,31976,False,False
+206134967,6f837004-aa38-4672-a8df-d829c4be1d2b,1177,7,Research,Research,/proxy/wiki/wiki/Research,1764411468781,10027,False,False
+206134967,6f837004-aa38-4672-a8df-d829c4be1d2b,1178,8,Chatbot,Chatbot,/proxy/wiki/wiki/Chatbot,1764411478808,124992,False,False
+206134967,6f837004-aa38-4672-a8df-d829c4be1d2b,1179,9,ChatGPT,ChatGPT,/proxy/wiki/wiki/ChatGPT,1764411603800,115780,False,False
+206134967,6f837004-aa38-4672-a8df-d829c4be1d2b,1182,10,Ethics_of_artificial_intelligence,Ethics of artificial intelligence,/proxy/wiki/wiki/Ethics_of_artificial_intelligence,1764411719580,271494,False,False
+206502106,10111113-bd67-4006-8572-bb8661439f3a,1294,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764790829019,9747,True,False
+206502106,10111113-bd67-4006-8572-bb8661439f3a,1295,1,Technology,Technology,/proxy/wiki/wiki/Technology,1764790838766,32479,False,False
+206502106,10111113-bd67-4006-8572-bb8661439f3a,1296,2,Technology,Technology,/proxy/wiki/wiki/Technology,1764790871245,716341,False,False
+206535445,f0b5674b-548c-4efa-a6ae-910e897bcc7b,892,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763769237553,46968,True,False
+206535445,f0b5674b-548c-4efa-a6ae-910e897bcc7b,893,1,Human_agency,Agency (philosophy),/proxy/wiki/wiki/Human_agency,1763769284521,29110,False,False
+206535445,f0b5674b-548c-4efa-a6ae-910e897bcc7b,894,2,Technology_and_society,Technology and society,/proxy/wiki/wiki/Technology_and_society,1763769313631,873804,False,False
+206560807,63038148-f29a-4c01-8f26-f3748ff77d65,961,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763914567842,55966,True,False
+206560807,63038148-f29a-4c01-8f26-f3748ff77d65,962,1,Ethics_of_artificial_intelligence,Ethics of artificial intelligence,/proxy/wiki/wiki/Ethics_of_artificial_intelligence,1763914623808,16319,False,False
+206560807,63038148-f29a-4c01-8f26-f3748ff77d65,963,2,Technological_unemployment,Technological unemployment,/proxy/wiki/wiki/Technological_unemployment,1763914640127,318564,False,False
+206560807,63038148-f29a-4c01-8f26-f3748ff77d65,964,3,Post-work_society,Post-work society,/proxy/wiki/wiki/Post-work_society,1763914958691,119219,False,False
+206560807,63038148-f29a-4c01-8f26-f3748ff77d65,965,4,Humans_Need_Not_Apply,Humans Need Not Apply,/proxy/wiki/wiki/Humans_Need_Not_Apply,1763915077910,25707,False,False
+206560807,63038148-f29a-4c01-8f26-f3748ff77d65,966,5,Basic_income,Universal basic income,/proxy/wiki/wiki/Basic_income,1763915103617,389269,False,False
+206692196,2c97959a-1733-4f80-8a4e-997fc2ded9ee,1075,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764012929975,32448,True,False
+206692196,2c97959a-1733-4f80-8a4e-997fc2ded9ee,1076,1,Robot,Robot,/proxy/wiki/wiki/Robot,1764012962423,32262,False,False
+206692196,2c97959a-1733-4f80-8a4e-997fc2ded9ee,1077,2,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1764012994685,26120,False,False
+206692196,2c97959a-1733-4f80-8a4e-997fc2ded9ee,1078,3,Human_Robot,List of Marvel Comics characters: M,/proxy/wiki/wiki/Human_Robot,1764013020805,245988,False,False
+206692196,2c97959a-1733-4f80-8a4e-997fc2ded9ee,1079,4,Robot,Robot,/proxy/wiki/wiki/Robot,1764013266793,567485,False,False
+206693830,57ea58ef-9f64-4bfa-8097-a0e406d30d2a,967,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763924935267,40579,True,False
+206693830,57ea58ef-9f64-4bfa-8097-a0e406d30d2a,968,1,Godfather_of_AI,Geoffrey Hinton,/proxy/wiki/wiki/Godfather_of_AI,1763924975846,88654,False,False
+206693830,57ea58ef-9f64-4bfa-8097-a0e406d30d2a,969,2,Mind_uploading,Mind uploading,/proxy/wiki/wiki/Mind_uploading,1763925064500,215143,False,False
+206693830,57ea58ef-9f64-4bfa-8097-a0e406d30d2a,970,3,Brain_herniation,Brain herniation,/proxy/wiki/wiki/Brain_herniation,1763925279643,59933,False,False
+206693830,57ea58ef-9f64-4bfa-8097-a0e406d30d2a,971,4,Music_and_artificial_intelligence,Music and artificial intelligence,/proxy/wiki/wiki/Music_and_artificial_intelligence,1763925339576,24551,False,False
+206693830,57ea58ef-9f64-4bfa-8097-a0e406d30d2a,972,5,Artificial_intelligence_in_education,Artificial intelligence in education,/proxy/wiki/wiki/Artificial_intelligence_in_education,1763925364127,60420,False,False
+206693830,57ea58ef-9f64-4bfa-8097-a0e406d30d2a,973,6,ChatGPT_in_education,ChatGPT in education,/proxy/wiki/wiki/ChatGPT_in_education,1763925424547,39190,False,False
+206693830,57ea58ef-9f64-4bfa-8097-a0e406d30d2a,974,7,ChatGPT_in_education,ChatGPT in education,/proxy/wiki/wiki/ChatGPT_in_education,1763925463737,292105,False,False
+206712465,1d684d6d-adf3-4eb8-a5bc-839a00560b02,914,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763834293833,34644,True,False
+206712465,1d684d6d-adf3-4eb8-a5bc-839a00560b02,915,1,Artificial_intelligence_visual_art,Artificial intelligence visual art,/proxy/wiki/wiki/Artificial_intelligence_visual_art,1763834328477,27345,False,False
+206712465,1d684d6d-adf3-4eb8-a5bc-839a00560b02,916,2,Alma_Matters:_Inside_the_IIT_Dream,Alma Matters: Inside the IIT Dream,/proxy/wiki/wiki/Alma_Matters:_Inside_the_IIT_Dream,1763834355822,2267,False,False
+206712465,1d684d6d-adf3-4eb8-a5bc-839a00560b02,917,3,Alma_Matters:_Inside_the_IIT_Dream,Alma Matters: Inside the IIT Dream,/proxy/wiki/wiki/Alma_Matters:_Inside_the_IIT_Dream,1763834358089,74867,False,False
+206712465,1d684d6d-adf3-4eb8-a5bc-839a00560b02,918,4,Social_networks,Social network,/proxy/wiki/wiki/Social_networks,1763834432956,33166,False,False
+206712465,1d684d6d-adf3-4eb8-a5bc-839a00560b02,919,5,Facebook,Facebook,/proxy/wiki/wiki/Facebook,1763834466122,622005,False,False
+206941528,3ad65887-a085-4dd4-a266-7ee7e028efc7,1061,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764007850824,9812,True,False
+206941528,3ad65887-a085-4dd4-a266-7ee7e028efc7,1062,1,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1764007860636,4958,False,False
+206941528,3ad65887-a085-4dd4-a266-7ee7e028efc7,1063,2,Human_intelligence,Human intelligence,/proxy/wiki/wiki/Human_intelligence,1764007865594,4579,False,False
+206941528,3ad65887-a085-4dd4-a266-7ee7e028efc7,1064,3,Intelligence,Intelligence,/proxy/wiki/wiki/Intelligence,1764007870173,3928,False,False
+206941528,3ad65887-a085-4dd4-a266-7ee7e028efc7,1065,4,Information,Information,/proxy/wiki/wiki/Information,1764007874101,11104,False,False
+206941528,3ad65887-a085-4dd4-a266-7ee7e028efc7,1066,5,INTEGRITY,Integrity (operating system),/proxy/wiki/wiki/INTEGRITY,1764007885205,21661,False,False
+206941528,3ad65887-a085-4dd4-a266-7ee7e028efc7,1067,6,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1764007906866,40299,False,False
+206941528,3ad65887-a085-4dd4-a266-7ee7e028efc7,1068,7,Ethics_of_artificial_intelligence,Ethics of artificial intelligence,/proxy/wiki/wiki/Ethics_of_artificial_intelligence,1764007947165,72879,False,False
+206941528,3ad65887-a085-4dd4-a266-7ee7e028efc7,1069,8,Institute_for_Ethics_in_Artificial_Intelligence,TUM School of Social Sciences and Technology,/proxy/wiki/wiki/Institute_for_Ethics_in_Artificial_Intelligence,1764008020044,384,False,False
+206941528,3ad65887-a085-4dd4-a266-7ee7e028efc7,1070,9,Institute_for_Ethics_in_Artificial_Intelligence,TUM School of Social Sciences and Technology,/proxy/wiki/wiki/Institute_for_Ethics_in_Artificial_Intelligence,1764008020428,57883,False,False
+206941528,3ad65887-a085-4dd4-a266-7ee7e028efc7,1071,10,AI_effect,AI effect,/proxy/wiki/wiki/AI_effect,1764008078311,70178,False,False
+206941528,3ad65887-a085-4dd4-a266-7ee7e028efc7,1072,11,Work_Ethics,Work ethic,/proxy/wiki/wiki/Work_Ethics,1764008148489,73646,False,False
+206941528,3ad65887-a085-4dd4-a266-7ee7e028efc7,1073,12,Chat_gpt,ChatGPT,/proxy/wiki/wiki/Chat_gpt,1764008222135,146599,False,False
+206941528,3ad65887-a085-4dd4-a266-7ee7e028efc7,1074,13,Artificial_intelligence_and_copyright,Artificial intelligence and copyright,/proxy/wiki/wiki/Artificial_intelligence_and_copyright,1764008368734,476592,False,False
+206941908,17dafde7-59e4-4805-8196-8afb4cf64683,774,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763568774777,5934,True,False
+206941908,17dafde7-59e4-4805-8196-8afb4cf64683,775,1,Social_media,Social media,/proxy/wiki/wiki/Social_media,1763568780711,143625,False,False
+206941908,17dafde7-59e4-4805-8196-8afb4cf64683,776,2,Information_technology,Information technology,/proxy/wiki/wiki/Information_technology,1763568924336,20789,False,False
+206941908,17dafde7-59e4-4805-8196-8afb4cf64683,777,3,Dopamine,Dopamine,/proxy/wiki/wiki/Dopamine,1763568945125,46677,False,False
+206941908,17dafde7-59e4-4805-8196-8afb4cf64683,778,4,Mood,Mood,/proxy/wiki/wiki/Mood,1763568991802,14440,False,False
+206941908,17dafde7-59e4-4805-8196-8afb4cf64683,779,5,Mood_(psychology),Mood (psychology),/proxy/wiki/wiki/Mood_(psychology),1763569006242,41255,False,False
+206941908,17dafde7-59e4-4805-8196-8afb4cf64683,780,6,Social_media,Social media,/proxy/wiki/wiki/Social_media,1763569047497,46878,False,False
+206941908,17dafde7-59e4-4805-8196-8afb4cf64683,781,7,Depersonalization,Depersonalization,/proxy/wiki/wiki/Depersonalization,1763569094375,117564,False,False
+206941908,17dafde7-59e4-4805-8196-8afb4cf64683,782,8,Technology,Technology,/proxy/wiki/wiki/Technology,1763569211939,123777,False,False
+206941908,17dafde7-59e4-4805-8196-8afb4cf64683,783,9,Internet,Internet,/proxy/wiki/wiki/Internet,1763569335716,245321,False,False
+207034471,061a6fdd-515d-455a-b7bb-7351aff4d4b4,713,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763556385113,49231,True,False
+207034471,061a6fdd-515d-455a-b7bb-7351aff4d4b4,714,1,Speech,Speech,/proxy/wiki/wiki/Speech,1763556434344,11255,False,False
+207034471,061a6fdd-515d-455a-b7bb-7351aff4d4b4,715,2,Community,Community,/proxy/wiki/wiki/Community,1763556445599,38005,False,False
+207034471,061a6fdd-515d-455a-b7bb-7351aff4d4b4,718,3,Social_network,Social network,/proxy/wiki/wiki/Social_network,1763556483604,98945,False,False
+207034471,061a6fdd-515d-455a-b7bb-7351aff4d4b4,719,4,Facebook,Facebook,/proxy/wiki/wiki/Facebook,1763556582549,96586,False,False
+207034471,061a6fdd-515d-455a-b7bb-7351aff4d4b4,721,5,Twitter,Twitter,/proxy/wiki/wiki/Twitter,1763556679135,205539,False,False
+207034471,061a6fdd-515d-455a-b7bb-7351aff4d4b4,732,6,Elon_Musk,Elon Musk,/proxy/wiki/wiki/Elon_Musk,1763556884674,393772,False,False
+207431370,317ae360-4817-4b98-aa72-3f68bbe0bae9,1155,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764339381723,8931,True,False
+207431370,317ae360-4817-4b98-aa72-3f68bbe0bae9,1156,1,Social_media,Social media,/proxy/wiki/wiki/Social_media,1764339390654,261487,False,False
+207431370,317ae360-4817-4b98-aa72-3f68bbe0bae9,1157,2,Social_media,Social media,/proxy/wiki/wiki/Social_media,1764339652141,41452,False,False
+207431370,317ae360-4817-4b98-aa72-3f68bbe0bae9,1158,3,Mental_health,Mental health,/proxy/wiki/wiki/Mental_health,1764339693593,11437,False,False
+207431370,317ae360-4817-4b98-aa72-3f68bbe0bae9,1159,4,Anxiety,Anxiety,/proxy/wiki/wiki/Anxiety,1764339705030,20759,False,False
+207431370,317ae360-4817-4b98-aa72-3f68bbe0bae9,1160,5,Posting,Post,/proxy/wiki/wiki/Posting,1764339725789,16829,False,False
+207431370,317ae360-4817-4b98-aa72-3f68bbe0bae9,1161,6,Social_media,Social media,/proxy/wiki/wiki/Social_media,1764339742618,16843,False,False
+207431370,317ae360-4817-4b98-aa72-3f68bbe0bae9,1162,7,Interoperability,Interoperability,/proxy/wiki/wiki/Interoperability,1764339759461,11855,False,False
+207431370,317ae360-4817-4b98-aa72-3f68bbe0bae9,1163,8,Social_media,Social media,/proxy/wiki/wiki/Social_media,1764339771316,47165,False,False
+207431370,317ae360-4817-4b98-aa72-3f68bbe0bae9,1164,9,Social_media,Social media,/proxy/wiki/wiki/Social_media,1764339818481,107941,False,False
+207431370,317ae360-4817-4b98-aa72-3f68bbe0bae9,1165,10,Body_positive,Body Positive,/proxy/wiki/wiki/Body_positive,1764339926422,27211,False,False
+207431370,317ae360-4817-4b98-aa72-3f68bbe0bae9,1166,11,Eating_disorder,Eating disorder,/proxy/wiki/wiki/Eating_disorder,1764339953633,16341,False,False
+207431370,317ae360-4817-4b98-aa72-3f68bbe0bae9,1167,12,Self_esteem,Self-esteem,/proxy/wiki/wiki/Self_esteem,1764339969974,515551,False,False
+207432196,2c95a080-7ed3-40cb-8b2f-a658acfd30af,1350,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1765290609761,12523,True,False
+207432196,2c95a080-7ed3-40cb-8b2f-a658acfd30af,1351,1,Wwe,WWE,/proxy/wiki/wiki/Wwe,1765290622284,12190,False,False
+207432196,2c95a080-7ed3-40cb-8b2f-a658acfd30af,1352,2,AI_agents,Agentic AI,/proxy/wiki/wiki/AI_agents,1765290634474,345824,False,False
+207432196,2c95a080-7ed3-40cb-8b2f-a658acfd30af,1357,3,Alfa_Romeo_GT,Alfa Romeo GT,/proxy/wiki/wiki/Alfa_Romeo_GT,1765290980298,25914,False,False
+207432196,2c95a080-7ed3-40cb-8b2f-a658acfd30af,1358,4,Alpha_Zero,AlphaZero,/proxy/wiki/wiki/Alpha_Zero,1765291006212,19172,False,False
+207432196,2c95a080-7ed3-40cb-8b2f-a658acfd30af,1359,5,Computer_program,Computer program,/proxy/wiki/wiki/Computer_program,1765291025384,2313,False,False
+207432196,2c95a080-7ed3-40cb-8b2f-a658acfd30af,1360,6,Sequence,Sequence,/proxy/wiki/wiki/Sequence,1765291027697,2913,False,False
+207432196,2c95a080-7ed3-40cb-8b2f-a658acfd30af,1361,7,Mathematics,Mathematics,/proxy/wiki/wiki/Mathematics,1765291030610,3682,False,False
+207432196,2c95a080-7ed3-40cb-8b2f-a658acfd30af,1362,8,Academic_discipline,Academic discipline,/proxy/wiki/wiki/Academic_discipline,1765291034292,6311,False,False
+207432196,2c95a080-7ed3-40cb-8b2f-a658acfd30af,1363,9,Knowledge,Knowledge,/proxy/wiki/wiki/Knowledge,1765291040603,3104,False,False
+207432196,2c95a080-7ed3-40cb-8b2f-a658acfd30af,1364,10,Declarative_knowledge,Declarative knowledge,/proxy/wiki/wiki/Declarative_knowledge,1765291043707,5534,False,False
+207432196,2c95a080-7ed3-40cb-8b2f-a658acfd30af,1365,11,Awareness,Awareness,/proxy/wiki/wiki/Awareness,1765291049241,3005,False,False
+207432196,2c95a080-7ed3-40cb-8b2f-a658acfd30af,1366,12,Philosophy,Philosophy,/proxy/wiki/wiki/Philosophy,1765291052246,46433,False,False
+207432196,2c95a080-7ed3-40cb-8b2f-a658acfd30af,1367,13,Back_pack,Backpack,/proxy/wiki/wiki/Back_pack,1765291098679,34258,False,False
+207432196,2c95a080-7ed3-40cb-8b2f-a658acfd30af,1368,14,Military,Military,/proxy/wiki/wiki/Military,1765291132937,313038,False,False
+207583204,1b7ac950-a81d-46a9-a7ec-1aea4120bca2,672,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763481035753,31128,True,False
+207583204,1b7ac950-a81d-46a9-a7ec-1aea4120bca2,673,1,Counterterrorism,Counterterrorism,/proxy/wiki/wiki/Counterterrorism,1763481066881,250460,False,False
+207583204,1b7ac950-a81d-46a9-a7ec-1aea4120bca2,674,2,Department_of_Homeland_Security,United States Department of Homeland Security,/proxy/wiki/wiki/Department_of_Homeland_Security,1763481317341,567167,False,False
+207730854,a0605cea-6c12-4264-8dc6-339098fcadd8,1184,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764428678295,12668,True,False
+207730854,a0605cea-6c12-4264-8dc6-339098fcadd8,1185,1,Human_race,Human,/proxy/wiki/wiki/Human_race,1764428690963,12268,False,False
+207730854,a0605cea-6c12-4264-8dc6-339098fcadd8,1186,2,Family_(biology),Family (biology),/proxy/wiki/wiki/Family_(biology),1764428703231,13718,False,False
+207730854,a0605cea-6c12-4264-8dc6-339098fcadd8,1187,3,Humans,Human,/proxy/wiki/wiki/Humans,1764428716949,22761,False,False
+207730854,a0605cea-6c12-4264-8dc6-339098fcadd8,1188,4,Human_geography,Human geography,/proxy/wiki/wiki/Human_geography,1764428739710,6471,False,False
+207730854,a0605cea-6c12-4264-8dc6-339098fcadd8,1189,5,Human,Human,/proxy/wiki/wiki/Human,1764428746181,9660,False,False
+207730854,a0605cea-6c12-4264-8dc6-339098fcadd8,1190,6,World_population,World population,/proxy/wiki/wiki/World_population,1764428755841,990409,False,False
+207747361,038da880-8169-4dd1-a9b6-322d28ef263b,811,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763589244413,14539,True,False
+207747361,038da880-8169-4dd1-a9b6-322d28ef263b,812,1,Cognitive_load,Cognitive load,/proxy/wiki/wiki/Cognitive_load,1763589258952,121949,False,False
+207747361,038da880-8169-4dd1-a9b6-322d28ef263b,813,2,Concentration,Concentration,/proxy/wiki/wiki/Concentration,1763589380901,18337,False,False
+207747361,038da880-8169-4dd1-a9b6-322d28ef263b,814,3,Focus,Focus,/proxy/wiki/wiki/Focus,1763589399238,27381,False,False
+207747361,038da880-8169-4dd1-a9b6-322d28ef263b,815,4,Consistency,Consistency,/proxy/wiki/wiki/Consistency,1763589426619,27799,False,False
+207747361,038da880-8169-4dd1-a9b6-322d28ef263b,816,5,Concentrate,Concentrate,/proxy/wiki/wiki/Concentrate,1763589454418,41670,False,False
+207747361,038da880-8169-4dd1-a9b6-322d28ef263b,817,6,Distraction,Distraction,/proxy/wiki/wiki/Distraction,1763589496088,101877,False,False
+207747361,038da880-8169-4dd1-a9b6-322d28ef263b,818,7,Human_multitasking,Human multitasking,/proxy/wiki/wiki/Human_multitasking,1763589597965,110721,False,False
+207747361,038da880-8169-4dd1-a9b6-322d28ef263b,819,8,Attention,Attention,/proxy/wiki/wiki/Attention,1763589708686,367341,False,False
+207805821,f57ef0cc-ab74-40cf-bbfd-e6a71fb0ac46,798,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763581913251,82398,True,False
+207805821,f57ef0cc-ab74-40cf-bbfd-e6a71fb0ac46,799,1,Technology,Technology,/proxy/wiki/wiki/Technology,1763581995649,30366,False,False
+207805821,f57ef0cc-ab74-40cf-bbfd-e6a71fb0ac46,800,2,Future,Future,/proxy/wiki/wiki/Future,1763582026015,12452,False,False
+207805821,f57ef0cc-ab74-40cf-bbfd-e6a71fb0ac46,801,3,Space,Space,/proxy/wiki/wiki/Space,1763582038467,8359,False,False
+207805821,f57ef0cc-ab74-40cf-bbfd-e6a71fb0ac46,802,4,Ai,Ai,/proxy/wiki/wiki/Ai,1763582046826,3660,False,False
+207805821,f57ef0cc-ab74-40cf-bbfd-e6a71fb0ac46,803,5,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1763582050486,67054,False,False
+207805821,f57ef0cc-ab74-40cf-bbfd-e6a71fb0ac46,804,6,The_Digital_Revolution,Information Age,/proxy/wiki/wiki/The_Digital_Revolution,1763582117540,304175,False,False
+207805821,f57ef0cc-ab74-40cf-bbfd-e6a71fb0ac46,805,7,Tech,Tech,/proxy/wiki/wiki/Tech,1763582421715,10317,False,False
+207805821,f57ef0cc-ab74-40cf-bbfd-e6a71fb0ac46,806,8,The_Tech_Interactive,The Tech Interactive,/proxy/wiki/wiki/The_Tech_Interactive,1763582432032,361704,False,False
+207852096,72556e7c-73c2-410c-a502-03360d146dd5,1080,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764017710533,11474,True,False
+207852096,72556e7c-73c2-410c-a502-03360d146dd5,1081,1,Social_media,Social media,/proxy/wiki/wiki/Social_media,1764017722007,21173,False,False
+207852096,72556e7c-73c2-410c-a502-03360d146dd5,1082,2,User-generated_content,User-generated content,/proxy/wiki/wiki/User-generated_content,1764017743180,44818,False,False
+207852096,72556e7c-73c2-410c-a502-03360d146dd5,1083,3,Social_media,Social media,/proxy/wiki/wiki/Social_media,1764017787998,332877,False,False
+207852096,72556e7c-73c2-410c-a502-03360d146dd5,1084,4,Access_to_information,Freedom of information,/proxy/wiki/wiki/Access_to_information,1764018120875,35446,False,False
+207852096,72556e7c-73c2-410c-a502-03360d146dd5,1085,5,Algorithmic_bias,Algorithmic bias,/proxy/wiki/wiki/Algorithmic_bias,1764018156321,121664,False,False
+207852096,72556e7c-73c2-410c-a502-03360d146dd5,1086,6,Bias,Bias,/proxy/wiki/wiki/Bias,1764018277985,533168,False,False
+208152439,3ff60f0f-e5cb-4613-b2a1-e73fc2b11691,1397,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1765490215868,8566,True,False
+208152439,3ff60f0f-e5cb-4613-b2a1-e73fc2b11691,1398,1,AI_agent,Agentic AI,/proxy/wiki/wiki/AI_agent,1765490224434,9186,False,False
+208152439,3ff60f0f-e5cb-4613-b2a1-e73fc2b11691,1399,2,AI_agent,Agentic AI,/proxy/wiki/wiki/AI_agent,1765490233620,219204,False,False
+208152439,3ff60f0f-e5cb-4613-b2a1-e73fc2b11691,1400,3,Robotic_process_automation,Robotic process automation,/proxy/wiki/wiki/Robotic_process_automation,1765490452824,2388,False,False
+208152439,3ff60f0f-e5cb-4613-b2a1-e73fc2b11691,1401,4,Robotic_process_automation,Robotic process automation,/proxy/wiki/wiki/Robotic_process_automation,1765490455212,552,False,False
+208152439,3ff60f0f-e5cb-4613-b2a1-e73fc2b11691,1402,5,Intelligent_agent,Intelligent agent,/proxy/wiki/wiki/Intelligent_agent,1765490455764,37795,False,False
+208152439,3ff60f0f-e5cb-4613-b2a1-e73fc2b11691,1403,6,Climate_change,Climate change,/proxy/wiki/wiki/Climate_change,1765490493559,81116,False,False
+208152439,3ff60f0f-e5cb-4613-b2a1-e73fc2b11691,1404,7,Humanize,Humanized antibody,/proxy/wiki/wiki/Humanize,1765490574675,29306,False,False
+208152439,3ff60f0f-e5cb-4613-b2a1-e73fc2b11691,1405,8,Humanise,Humanise,/proxy/wiki/wiki/Humanise,1765490603981,23068,False,False
+208152439,3ff60f0f-e5cb-4613-b2a1-e73fc2b11691,1406,9,Robots,Robot,/proxy/wiki/wiki/Robots,1765490627049,32680,False,False
+208152439,3ff60f0f-e5cb-4613-b2a1-e73fc2b11691,1407,10,Sex_robot,Sex robot,/proxy/wiki/wiki/Sex_robot,1765490659729,102631,False,False
+208152439,3ff60f0f-e5cb-4613-b2a1-e73fc2b11691,1408,11,Roxxxy,Roxxxy,/proxy/wiki/wiki/Roxxxy,1765490762360,253626,False,False
+208245035,36af777a-501b-499d-b503-0d9f80fc43f1,663,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763479843833,14328,True,False
+208245035,36af777a-501b-499d-b503-0d9f80fc43f1,664,1,Ai,Ai,/proxy/wiki/wiki/Ai,1763479858161,28370,False,False
+208245035,36af777a-501b-499d-b503-0d9f80fc43f1,665,2,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763479886531,11905,True,False
+208245035,36af777a-501b-499d-b503-0d9f80fc43f1,666,3,Affect,Affect,/proxy/wiki/wiki/Affect,1763479898436,11013,False,False
+208245035,36af777a-501b-499d-b503-0d9f80fc43f1,667,4,Affect_(education),Affect in education,/proxy/wiki/wiki/Affect_(education),1763479909449,21550,False,False
+208245035,36af777a-501b-499d-b503-0d9f80fc43f1,668,5,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763479930999,26912,True,False
+208245035,36af777a-501b-499d-b503-0d9f80fc43f1,669,6,Fuck,Fuck,/proxy/wiki/wiki/Fuck,1763479957911,16483,False,False
+208245035,36af777a-501b-499d-b503-0d9f80fc43f1,670,7,Work,Work,/proxy/wiki/wiki/Work,1763479974394,17660,False,False
+208245035,36af777a-501b-499d-b503-0d9f80fc43f1,671,8,"Special:Search/intitle:""Work""","intitle:""Work"" - Search results","/proxy/wiki/wiki/Special:Search/intitle:""Work""",1763479992054,823782,False,False
+208302661,a64cdb91-7563-44c7-8572-97a273d1089c,1106,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764181068542,14309,True,False
+208302661,a64cdb91-7563-44c7-8572-97a273d1089c,1107,1,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1764181082851,115945,False,False
+208302661,a64cdb91-7563-44c7-8572-97a273d1089c,1113,2,Intelligence,Intelligence,/proxy/wiki/wiki/Intelligence,1764181198796,95876,False,False
+208302661,a64cdb91-7563-44c7-8572-97a273d1089c,1114,3,Language,Language,/proxy/wiki/wiki/Language,1764181294672,331255,False,False
+208302661,a64cdb91-7563-44c7-8572-97a273d1089c,1115,4,Learning,Learning,/proxy/wiki/wiki/Learning,1764181625927,367215,False,False
+208324392,1aa78760-9177-4423-a529-9bf364a922a2,912,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763833274380,205857,True,False
+208324392,1aa78760-9177-4423-a529-9bf364a922a2,913,1,Phubbing,Phubbing,/proxy/wiki/wiki/Phubbing,1763833480237,685187,False,False
+208912675,4abf981c-b219-49f7-a771-7e3ca82b3b07,807,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763584411373,17205,True,False
+208912675,4abf981c-b219-49f7-a771-7e3ca82b3b07,808,1,Technology,Technology,/proxy/wiki/wiki/Technology,1763584428578,195335,False,False
+208912675,4abf981c-b219-49f7-a771-7e3ca82b3b07,809,2,Ai,Ai,/proxy/wiki/wiki/Ai,1763584623913,10697,False,False
+208912675,4abf981c-b219-49f7-a771-7e3ca82b3b07,810,3,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1763584634610,919152,False,False
+208944017,391d95ed-a2f0-48bb-bad2-9c693c3534aa,700,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763553651422,36814,True,False
+208944017,391d95ed-a2f0-48bb-bad2-9c693c3534aa,701,1,Human_engineering,Ergonomics,/proxy/wiki/wiki/Human_engineering,1763553688236,52466,False,False
+208944017,391d95ed-a2f0-48bb-bad2-9c693c3534aa,702,2,Social_engineering,Social engineering,/proxy/wiki/wiki/Social_engineering,1763553740702,4894,False,False
+208944017,391d95ed-a2f0-48bb-bad2-9c693c3534aa,703,3,Social_engineering_(political_science),Social engineering (political science),/proxy/wiki/wiki/Social_engineering_(political_science),1763553745596,24566,False,False
+208944017,391d95ed-a2f0-48bb-bad2-9c693c3534aa,704,4,Media_manipulation,Media manipulation,/proxy/wiki/wiki/Media_manipulation,1763553770162,33304,False,False
+208944017,391d95ed-a2f0-48bb-bad2-9c693c3534aa,705,5,File:Daisy_(1964).webm,File:Daisy (1964).webm,/proxy/wiki/wiki/File:Daisy_(1964).webm,1763553803466,2849,False,False
+208944017,391d95ed-a2f0-48bb-bad2-9c693c3534aa,706,6,File:Daisy_(1964).webm,File:Daisy (1964).webm,/proxy/wiki/wiki/File:Daisy_(1964).webm,1763553806315,8688,False,False
+208944017,391d95ed-a2f0-48bb-bad2-9c693c3534aa,707,7,File:Daisy_(1964).webm,File:Daisy (1964).webm,/proxy/wiki/wiki/File:Daisy_(1964).webm,1763553815003,77123,False,False
+208944017,391d95ed-a2f0-48bb-bad2-9c693c3534aa,708,8,Social_engineering_(political_science),Social engineering (political science),/proxy/wiki/wiki/Social_engineering_(political_science),1763553892126,120523,False,False
+208944017,391d95ed-a2f0-48bb-bad2-9c693c3534aa,709,9,Social_engineering,Social engineering,/proxy/wiki/wiki/Social_engineering,1763554012649,2213,False,False
+208944017,391d95ed-a2f0-48bb-bad2-9c693c3534aa,710,10,Social_engineering_(political_science),Social engineering (political science),/proxy/wiki/wiki/Social_engineering_(political_science),1763554014862,11923,False,False
+208944017,391d95ed-a2f0-48bb-bad2-9c693c3534aa,711,11,Bbc,BBC,/proxy/wiki/wiki/Bbc,1763554026785,104709,False,False
+208944017,391d95ed-a2f0-48bb-bad2-9c693c3534aa,712,12,BBC_News,BBC News,/proxy/wiki/wiki/BBC_News,1763554131494,292750,False,False
+209232008,f1e2c884-8520-4969-b999-3ef147c90985,900,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763828799621,42358,True,False
+209232008,f1e2c884-8520-4969-b999-3ef147c90985,901,1,Technology,Technology,/proxy/wiki/wiki/Technology,1763828841979,31929,False,False
+209232008,f1e2c884-8520-4969-b999-3ef147c90985,902,2,Adduction,Anatomical terms of motion,/proxy/wiki/wiki/Adduction,1763828873908,35646,False,False
+209232008,f1e2c884-8520-4969-b999-3ef147c90985,903,3,Education,Education,/proxy/wiki/wiki/Education,1763828909554,108820,False,False
+209232008,f1e2c884-8520-4969-b999-3ef147c90985,904,4,Computers_in_the_classroom,Computers in the classroom,/proxy/wiki/wiki/Computers_in_the_classroom,1763829018374,7228,False,False
+209232008,f1e2c884-8520-4969-b999-3ef147c90985,905,5,Education,Education,/proxy/wiki/wiki/Education,1763829025602,114222,False,False
+209232008,f1e2c884-8520-4969-b999-3ef147c90985,906,6,Computers_in_the_classroom,Computers in the classroom,/proxy/wiki/wiki/Computers_in_the_classroom,1763829139824,120455,False,False
+209232008,f1e2c884-8520-4969-b999-3ef147c90985,907,7,Computational_thinking,Computational thinking,/proxy/wiki/wiki/Computational_thinking,1763829260279,9828,False,False
+209232008,f1e2c884-8520-4969-b999-3ef147c90985,908,8,Computers_in_the_classroom,Computers in the classroom,/proxy/wiki/wiki/Computers_in_the_classroom,1763829270107,62124,False,False
+209232008,f1e2c884-8520-4969-b999-3ef147c90985,909,9,Digital_electronics,Digital electronics,/proxy/wiki/wiki/Digital_electronics,1763829332231,6304,False,False
+209232008,f1e2c884-8520-4969-b999-3ef147c90985,910,10,Computers_in_the_classroom,Computers in the classroom,/proxy/wiki/wiki/Computers_in_the_classroom,1763829338535,13317,False,False
+209232008,f1e2c884-8520-4969-b999-3ef147c90985,911,11,Education,Education,/proxy/wiki/wiki/Education,1763829351852,230621,False,False
+209363712,74c83454-a2be-46bd-8131-9e58f96e4117,929,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763888087875,14329,True,False
+209363712,74c83454-a2be-46bd-8131-9e58f96e4117,930,1,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1763888102204,40352,False,False
+209363712,74c83454-a2be-46bd-8131-9e58f96e4117,931,2,Jobpocalypse,Jobpocalypse,/proxy/wiki/wiki/Jobpocalypse,1763888142556,70797,False,False
+209363712,74c83454-a2be-46bd-8131-9e58f96e4117,932,3,Workplace_impact_of_artificial_intelligence,Workplace impact of artificial intelligence,/proxy/wiki/wiki/Workplace_impact_of_artificial_intelligence,1763888213353,169676,False,False
+209363712,74c83454-a2be-46bd-8131-9e58f96e4117,933,4,AI_Safety_Institute_(United_Kingdom),AI Safety Institute,/proxy/wiki/wiki/AI_Safety_Institute_(United_Kingdom),1763888383029,177748,False,False
+209363712,74c83454-a2be-46bd-8131-9e58f96e4117,934,5,Timeline_of_artificial_intelligence,Timeline of artificial intelligence,/proxy/wiki/wiki/Timeline_of_artificial_intelligence,1763888560777,427818,False,False
+209434950,ed77f76a-1d79-4171-86ed-c695759eb4af,791,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763580816279,18291,True,False
+209434950,ed77f76a-1d79-4171-86ed-c695759eb4af,792,1,Data_centers,Data center,/proxy/wiki/wiki/Data_centers,1763580834570,244252,False,False
+209434950,ed77f76a-1d79-4171-86ed-c695759eb4af,793,2,Water_consumption,Water footprint,/proxy/wiki/wiki/Water_consumption,1763581078822,106394,False,False
+209434950,ed77f76a-1d79-4171-86ed-c695759eb4af,794,3,Mile_Island,Mile Island,/proxy/wiki/wiki/Mile_Island,1763581185216,70321,False,False
+209434950,ed77f76a-1d79-4171-86ed-c695759eb4af,795,4,China,China,/proxy/wiki/wiki/China,1763581255537,70625,False,False
+209434950,ed77f76a-1d79-4171-86ed-c695759eb4af,796,5,Global_warming,Climate change,/proxy/wiki/wiki/Global_warming,1763581326162,69013,False,False
+209434950,ed77f76a-1d79-4171-86ed-c695759eb4af,797,6,Green_house,Greenhouse,/proxy/wiki/wiki/Green_house,1763581395175,289497,False,False
+209515154,cfead0a7-adba-44c4-a7be-f49d38658272,1390,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1765460515714,12505,True,False
+209515154,cfead0a7-adba-44c4-a7be-f49d38658272,1391,1,Social_media_and_mental_health,Digital media use and mental health,/proxy/wiki/wiki/Social_media_and_mental_health,1765460528219,149278,False,False
+209515154,cfead0a7-adba-44c4-a7be-f49d38658272,1392,2,Problematic_social_media_use,Problematic social media use,/proxy/wiki/wiki/Problematic_social_media_use,1765460677497,114625,False,False
+209515154,cfead0a7-adba-44c4-a7be-f49d38658272,1393,3,Social,Society,/proxy/wiki/wiki/Social,1765460792122,8113,False,False
+209515154,cfead0a7-adba-44c4-a7be-f49d38658272,1394,4,Social_media,Social media,/proxy/wiki/wiki/Social_media,1765460800235,19695,False,False
+209515154,cfead0a7-adba-44c4-a7be-f49d38658272,1395,5,Mental_health,Mental health,/proxy/wiki/wiki/Mental_health,1765460819930,128627,False,False
+209515154,cfead0a7-adba-44c4-a7be-f49d38658272,1396,6,Social_media,Social media,/proxy/wiki/wiki/Social_media,1765460948557,510740,False,False
+209639855,ff0f8960-9692-4fc4-9f53-8ab4a52333ad,1225,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764493371846,10113,True,False
+209639855,ff0f8960-9692-4fc4-9f53-8ab4a52333ad,1226,1,Brain,Brain,/proxy/wiki/wiki/Brain,1764493381959,201572,False,False
+209639855,ff0f8960-9692-4fc4-9f53-8ab4a52333ad,1227,2,Good,Good,/proxy/wiki/wiki/Good,1764493583531,88120,False,False
+209639855,ff0f8960-9692-4fc4-9f53-8ab4a52333ad,1228,3,Reward,Reward,/proxy/wiki/wiki/Reward,1764493671651,16013,False,False
+209639855,ff0f8960-9692-4fc4-9f53-8ab4a52333ad,1229,4,Reward_system,Reward system,/proxy/wiki/wiki/Reward_system,1764493687664,458927,False,False
+209712041,6b255278-165f-4667-88eb-60c5521d738d,935,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763901092062,50782,True,False
+209712041,6b255278-165f-4667-88eb-60c5521d738d,936,1,Deepfake,Deepfake,/proxy/wiki/wiki/Deepfake,1763901142844,726744,False,False
+209877109,f4444023-d19b-4bea-a955-32be24f7121e,1215,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764491289777,6527,True,False
+209877109,f4444023-d19b-4bea-a955-32be24f7121e,1216,1,Job,Work (human activity),/proxy/wiki/wiki/Job,1764491296304,10355,False,False
+209877109,f4444023-d19b-4bea-a955-32be24f7121e,1217,2,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764491306659,17633,True,False
+209877109,f4444023-d19b-4bea-a955-32be24f7121e,1218,3,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1764491324292,190494,False,False
+209877109,f4444023-d19b-4bea-a955-32be24f7121e,1219,4,Work,Work,/proxy/wiki/wiki/Work,1764491514786,7324,False,False
+209877109,f4444023-d19b-4bea-a955-32be24f7121e,1220,5,Work_(human_activity),Work (human activity),/proxy/wiki/wiki/Work_(human_activity),1764491522110,109681,False,False
+209877109,f4444023-d19b-4bea-a955-32be24f7121e,1221,6,Program,Program,/proxy/wiki/wiki/Program,1764491631791,9695,False,False
+209877109,f4444023-d19b-4bea-a955-32be24f7121e,1222,7,Computer_programming,Computer programming,/proxy/wiki/wiki/Computer_programming,1764491641486,48387,False,False
+209877109,f4444023-d19b-4bea-a955-32be24f7121e,1223,8,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1764491689873,28685,False,False
+209877109,f4444023-d19b-4bea-a955-32be24f7121e,1224,9,Stackoverflow,Stack Overflow,/proxy/wiki/wiki/Stackoverflow,1764491718558,423531,False,False
+211545348,18319dac-05a2-4c41-bfb7-2c8b3a17b9aa,826,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763629702293,18423,True,False
+211545348,18319dac-05a2-4c41-bfb7-2c8b3a17b9aa,827,1,Ai,Ai,/proxy/wiki/wiki/Ai,1763629720716,5551,False,False
+211545348,18319dac-05a2-4c41-bfb7-2c8b3a17b9aa,828,2,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1763629726267,39492,False,False
+211545348,18319dac-05a2-4c41-bfb7-2c8b3a17b9aa,829,3,Future_technology,Future technology,/proxy/wiki/wiki/Future_technology,1763629765759,14629,False,False
+211545348,18319dac-05a2-4c41-bfb7-2c8b3a17b9aa,830,4,Technology_forecasting,Technology forecasting,/proxy/wiki/wiki/Technology_forecasting,1763629780388,79404,False,False
+211545348,18319dac-05a2-4c41-bfb7-2c8b3a17b9aa,831,5,Future_technology,Future technology,/proxy/wiki/wiki/Future_technology,1763629859792,7912,False,False
+211545348,18319dac-05a2-4c41-bfb7-2c8b3a17b9aa,832,6,Hypothetical_technology,Hypothetical technology,/proxy/wiki/wiki/Hypothetical_technology,1763629867704,99971,False,False
+211545348,18319dac-05a2-4c41-bfb7-2c8b3a17b9aa,833,7,Mind_uploading,Mind uploading,/proxy/wiki/wiki/Mind_uploading,1763629967675,117373,False,False
+211545348,18319dac-05a2-4c41-bfb7-2c8b3a17b9aa,834,8,Digital_immortality,Digital immortality,/proxy/wiki/wiki/Digital_immortality,1763630085048,67715,False,False
+211545348,18319dac-05a2-4c41-bfb7-2c8b3a17b9aa,835,9,Digitizing,Digitization,/proxy/wiki/wiki/Digitizing,1763630152763,19403,False,False
+211545348,18319dac-05a2-4c41-bfb7-2c8b3a17b9aa,836,10,Smart_home,Home automation,/proxy/wiki/wiki/Smart_home,1763630172166,72290,False,False
+211545348,18319dac-05a2-4c41-bfb7-2c8b3a17b9aa,837,11,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1763630244456,32656,False,False
+211545348,18319dac-05a2-4c41-bfb7-2c8b3a17b9aa,838,12,Intelligence_explosion,Technological singularity,/proxy/wiki/wiki/Intelligence_explosion,1763630277112,246364,False,False
+211623251,e3ded457-c5b7-49f3-bb79-07ee04a1a8e2,927,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763883115766,29063,True,False
+211623251,e3ded457-c5b7-49f3-bb79-07ee04a1a8e2,928,1,Smartphones,Smartphone,/proxy/wiki/wiki/Smartphones,1763883144829,871252,False,False
+211644240,0ddcdbbf-d69a-4064-8069-5e0f973f10a4,636,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763461757277,14147,True,False
+211644240,0ddcdbbf-d69a-4064-8069-5e0f973f10a4,637,1,Technology,Technology,/proxy/wiki/wiki/Technology,1763461771424,41729,False,False
+211644240,0ddcdbbf-d69a-4064-8069-5e0f973f10a4,638,2,Science_studies,Science studies,/proxy/wiki/wiki/Science_studies,1763461813153,10806,False,False
+211644240,0ddcdbbf-d69a-4064-8069-5e0f973f10a4,639,3,Iq,Intelligence quotient,/proxy/wiki/wiki/Iq,1763461823959,674002,False,False
+211668991,4be9ea63-5739-44dd-81d5-ec1d03eae5d2,1369,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1765305742200,12329,True,False
+211668991,4be9ea63-5739-44dd-81d5-ec1d03eae5d2,1370,1,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1765305754529,78955,False,False
+211668991,4be9ea63-5739-44dd-81d5-ec1d03eae5d2,1371,2,AI_(disambiguation),Ai,/proxy/wiki/wiki/AI_(disambiguation),1765305833484,6206,False,True
+211668991,4be9ea63-5739-44dd-81d5-ec1d03eae5d2,1372,3,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1765305839690,34084,False,False
+211668991,4be9ea63-5739-44dd-81d5-ec1d03eae5d2,1373,4,Technology,Technology,/proxy/wiki/wiki/Technology,1765305873774,98159,False,False
+211668991,4be9ea63-5739-44dd-81d5-ec1d03eae5d2,1374,5,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1765305971933,1080,False,False
+211668991,4be9ea63-5739-44dd-81d5-ec1d03eae5d2,1375,6,Ai,Ai,/proxy/wiki/wiki/Ai,1765305973013,3159,False,False
+211668991,4be9ea63-5739-44dd-81d5-ec1d03eae5d2,1376,7,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1765305976172,12153,False,False
+211668991,4be9ea63-5739-44dd-81d5-ec1d03eae5d2,1377,8,Applications_of_AI,Applications of artificial intelligence,/proxy/wiki/wiki/Applications_of_AI,1765305988325,624006,False,False
+211877428,bfbaf0ed-f484-47fb-b751-777df38b5d4e,1174,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764411410290,11254,True,False
+211877428,bfbaf0ed-f484-47fb-b751-777df38b5d4e,1175,1,Well_being,Well-being,/proxy/wiki/wiki/Well_being,1764411421544,210577,False,False
+211877428,bfbaf0ed-f484-47fb-b751-777df38b5d4e,1180,2,Socialism_of_the_21st_century,Socialism of the 21st century,/proxy/wiki/wiki/Socialism_of_the_21st_century,1764411632121,68904,False,False
+211877428,bfbaf0ed-f484-47fb-b751-777df38b5d4e,1181,3,List_of_suicides_in_the_21st_century,List of suicides in the 21st century,/proxy/wiki/wiki/List_of_suicides_in_the_21st_century,1764411701025,67869,False,False
+211877428,bfbaf0ed-f484-47fb-b751-777df38b5d4e,1183,4,World_Happiness_Report,World Happiness Report,/proxy/wiki/wiki/World_Happiness_Report,1764411768894,639644,False,False
+211921192,97b3566e-e1cf-4b54-960d-78799678a0e6,1087,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764083091354,42085,True,False
+211921192,97b3566e-e1cf-4b54-960d-78799678a0e6,1088,1,Chess,Chess,/proxy/wiki/wiki/Chess,1764083133439,24133,False,False
+211921192,97b3566e-e1cf-4b54-960d-78799678a0e6,1089,2,Online_chess,Online chess,/proxy/wiki/wiki/Online_chess,1764083157572,161227,False,False
+211921192,97b3566e-e1cf-4b54-960d-78799678a0e6,1090,3,PyChess,PyChess,/proxy/wiki/wiki/PyChess,1764083318799,18539,False,False
+211921192,97b3566e-e1cf-4b54-960d-78799678a0e6,1091,4,Online_chess,Online chess,/proxy/wiki/wiki/Online_chess,1764083337338,53471,False,False
+211921192,97b3566e-e1cf-4b54-960d-78799678a0e6,1092,5,Computer_chess,Computer chess,/proxy/wiki/wiki/Computer_chess,1764083390809,46156,False,False
+211921192,97b3566e-e1cf-4b54-960d-78799678a0e6,1093,6,Human–computer_chess_matches,Human–computer chess matches,/proxy/wiki/wiki/Human–computer_chess_matches,1764083436965,26015,False,False
+211921192,97b3566e-e1cf-4b54-960d-78799678a0e6,1094,7,Deep_Blue_(chess_computer),Deep Blue (chess computer),/proxy/wiki/wiki/Deep_Blue_(chess_computer),1764083462980,98599,False,False
+211921192,97b3566e-e1cf-4b54-960d-78799678a0e6,1095,8,Chess,Chess,/proxy/wiki/wiki/Chess,1764083561579,798766,False,False
+212175665,b208c0d1-d178-4258-99e2-f66c6881bda8,1348,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1765290463966,54677,True,False
+212175665,b208c0d1-d178-4258-99e2-f66c6881bda8,1349,1,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1765290518643,149599,False,False
+212175665,b208c0d1-d178-4258-99e2-f66c6881bda8,1353,2,Robots,Robot,/proxy/wiki/wiki/Robots,1765290668242,16640,False,False
+212175665,b208c0d1-d178-4258-99e2-f66c6881bda8,1354,3,Programming,Program,/proxy/wiki/wiki/Programming,1765290684882,24813,False,False
+212175665,b208c0d1-d178-4258-99e2-f66c6881bda8,1355,4,Computer_science,Computer science,/proxy/wiki/wiki/Computer_science,1765290709695,120314,False,False
+212175665,b208c0d1-d178-4258-99e2-f66c6881bda8,1356,5,AI_takeover,AI takeover,/proxy/wiki/wiki/AI_takeover,1765290830009,537956,False,False
+212232631,15b87b2f-b90a-401a-b4f7-22a82ea8bbad,839,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763631143637,57772,True,False
+212232631,15b87b2f-b90a-401a-b4f7-22a82ea8bbad,840,1,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1763631201409,8464,False,False
+212232631,15b87b2f-b90a-401a-b4f7-22a82ea8bbad,841,2,Privacy,Privacy,/proxy/wiki/wiki/Privacy,1763631209873,29706,False,False
+212232631,15b87b2f-b90a-401a-b4f7-22a82ea8bbad,842,3,Privacy,Privacy,/proxy/wiki/wiki/Privacy,1763631239579,609084,False,False
+212584338,7cf63251-19dc-4e3c-886d-31d9b6387382,1557,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1766927211251,21152,True,False
+212584338,7cf63251-19dc-4e3c-886d-31d9b6387382,1558,1,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1766927232403,27989,False,False
+212584338,7cf63251-19dc-4e3c-886d-31d9b6387382,1559,2,Job,Work (human activity),/proxy/wiki/wiki/Job,1766927260392,268470,False,False
+212584338,7cf63251-19dc-4e3c-886d-31d9b6387382,1560,3,Technology,Technology,/proxy/wiki/wiki/Technology,1766927528862,582532,False,False
+212753198,449c1a01-4931-431a-b4fa-35ae7844f50d,640,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763466260234,17264,True,False
+212753198,449c1a01-4931-431a-b4fa-35ae7844f50d,641,1,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763466277498,9076,True,False
+212753198,449c1a01-4931-431a-b4fa-35ae7844f50d,642,2,Phone,Telephone,/proxy/wiki/wiki/Phone,1763466286574,15506,False,False
+212753198,449c1a01-4931-431a-b4fa-35ae7844f50d,643,3,Smartphone,Smartphone,/proxy/wiki/wiki/Smartphone,1763466302080,96991,False,False
+212753198,449c1a01-4931-431a-b4fa-35ae7844f50d,644,4,Social_media,Social media,/proxy/wiki/wiki/Social_media,1763466399071,59864,False,False
+212753198,449c1a01-4931-431a-b4fa-35ae7844f50d,645,5,Computers,Computer,/proxy/wiki/wiki/Computers,1763466458935,42020,False,False
+212753198,449c1a01-4931-431a-b4fa-35ae7844f50d,646,6,Boycott,Boycott,/proxy/wiki/wiki/Boycott,1763466500955,76855,False,False
+212753198,449c1a01-4931-431a-b4fa-35ae7844f50d,647,7,Technology,Technology,/proxy/wiki/wiki/Technology,1763466577810,521042,False,False
+213008402,8b88f0ae-0d05-47bb-adbb-086723db7678,884,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763741543558,36103,True,False
+213008402,8b88f0ae-0d05-47bb-adbb-086723db7678,885,1,Babies,Infant,/proxy/wiki/wiki/Babies,1763741579661,83951,False,False
+213008402,8b88f0ae-0d05-47bb-adbb-086723db7678,886,2,Technology,Technology,/proxy/wiki/wiki/Technology,1763741663612,170921,False,False
+213008402,8b88f0ae-0d05-47bb-adbb-086723db7678,887,3,Screen_time,Screen time,/proxy/wiki/wiki/Screen_time,1763741834533,681475,False,False
+213354301,95f91799-c299-4abd-9326-2b82572b524c,1340,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1765267397119,67979,True,False
+213354301,95f91799-c299-4abd-9326-2b82572b524c,1341,1,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1765267465098,148803,False,False
+213354301,95f91799-c299-4abd-9326-2b82572b524c,1342,2,ChatGPT,ChatGPT,/proxy/wiki/wiki/ChatGPT,1765267613901,2466,False,False
+213354301,95f91799-c299-4abd-9326-2b82572b524c,1343,3,ChatGPT,ChatGPT,/proxy/wiki/wiki/ChatGPT,1765267616367,2448,False,False
+213354301,95f91799-c299-4abd-9326-2b82572b524c,1344,4,ChatGPT,ChatGPT,/proxy/wiki/wiki/ChatGPT,1765267618815,434,False,False
+213354301,95f91799-c299-4abd-9326-2b82572b524c,1345,5,ChatGPT,ChatGPT,/proxy/wiki/wiki/ChatGPT,1765267619249,269535,False,False
+213354301,95f91799-c299-4abd-9326-2b82572b524c,1346,6,Jailbreak_(computer_science),Privilege escalation,/proxy/wiki/wiki/Jailbreak_(computer_science),1765267888784,61564,False,False
+213354301,95f91799-c299-4abd-9326-2b82572b524c,1347,7,Generative_artificial_intelligence,Generative artificial intelligence,/proxy/wiki/wiki/Generative_artificial_intelligence,1765267950348,465378,False,False
+213763063,7e5a4e11-191c-4c12-b794-54bcbfdf6089,1550,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1766921901277,150309,True,False
+213763063,7e5a4e11-191c-4c12-b794-54bcbfdf6089,1551,1,Gartner_hype_cycle,Gartner hype cycle,/proxy/wiki/wiki/Gartner_hype_cycle,1766922051586,78662,False,False
+213763063,7e5a4e11-191c-4c12-b794-54bcbfdf6089,1552,2,Technology_hype,Gartner hype cycle,/proxy/wiki/wiki/Technology_hype,1766922130248,14398,False,False
+213763063,7e5a4e11-191c-4c12-b794-54bcbfdf6089,1553,3,Phubbing,Phubbing,/proxy/wiki/wiki/Phubbing,1766922144646,80441,False,False
+213763063,7e5a4e11-191c-4c12-b794-54bcbfdf6089,1554,4,Human_behavior,Human behavior,/proxy/wiki/wiki/Human_behavior,1766922225087,73781,False,False
+213763063,7e5a4e11-191c-4c12-b794-54bcbfdf6089,1555,5,Mental_health,Mental health,/proxy/wiki/wiki/Mental_health,1766922298868,138861,False,False
+213763063,7e5a4e11-191c-4c12-b794-54bcbfdf6089,1556,6,Technology,Technology,/proxy/wiki/wiki/Technology,1766922437729,416549,False,False
+213817539,5c763033-fb0e-46aa-baeb-53280e1e39ce,1483,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1766048825140,12559,True,False
+213817539,5c763033-fb0e-46aa-baeb-53280e1e39ce,1484,1,Ethics_of_technology,Ethics of technology,/proxy/wiki/wiki/Ethics_of_technology,1766048837699,761876,False,False
+213932338,1d8d53cd-2642-46d5-b346-9a758348230b,1439,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1765657766703,5817,True,False
+213932338,1d8d53cd-2642-46d5-b346-9a758348230b,1440,1,Ai,Ai,/proxy/wiki/wiki/Ai,1765657772520,23389,False,False
+213932338,1d8d53cd-2642-46d5-b346-9a758348230b,1441,2,Ai,Ai,/proxy/wiki/wiki/Ai,1765657795909,9744,False,False
+213932338,1d8d53cd-2642-46d5-b346-9a758348230b,1442,3,Chatbot,Chatbot,/proxy/wiki/wiki/Chatbot,1765657805653,22890,False,False
+213932338,1d8d53cd-2642-46d5-b346-9a758348230b,1443,4,Ai,Ai,/proxy/wiki/wiki/Ai,1765657828543,101420,False,False
+213932338,1d8d53cd-2642-46d5-b346-9a758348230b,1444,5,Air_India,Air India,/proxy/wiki/wiki/Air_India,1765657929963,2419,False,False
+213932338,1d8d53cd-2642-46d5-b346-9a758348230b,1445,6,The_Art_Institutes,The Art Institutes,/proxy/wiki/wiki/The_Art_Institutes,1765657932382,202525,False,False
+213932338,1d8d53cd-2642-46d5-b346-9a758348230b,1446,7,Special:Random,2017 South American Youth Games,/proxy/wiki/wiki/Special:Random,1765658134907,40983,False,False
+213932338,1d8d53cd-2642-46d5-b346-9a758348230b,1447,8,Ai,Ai,/proxy/wiki/wiki/Ai,1765658175890,25270,False,False
+213932338,1d8d53cd-2642-46d5-b346-9a758348230b,1448,9,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1765658201160,352273,False,False
+214575375,1af4b629-8130-463a-997d-3376f9e766d8,1230,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764504413631,27218,True,False
+214575375,1af4b629-8130-463a-997d-3376f9e766d8,1231,1,Mental_health,Mental health,/proxy/wiki/wiki/Mental_health,1764504440849,9693,False,False
+214575375,1af4b629-8130-463a-997d-3376f9e766d8,1232,2,Mental_health_and_social_media,Digital media use and mental health,/proxy/wiki/wiki/Mental_health_and_social_media,1764504450542,121124,False,False
+214575375,1af4b629-8130-463a-997d-3376f9e766d8,1233,3,Social_media,Social media,/proxy/wiki/wiki/Social_media,1764504571666,37862,False,False
+214575375,1af4b629-8130-463a-997d-3376f9e766d8,1234,4,Social_media_and_mental_health,Digital media use and mental health,/proxy/wiki/wiki/Social_media_and_mental_health,1764504609528,81480,False,False
+214575375,1af4b629-8130-463a-997d-3376f9e766d8,1235,5,Psychology_and_social_media,Social media and psychology,/proxy/wiki/wiki/Psychology_and_social_media,1764504691008,74574,False,False
+214575375,1af4b629-8130-463a-997d-3376f9e766d8,1236,6,Problematic_social_media_use,Problematic social media use,/proxy/wiki/wiki/Problematic_social_media_use,1764504765582,123479,False,False
+214575375,1af4b629-8130-463a-997d-3376f9e766d8,1237,7,Social_media_and_psychology,Social media and psychology,/proxy/wiki/wiki/Social_media_and_psychology,1764504889061,103254,False,False
+214575375,1af4b629-8130-463a-997d-3376f9e766d8,1238,8,Mental_health_and_social_media,Digital media use and mental health,/proxy/wiki/wiki/Mental_health_and_social_media,1764504992315,352138,False,False
+214578338,84e18c1b-9f44-420c-a376-ccbbbb7888e1,1452,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1765996074326,36042,True,False
+214578338,84e18c1b-9f44-420c-a376-ccbbbb7888e1,1453,1,Social_media,Social media,/proxy/wiki/wiki/Social_media,1765996110368,220162,False,False
+214578338,84e18c1b-9f44-420c-a376-ccbbbb7888e1,1454,2,Recommendation_algorithms,Recommender system,/proxy/wiki/wiki/Recommendation_algorithms,1765996330530,485831,False,False
+214694564,a726664e-c100-44b2-8c00-be57e5dccce9,1033,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763989836990,54737,True,False
+214694564,a726664e-c100-44b2-8c00-be57e5dccce9,1034,1,Wikipedia:Contents,Wikipedia:Contents,/proxy/wiki/wiki/Wikipedia:Contents,1763989891727,42121,False,False
+214694564,a726664e-c100-44b2-8c00-be57e5dccce9,1035,2,AI_alignment,AI alignment,/proxy/wiki/wiki/AI_alignment,1763989933848,188918,False,False
+214694564,a726664e-c100-44b2-8c00-be57e5dccce9,1036,3,Geoffrey_Hinton,Geoffrey Hinton,/proxy/wiki/wiki/Geoffrey_Hinton,1763990122766,98972,False,False
+214694564,a726664e-c100-44b2-8c00-be57e5dccce9,1037,4,AI_alignment,AI alignment,/proxy/wiki/wiki/AI_alignment,1763990221738,7950,False,False
+214694564,a726664e-c100-44b2-8c00-be57e5dccce9,1038,5,AI_takeover,AI takeover,/proxy/wiki/wiki/AI_takeover,1763990229688,191827,False,False
+214694564,a726664e-c100-44b2-8c00-be57e5dccce9,1039,6,Help:Searching,Help:Searching,/proxy/wiki/wiki/Help:Searching,1763990421515,422916,False,False
+214945065,409b6a8d-1879-42ff-8583-a918ca985d41,1561,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1767050315430,28192,True,False
+214945065,409b6a8d-1879-42ff-8583-a918ca985d41,1562,1,Showerhead,Shower,/proxy/wiki/wiki/Showerhead,1767050343622,59109,False,False
+214945065,409b6a8d-1879-42ff-8583-a918ca985d41,1563,2,Nozzle,Nozzle,/proxy/wiki/wiki/Nozzle,1767050402731,117836,False,False
+214945065,409b6a8d-1879-42ff-8583-a918ca985d41,1564,3,Shower,Shower,/proxy/wiki/wiki/Shower,1767050520567,134521,False,False
+214945065,409b6a8d-1879-42ff-8583-a918ca985d41,1565,4,Power_outage,Power outage,/proxy/wiki/wiki/Power_outage,1767050655088,27285,False,False
+214945065,409b6a8d-1879-42ff-8583-a918ca985d41,1566,5,Energy_crisis,Energy crisis,/proxy/wiki/wiki/Energy_crisis,1767050682373,56792,False,False
+214945065,409b6a8d-1879-42ff-8583-a918ca985d41,1567,6,Power,Power,/proxy/wiki/wiki/Power,1767050739165,46170,False,False
+214945065,409b6a8d-1879-42ff-8583-a918ca985d41,1568,7,Electricity,Electricity,/proxy/wiki/wiki/Electricity,1767050785335,486817,False,False
+215008087,1aa3630c-629f-4bb1-a7ce-7b93e16471f9,716,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763556462435,14976,True,False
+215008087,1aa3630c-629f-4bb1-a7ce-7b93e16471f9,717,1,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1763556477411,113618,False,False
+215008087,1aa3630c-629f-4bb1-a7ce-7b93e16471f9,720,2,Yuval_Noah_Harari,Yuval Noah Harari,/proxy/wiki/wiki/Yuval_Noah_Harari,1763556591029,88617,False,False
+215008087,1aa3630c-629f-4bb1-a7ce-7b93e16471f9,722,3,Ethics,Ethics,/proxy/wiki/wiki/Ethics,1763556679646,22326,False,False
+215008087,1aa3630c-629f-4bb1-a7ce-7b93e16471f9,723,4,Nissan,Nissan,/proxy/wiki/wiki/Nissan,1763556701972,16366,False,False
+215008087,1aa3630c-629f-4bb1-a7ce-7b93e16471f9,724,5,Nissan_Titan,Nissan Titan,/proxy/wiki/wiki/Nissan_Titan,1763556718338,12855,False,False
+215008087,1aa3630c-629f-4bb1-a7ce-7b93e16471f9,725,6,"Canton,_Mississippi","Canton, Mississippi","/proxy/wiki/wiki/Canton,_Mississippi",1763556731193,49717,False,False
+215008087,1aa3630c-629f-4bb1-a7ce-7b93e16471f9,726,7,Scott_Field_(Texas_politician),Scott Field (politician),/proxy/wiki/wiki/Scott_Field_(Texas_politician),1763556780910,4437,False,False
+215008087,1aa3630c-629f-4bb1-a7ce-7b93e16471f9,727,8,Scott_Field_(Texas_politician),Scott Field (politician),/proxy/wiki/wiki/Scott_Field_(Texas_politician),1763556785347,24312,False,False
+215008087,1aa3630c-629f-4bb1-a7ce-7b93e16471f9,728,9,Rufus_Hardy_(representative),Rufus Hardy (representative),/proxy/wiki/wiki/Rufus_Hardy_(representative),1763556809659,18412,False,False
+215008087,1aa3630c-629f-4bb1-a7ce-7b93e16471f9,729,10,"Corsicana,_Texas","Corsicana, Texas","/proxy/wiki/wiki/Corsicana,_Texas",1763556828071,4890,False,False
+215008087,1aa3630c-629f-4bb1-a7ce-7b93e16471f9,730,11,United_States,United States,/proxy/wiki/wiki/United_States,1763556832961,27900,False,False
+215008087,1aa3630c-629f-4bb1-a7ce-7b93e16471f9,731,12,Military_history_of_the_United_States_during_World_War_II,Military history of the United States during World War II,/proxy/wiki/wiki/Military_history_of_the_United_States_during_World_War_II,1763556860861,157692,False,False
+215008087,1aa3630c-629f-4bb1-a7ce-7b93e16471f9,733,13,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1763557018553,209240,False,False
+215203746,d19bc1a7-dd8a-4717-bfc2-012201bc9a46,1426,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1765653091904,9898,True,False
+215203746,d19bc1a7-dd8a-4717-bfc2-012201bc9a46,1427,1,Endless_scrolling,Scrolling,/proxy/wiki/wiki/Endless_scrolling,1765653101802,5806,False,False
+215203746,d19bc1a7-dd8a-4717-bfc2-012201bc9a46,1428,2,Infinite_scrolling,Infinite scrolling,/proxy/wiki/wiki/Infinite_scrolling,1765653107608,16707,False,False
+215203746,d19bc1a7-dd8a-4717-bfc2-012201bc9a46,1429,3,Infinite_scrolling,Infinite scrolling,/proxy/wiki/wiki/Infinite_scrolling,1765653124315,22091,False,False
+215203746,d19bc1a7-dd8a-4717-bfc2-012201bc9a46,1430,4,Doom_scrolling,Doomscrolling,/proxy/wiki/wiki/Doom_scrolling,1765653146406,105189,False,False
+215203746,d19bc1a7-dd8a-4717-bfc2-012201bc9a46,1431,5,Negativity_bias,Negativity bias,/proxy/wiki/wiki/Negativity_bias,1765653251595,390,False,False
+215203746,d19bc1a7-dd8a-4717-bfc2-012201bc9a46,1432,6,Negativity_bias,Negativity bias,/proxy/wiki/wiki/Negativity_bias,1765653251985,393,False,False
+215203746,d19bc1a7-dd8a-4717-bfc2-012201bc9a46,1433,7,Negativity_bias,Negativity bias,/proxy/wiki/wiki/Negativity_bias,1765653252378,2394,False,False
+215203746,d19bc1a7-dd8a-4717-bfc2-012201bc9a46,1434,8,Negativity_bias,Negativity bias,/proxy/wiki/wiki/Negativity_bias,1765653254772,2404,False,False
+215203746,d19bc1a7-dd8a-4717-bfc2-012201bc9a46,1435,9,Negativity_bias,Negativity bias,/proxy/wiki/wiki/Negativity_bias,1765653257176,100055,False,False
+215203746,d19bc1a7-dd8a-4717-bfc2-012201bc9a46,1436,10,Social_media_apps,Social media,/proxy/wiki/wiki/Social_media_apps,1765653357231,139725,False,False
+215203746,d19bc1a7-dd8a-4717-bfc2-012201bc9a46,1437,11,Shorts,Shorts,/proxy/wiki/wiki/Shorts,1765653496956,19728,False,False
+215203746,d19bc1a7-dd8a-4717-bfc2-012201bc9a46,1438,12,Youtube_Shorts,YouTube Shorts,/proxy/wiki/wiki/Youtube_Shorts,1765653516684,373210,False,False
+215236134,f5ee57d3-5d5a-4166-9db1-e41abdd0bf4c,1116,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764182821839,22881,True,False
+215236134,f5ee57d3-5d5a-4166-9db1-e41abdd0bf4c,1117,1,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764182844720,3834,True,False
+215236134,f5ee57d3-5d5a-4166-9db1-e41abdd0bf4c,1118,2,Labor,Labour,/proxy/wiki/wiki/Labor,1764182848554,22029,False,False
+215236134,f5ee57d3-5d5a-4166-9db1-e41abdd0bf4c,1119,3,Wage,Wage,/proxy/wiki/wiki/Wage,1764182870583,13225,False,False
+215236134,f5ee57d3-5d5a-4166-9db1-e41abdd0bf4c,1120,4,Efficiency_wage,Efficiency wage,/proxy/wiki/wiki/Efficiency_wage,1764182883808,59109,False,False
+215236134,f5ee57d3-5d5a-4166-9db1-e41abdd0bf4c,1121,5,Labor_economics,Labour economics,/proxy/wiki/wiki/Labor_economics,1764182942917,119712,False,False
+215236134,f5ee57d3-5d5a-4166-9db1-e41abdd0bf4c,1122,6,Capital,Capital,/proxy/wiki/wiki/Capital,1764183062629,11123,False,False
+215236134,f5ee57d3-5d5a-4166-9db1-e41abdd0bf4c,1123,7,Capital_(economics),Capital (economics),/proxy/wiki/wiki/Capital_(economics),1764183073752,16356,False,False
+215236134,f5ee57d3-5d5a-4166-9db1-e41abdd0bf4c,1124,8,Human_capital,Human capital,/proxy/wiki/wiki/Human_capital,1764183090108,96077,False,False
+215236134,f5ee57d3-5d5a-4166-9db1-e41abdd0bf4c,1125,9,Wage,Wage,/proxy/wiki/wiki/Wage,1764183186185,14359,False,False
+215236134,f5ee57d3-5d5a-4166-9db1-e41abdd0bf4c,1126,10,Compensation_of_employees,Compensation of employees,/proxy/wiki/wiki/Compensation_of_employees,1764183200544,9311,False,False
+215236134,f5ee57d3-5d5a-4166-9db1-e41abdd0bf4c,1127,11,Labor_power,Labour power,/proxy/wiki/wiki/Labor_power,1764183209855,119247,False,False
+215236134,f5ee57d3-5d5a-4166-9db1-e41abdd0bf4c,1128,12,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1764183329102,37598,False,False
+215236134,f5ee57d3-5d5a-4166-9db1-e41abdd0bf4c,1129,13,Technological_unemployment,Technological unemployment,/proxy/wiki/wiki/Technological_unemployment,1764183366700,670627,False,False
+215549015,59711e70-0df8-45d1-a49f-2fe6f68932bb,1242,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764621121459,15997,True,False
+215549015,59711e70-0df8-45d1-a49f-2fe6f68932bb,1243,1,AI_and_Environment,Intelligent environment,/proxy/wiki/wiki/AI_and_Environment,1764621137456,21023,False,False
+215549015,59711e70-0df8-45d1-a49f-2fe6f68932bb,1244,2,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764621158479,13029,True,False
+215549015,59711e70-0df8-45d1-a49f-2fe6f68932bb,1245,3,Ai,Ai,/proxy/wiki/wiki/Ai,1764621171508,18585,False,False
+215549015,59711e70-0df8-45d1-a49f-2fe6f68932bb,1246,4,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1764621190093,40403,False,False
+215549015,59711e70-0df8-45d1-a49f-2fe6f68932bb,1247,5,S-shaped_curve,Sigmoid function,/proxy/wiki/wiki/S-shaped_curve,1764621230496,3881,False,False
+215549015,59711e70-0df8-45d1-a49f-2fe6f68932bb,1248,6,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1764621234377,30927,False,False
+215549015,59711e70-0df8-45d1-a49f-2fe6f68932bb,1249,7,Artificial_intelligence_and_elections,Artificial intelligence and elections,/proxy/wiki/wiki/Artificial_intelligence_and_elections,1764621265304,680780,False,False
+215550260,53b9f276-687c-4a7d-829d-3d86d738ea83,978,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763926866581,12532,True,False
+215550260,53b9f276-687c-4a7d-829d-3d86d738ea83,980,1,LLMs,Large language model,/proxy/wiki/wiki/LLMs,1763926879113,48192,False,False
+215550260,53b9f276-687c-4a7d-829d-3d86d738ea83,982,2,Generalization_(machine_learning),Machine learning,/proxy/wiki/wiki/Generalization_(machine_learning),1763926927305,5358,False,False
+215550260,53b9f276-687c-4a7d-829d-3d86d738ea83,983,3,Generalization_(machine_learning),Machine learning,/proxy/wiki/wiki/Generalization_(machine_learning),1763926932663,1310,False,False
+215550260,53b9f276-687c-4a7d-829d-3d86d738ea83,984,4,Generalization_(machine_learning),Machine learning,/proxy/wiki/wiki/Generalization_(machine_learning),1763926933973,465,False,False
+215550260,53b9f276-687c-4a7d-829d-3d86d738ea83,985,5,Generalization_(machine_learning),Machine learning,/proxy/wiki/wiki/Generalization_(machine_learning),1763926934438,5682,False,False
+215550260,53b9f276-687c-4a7d-829d-3d86d738ea83,986,6,Generalization_(machine_learning),Machine learning,/proxy/wiki/wiki/Generalization_(machine_learning),1763926940120,416,False,False
+215550260,53b9f276-687c-4a7d-829d-3d86d738ea83,987,7,Generalization_(machine_learning),Machine learning,/proxy/wiki/wiki/Generalization_(machine_learning),1763926940536,21845,False,False
+215550260,53b9f276-687c-4a7d-829d-3d86d738ea83,988,8,Llm,Large language model,/proxy/wiki/wiki/Llm,1763926962381,59007,False,False
+215550260,53b9f276-687c-4a7d-829d-3d86d738ea83,990,9,Hallucination_(artificial_intelligence),Hallucination (artificial intelligence),/proxy/wiki/wiki/Hallucination_(artificial_intelligence),1763927021388,229684,False,False
+215550260,53b9f276-687c-4a7d-829d-3d86d738ea83,993,10,Generative_pre-trained_transformer,Generative pre-trained transformer,/proxy/wiki/wiki/Generative_pre-trained_transformer,1763927251072,144073,False,False
+215550260,53b9f276-687c-4a7d-829d-3d86d738ea83,994,11,European_Union_Intellectual_Property_Office,European Union Intellectual Property Office,/proxy/wiki/wiki/European_Union_Intellectual_Property_Office,1763927395145,196850,False,False
+216232124,cb0dcb7f-079c-4cac-99cf-00a417221b5e,1579,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1767107601891,7073,True,False
+216232124,cb0dcb7f-079c-4cac-99cf-00a417221b5e,1580,1,Agi,AGI,/proxy/wiki/wiki/Agi,1767107608964,3316,False,False
+216232124,cb0dcb7f-079c-4cac-99cf-00a417221b5e,1581,2,Artificial_general_intelligence,Artificial general intelligence,/proxy/wiki/wiki/Artificial_general_intelligence,1767107612280,262327,False,False
+216232124,cb0dcb7f-079c-4cac-99cf-00a417221b5e,1582,3,Artificial_stupidity,Artificial stupidity,/proxy/wiki/wiki/Artificial_stupidity,1767107874607,148011,False,False
+216232124,cb0dcb7f-079c-4cac-99cf-00a417221b5e,1583,4,Minimax,Minimax,/proxy/wiki/wiki/Minimax,1767108022618,60876,False,False
+216232124,cb0dcb7f-079c-4cac-99cf-00a417221b5e,1584,5,Agi,AGI,/proxy/wiki/wiki/Agi,1767108083494,6275,False,False
+216232124,cb0dcb7f-079c-4cac-99cf-00a417221b5e,1585,6,Artificial_general_intelligence,Artificial general intelligence,/proxy/wiki/wiki/Artificial_general_intelligence,1767108089769,395285,False,False
+230490476,09425925-94d2-4633-9ff1-7e70cdcd9db8,1024,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763977867576,6964,True,False
+230490476,09425925-94d2-4633-9ff1-7e70cdcd9db8,1025,1,Shakey,Shaky (disambiguation),/proxy/wiki/wiki/Shakey,1763977874540,17221,False,False
+230490476,09425925-94d2-4633-9ff1-7e70cdcd9db8,1026,2,Shakey_the_robot,Shakey the robot,/proxy/wiki/wiki/Shakey_the_robot,1763977891761,43677,False,False
+230490476,09425925-94d2-4633-9ff1-7e70cdcd9db8,1027,3,Pathfinding,Pathfinding,/proxy/wiki/wiki/Pathfinding,1763977935438,7807,False,False
+230490476,09425925-94d2-4633-9ff1-7e70cdcd9db8,1028,4,A*_search_algorithm,A* search algorithm,/proxy/wiki/wiki/A*_search_algorithm,1763977943245,40664,False,False
+230490476,09425925-94d2-4633-9ff1-7e70cdcd9db8,1029,5,Parsing,Parsing,/proxy/wiki/wiki/Parsing,1763977983909,44059,False,False
+230490476,09425925-94d2-4633-9ff1-7e70cdcd9db8,1030,6,Computer_vision,Computer vision,/proxy/wiki/wiki/Computer_vision,1763978027968,147871,False,False
+230490476,09425925-94d2-4633-9ff1-7e70cdcd9db8,1031,7,Shakey_the_Robot,Shakey the robot,/proxy/wiki/wiki/Shakey_the_Robot,1763978175839,55178,False,False
+230490476,09425925-94d2-4633-9ff1-7e70cdcd9db8,1032,8,Natural_language_processing,Natural language processing,/proxy/wiki/wiki/Natural_language_processing,1763978231017,555965,False,False
+2933,0655223d-fc15-4ddc-b95c-f198563bb12d,1048,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763996921585,71885,True,False
+2933,0655223d-fc15-4ddc-b95c-f198563bb12d,1049,1,AI_takeover,AI takeover,/proxy/wiki/wiki/AI_takeover,1763996993470,60489,False,False
+2933,0655223d-fc15-4ddc-b95c-f198563bb12d,1050,2,Technological_unemployment,Technological unemployment,/proxy/wiki/wiki/Technological_unemployment,1763997053959,788670,False,False
+2934,052d2033-e8fb-4455-87b8-9f70e4ed258c,1046,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763995829147,6611,True,False
+2934,052d2033-e8fb-4455-87b8-9f70e4ed258c,1047,1,Robots,Robot,/proxy/wiki/wiki/Robots,1763995835758,747832,False,False
+2941,e96db58b-5eeb-4c40-a6be-449eac327cc3,662,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763473764610,641880,True,False
+2952,5aa18ed3-2d42-465c-bbb5-e2fa3f1e7fc2,685,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763492755690,7862,True,False
+2952,5aa18ed3-2d42-465c-bbb5-e2fa3f1e7fc2,686,1,Attention_span,Attention span,/proxy/wiki/wiki/Attention_span,1763492763552,140583,False,False
+2952,5aa18ed3-2d42-465c-bbb5-e2fa3f1e7fc2,687,2,Subliminal_stimuli,Subliminal stimuli,/proxy/wiki/wiki/Subliminal_stimuli,1763492904135,26820,False,False
+2952,5aa18ed3-2d42-465c-bbb5-e2fa3f1e7fc2,688,3,Hyperfocus,Hyperfocus,/proxy/wiki/wiki/Hyperfocus,1763492930955,35945,False,False
+2952,5aa18ed3-2d42-465c-bbb5-e2fa3f1e7fc2,689,4,Absent-mindedness,Absent-mindedness,/proxy/wiki/wiki/Absent-mindedness,1763492966900,14019,False,False
+2952,5aa18ed3-2d42-465c-bbb5-e2fa3f1e7fc2,690,5,Mindfulness,Mindfulness,/proxy/wiki/wiki/Mindfulness,1763492980919,105964,False,False
+2952,5aa18ed3-2d42-465c-bbb5-e2fa3f1e7fc2,691,6,Tiktok,TikTok,/proxy/wiki/wiki/Tiktok,1763493086883,94343,False,False
+2952,5aa18ed3-2d42-465c-bbb5-e2fa3f1e7fc2,692,7,Focus,Focus,/proxy/wiki/wiki/Focus,1763493181226,24708,False,False
+2952,5aa18ed3-2d42-465c-bbb5-e2fa3f1e7fc2,693,8,Attention,Attention,/proxy/wiki/wiki/Attention,1763493205934,77369,False,False
+2952,5aa18ed3-2d42-465c-bbb5-e2fa3f1e7fc2,694,9,Attention_span,Attention span,/proxy/wiki/wiki/Attention_span,1763493283303,51578,False,False
+2952,5aa18ed3-2d42-465c-bbb5-e2fa3f1e7fc2,695,10,Mindfulness_(psychology),Mindfulness,/proxy/wiki/wiki/Mindfulness_(psychology),1763493334881,364490,False,False
+314707407,2218f4a1-adb7-460a-adbf-28845d79ca45,1305,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764863612528,7605,True,False
+314707407,2218f4a1-adb7-460a-adbf-28845d79ca45,1306,1,Generative_AI,Generative artificial intelligence,/proxy/wiki/wiki/Generative_AI,1764863620133,126894,False,False
+314707407,2218f4a1-adb7-460a-adbf-28845d79ca45,1307,2,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1764863747027,11478,False,False
+314707407,2218f4a1-adb7-460a-adbf-28845d79ca45,1308,3,Superintelligence,Superintelligence,/proxy/wiki/wiki/Superintelligence,1764863758505,70160,False,False
+314707407,2218f4a1-adb7-460a-adbf-28845d79ca45,1309,4,Transhumanism,Transhumanism,/proxy/wiki/wiki/Transhumanism,1764863828665,49696,False,False
+314707407,2218f4a1-adb7-460a-adbf-28845d79ca45,1310,5,Posthuman,Posthuman,/proxy/wiki/wiki/Posthuman,1764863878361,7809,False,False
+314707407,2218f4a1-adb7-460a-adbf-28845d79ca45,1311,6,Posthuman,Posthuman,/proxy/wiki/wiki/Posthuman,1764863886170,16547,False,False
+314707407,2218f4a1-adb7-460a-adbf-28845d79ca45,1312,7,Transhumanism,Transhumanism,/proxy/wiki/wiki/Transhumanism,1764863902717,4089,False,False
+314707407,2218f4a1-adb7-460a-adbf-28845d79ca45,1313,8,Transhumanism,Transhumanism,/proxy/wiki/wiki/Transhumanism,1764863906806,108643,False,False
+314707407,2218f4a1-adb7-460a-adbf-28845d79ca45,1314,9,Critical_theory,Critical theory,/proxy/wiki/wiki/Critical_theory,1764864015449,54095,False,False
+314707407,2218f4a1-adb7-460a-adbf-28845d79ca45,1315,10,Transhuman,Transhuman,/proxy/wiki/wiki/Transhuman,1764864069544,104895,False,False
+314707407,2218f4a1-adb7-460a-adbf-28845d79ca45,1316,11,Genetic_enhancement,Human genetic enhancement,/proxy/wiki/wiki/Genetic_enhancement,1764864174439,201889,False,False
+314778374,152adb02-5312-4fd1-9800-0c80a6b6f2c6,937,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763904788902,115306,True,False
+314778374,152adb02-5312-4fd1-9800-0c80a6b6f2c6,938,1,Digital_communication,Data communication,/proxy/wiki/wiki/Digital_communication,1763904904208,154241,False,False
+314778374,152adb02-5312-4fd1-9800-0c80a6b6f2c6,939,2,Social_isolation,Social isolation,/proxy/wiki/wiki/Social_isolation,1763905058449,703091,False,False
+314830449,37864b1e-15d4-4a28-90d2-bc2a1b4e0517,846,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763645326505,44170,True,False
+314830449,37864b1e-15d4-4a28-90d2-bc2a1b4e0517,847,1,Ai,Ai,/proxy/wiki/wiki/Ai,1763645370675,3742,False,False
+314830449,37864b1e-15d4-4a28-90d2-bc2a1b4e0517,848,2,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1763645374417,71518,False,False
+314830449,37864b1e-15d4-4a28-90d2-bc2a1b4e0517,849,3,Unemployment,Unemployment,/proxy/wiki/wiki/Unemployment,1763645445935,97704,False,False
+314830449,37864b1e-15d4-4a28-90d2-bc2a1b4e0517,850,4,Firing,Firing,/proxy/wiki/wiki/Firing,1763645543639,3801,False,False
+314830449,37864b1e-15d4-4a28-90d2-bc2a1b4e0517,851,5,Dismissal_(employment),Dismissal (employment),/proxy/wiki/wiki/Dismissal_(employment),1763645547440,19378,False,False
+314830449,37864b1e-15d4-4a28-90d2-bc2a1b4e0517,852,6,Labour_market_flexibility,Labour market flexibility,/proxy/wiki/wiki/Labour_market_flexibility,1763645566818,69628,False,False
+314830449,37864b1e-15d4-4a28-90d2-bc2a1b4e0517,853,7,Ai,Ai,/proxy/wiki/wiki/Ai,1763645636446,7380,False,False
+314830449,37864b1e-15d4-4a28-90d2-bc2a1b4e0517,854,8,Chatgpt,ChatGPT,/proxy/wiki/wiki/Chatgpt,1763645643826,143317,False,False
+314830449,37864b1e-15d4-4a28-90d2-bc2a1b4e0517,855,9,Programmer,Programmer,/proxy/wiki/wiki/Programmer,1763645787143,332134,False,False
+314909961,36b82159-55b6-481e-8b6c-9953130bec31,648,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763471726659,86529,True,False
+314909961,36b82159-55b6-481e-8b6c-9953130bec31,649,1,Youth-led_development,Youth-led development,/proxy/wiki/wiki/Youth-led_development,1763471813188,40924,False,False
+314909961,36b82159-55b6-481e-8b6c-9953130bec31,650,2,United_Youth_Development_Organization,UYDO,/proxy/wiki/wiki/United_Youth_Development_Organization,1763471854112,82187,False,False
+314909961,36b82159-55b6-481e-8b6c-9953130bec31,651,3,Mobile_technology,Mobile technology,/proxy/wiki/wiki/Mobile_technology,1763471936299,158313,False,False
+314909961,36b82159-55b6-481e-8b6c-9953130bec31,652,4,Mobile_technology,Mobile technology,/proxy/wiki/wiki/Mobile_technology,1763472094612,404,False,False
+314909961,36b82159-55b6-481e-8b6c-9953130bec31,653,5,Mobile_technology,Mobile technology,/proxy/wiki/wiki/Mobile_technology,1763472095016,411,False,False
+314909961,36b82159-55b6-481e-8b6c-9953130bec31,654,6,Mobile_technology,Mobile technology,/proxy/wiki/wiki/Mobile_technology,1763472095427,1318,False,False
+314909961,36b82159-55b6-481e-8b6c-9953130bec31,655,7,Youth-led_development,Youth-led development,/proxy/wiki/wiki/Youth-led_development,1763472096745,9263,False,False
+314909961,36b82159-55b6-481e-8b6c-9953130bec31,656,8,Mobile_technology,Mobile technology,/proxy/wiki/wiki/Mobile_technology,1763472106008,580531,False,False
+314923095,cfd4f8b0-29c2-43f1-9d63-a83802964b1b,863,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763657495582,26887,True,False
+314923095,cfd4f8b0-29c2-43f1-9d63-a83802964b1b,864,1,Africa,Africa,/proxy/wiki/wiki/Africa,1763657522469,41663,False,False
+314923095,cfd4f8b0-29c2-43f1-9d63-a83802964b1b,865,2,High_education,Tertiary education,/proxy/wiki/wiki/High_education,1763657564132,9442,False,False
+314923095,cfd4f8b0-29c2-43f1-9d63-a83802964b1b,866,3,Math,Mathematics,/proxy/wiki/wiki/Math,1763657573574,9863,False,False
+314923095,cfd4f8b0-29c2-43f1-9d63-a83802964b1b,867,4,Cs,CS,/proxy/wiki/wiki/Cs,1763657583437,19858,False,False
+314923095,cfd4f8b0-29c2-43f1-9d63-a83802964b1b,868,5,Train,Train,/proxy/wiki/wiki/Train,1763657603295,143386,False,False
+314923095,cfd4f8b0-29c2-43f1-9d63-a83802964b1b,869,6,שְׁלִיחוּת,Shaliah,/proxy/wiki/wiki/שְׁלִיחוּת,1763657746681,34358,False,False
+314923095,cfd4f8b0-29c2-43f1-9d63-a83802964b1b,870,7,Money,Money,/proxy/wiki/wiki/Money,1763657781039,61158,False,False
+314923095,cfd4f8b0-29c2-43f1-9d63-a83802964b1b,871,8,Fashin,Fashion,/proxy/wiki/wiki/Fashin,1763657842197,7634,False,False
+314923095,cfd4f8b0-29c2-43f1-9d63-a83802964b1b,872,9,Africa,Africa,/proxy/wiki/wiki/Africa,1763657849831,134724,False,False
+314923095,cfd4f8b0-29c2-43f1-9d63-a83802964b1b,873,10,Explore,Exploration,/proxy/wiki/wiki/Explore,1763657984555,17845,False,False
+314923095,cfd4f8b0-29c2-43f1-9d63-a83802964b1b,874,11,Ships,Ship,/proxy/wiki/wiki/Ships,1763658002400,342713,False,False
+315180737,462a3318-4a0e-4d5a-86eb-20c675a063e3,766,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763565567810,143436,True,False
+315180737,462a3318-4a0e-4d5a-86eb-20c675a063e3,769,1,Artificial_intelligence_engineering,Artificial intelligence engineering,/proxy/wiki/wiki/Artificial_intelligence_engineering,1763565711246,177962,False,False
+315180737,462a3318-4a0e-4d5a-86eb-20c675a063e3,770,2,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763565889208,15433,True,False
+315180737,462a3318-4a0e-4d5a-86eb-20c675a063e3,771,3,Machine_learning,Machine learning,/proxy/wiki/wiki/Machine_learning,1763565904641,51159,False,False
+315180737,462a3318-4a0e-4d5a-86eb-20c675a063e3,772,4,AI-assisted_reverse_engineering,AI-assisted reverse engineering,/proxy/wiki/wiki/AI-assisted_reverse_engineering,1763565955800,76430,False,False
+315180737,462a3318-4a0e-4d5a-86eb-20c675a063e3,773,5,Technological_unemployment,Technological unemployment,/proxy/wiki/wiki/Technological_unemployment,1763566032230,918366,False,False
+316440726,85e22950-7b1a-4e19-96b3-0e73af490ff6,1420,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1765627953273,23175,True,False
+316440726,85e22950-7b1a-4e19-96b3-0e73af490ff6,1421,1,Job_loss,Job loss,/proxy/wiki/wiki/Job_loss,1765627976448,4652,False,False
+316440726,85e22950-7b1a-4e19-96b3-0e73af490ff6,1422,2,Termination_of_employment,Termination of employment,/proxy/wiki/wiki/Termination_of_employment,1765627981100,54650,False,False
+316440726,85e22950-7b1a-4e19-96b3-0e73af490ff6,1423,3,Layoff,Layoff,/proxy/wiki/wiki/Layoff,1765628035750,43246,False,False
+316440726,85e22950-7b1a-4e19-96b3-0e73af490ff6,1424,4,Artificial_inteligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_inteligence,1765628078996,155983,False,False
+316440726,85e22950-7b1a-4e19-96b3-0e73af490ff6,1425,5,Technological_unemployment,Technological unemployment,/proxy/wiki/wiki/Technological_unemployment,1765628234979,702363,False,False
+316576016,309e9f68-3981-4556-9789-32f2188ebd1f,1262,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764663740778,50466,True,False
+316576016,309e9f68-3981-4556-9789-32f2188ebd1f,1263,1,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764663791244,28704,True,False
+316576016,309e9f68-3981-4556-9789-32f2188ebd1f,1264,2,Soccer,Association football,/proxy/wiki/wiki/Soccer,1764663819948,180082,False,False
+316576016,309e9f68-3981-4556-9789-32f2188ebd1f,1265,3,Basketball,Basketball,/proxy/wiki/wiki/Basketball,1764664000030,176391,False,False
+316576016,309e9f68-3981-4556-9789-32f2188ebd1f,1266,4,Underwater_hockey,Underwater hockey,/proxy/wiki/wiki/Underwater_hockey,1764664176421,170188,False,False
+316576016,309e9f68-3981-4556-9789-32f2188ebd1f,1267,5,Football,Football,/proxy/wiki/wiki/Football,1764664346609,195097,False,False
+318471075,8efb8b51-1df8-4797-bc10-43da331a040a,1297,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764849233013,11307,True,False
+318471075,8efb8b51-1df8-4797-bc10-43da331a040a,1298,1,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1764849244320,136641,False,False
+318471075,8efb8b51-1df8-4797-bc10-43da331a040a,1299,2,Human-AI_interaction,Human-AI interaction,/proxy/wiki/wiki/Human-AI_interaction,1764849380961,114788,False,False
+318471075,8efb8b51-1df8-4797-bc10-43da331a040a,1300,3,AI_alignment,AI alignment,/proxy/wiki/wiki/AI_alignment,1764849495749,220278,False,False
+318471075,8efb8b51-1df8-4797-bc10-43da331a040a,1301,4,"Superintelligence:_Paths,_Dangers,_Strategies","Superintelligence: Paths, Dangers, Strategies","/proxy/wiki/wiki/Superintelligence:_Paths,_Dangers,_Strategies",1764849716027,19362,False,False
+318471075,8efb8b51-1df8-4797-bc10-43da331a040a,1302,5,Human_Compatible,Human Compatible,/proxy/wiki/wiki/Human_Compatible,1764849735389,39184,False,False
+318471075,8efb8b51-1df8-4797-bc10-43da331a040a,1303,6,Human_Compatible,Human Compatible,/proxy/wiki/wiki/Human_Compatible,1764849774573,44939,False,False
+318471075,8efb8b51-1df8-4797-bc10-43da331a040a,1304,7,Brain_rot,Brain rot,/proxy/wiki/wiki/Brain_rot,1764849819512,254057,False,False
+318548625,44598734-4f0b-4899-b675-9e93ca1e738e,1586,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1767177138804,7763,True,False
+318548625,44598734-4f0b-4899-b675-9e93ca1e738e,1587,1,LLM,Large language model,/proxy/wiki/wiki/LLM,1767177146567,25168,False,False
+318548625,44598734-4f0b-4899-b675-9e93ca1e738e,1588,2,Generative_pre-trained_transformers,Generative pre-trained transformer,/proxy/wiki/wiki/Generative_pre-trained_transformers,1767177171735,97345,False,False
+318548625,44598734-4f0b-4899-b675-9e93ca1e738e,1589,3,AI_agent,AI agent,/proxy/wiki/wiki/AI_agent,1767177269080,92616,False,False
+318548625,44598734-4f0b-4899-b675-9e93ca1e738e,1590,4,Model_Context_Protocol,Model Context Protocol,/proxy/wiki/wiki/Model_Context_Protocol,1767177361696,29337,False,False
+318548625,44598734-4f0b-4899-b675-9e93ca1e738e,1592,5,AI_governance,Regulation of artificial intelligence,/proxy/wiki/wiki/AI_governance,1767177391033,60134,False,False
+318548625,44598734-4f0b-4899-b675-9e93ca1e738e,1594,6,Global_Partnership_on_Artificial_Intelligence,Global Partnership on Artificial Intelligence,/proxy/wiki/wiki/Global_Partnership_on_Artificial_Intelligence,1767177451167,46137,False,False
+318548625,44598734-4f0b-4899-b675-9e93ca1e738e,1596,7,Cyber_security,Computer security,/proxy/wiki/wiki/Cyber_security,1767177497304,172139,False,False
+318548625,44598734-4f0b-4899-b675-9e93ca1e738e,1599,8,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1767177669443,25756,True,False
+318548625,44598734-4f0b-4899-b675-9e93ca1e738e,1600,9,AI_agent,AI agent,/proxy/wiki/wiki/AI_agent,1767177695199,41979,False,False
+318548625,44598734-4f0b-4899-b675-9e93ca1e738e,1601,10,Reward_hacking,Reward hacking,/proxy/wiki/wiki/Reward_hacking,1767177737178,225080,False,False
+318738127,bf4825bd-90d9-4453-a997-3c9728cf9694,1040,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763993871056,19738,True,False
+318738127,bf4825bd-90d9-4453-a997-3c9728cf9694,1041,1,Social_skills,Social skills,/proxy/wiki/wiki/Social_skills,1763993890794,126250,False,False
+318738127,bf4825bd-90d9-4453-a997-3c9728cf9694,1042,2,Snakes_in_Suits:_When_Psychopaths_Go_to_Work,Snakes in Suits,/proxy/wiki/wiki/Snakes_in_Suits:_When_Psychopaths_Go_to_Work,1763994017044,47281,False,False
+318738127,bf4825bd-90d9-4453-a997-3c9728cf9694,1043,3,Adhd,Attention deficit hyperactivity disorder,/proxy/wiki/wiki/Adhd,1763994064325,267580,False,False
+318738127,bf4825bd-90d9-4453-a997-3c9728cf9694,1044,4,Anxiety,Anxiety,/proxy/wiki/wiki/Anxiety,1763994331905,120376,False,False
+318738127,bf4825bd-90d9-4453-a997-3c9728cf9694,1045,5,Agressive,Aggression,/proxy/wiki/wiki/Agressive,1763994452281,259361,False,False
+318801792,2facd856-9891-4ca4-925e-c91bdd9353c5,682,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763489799749,17845,True,False
+318801792,2facd856-9891-4ca4-925e-c91bdd9353c5,683,1,Technology,Technology,/proxy/wiki/wiki/Technology,1763489817594,12348,False,False
+318801792,2facd856-9891-4ca4-925e-c91bdd9353c5,684,2,Technology_and_society,Technology and society,/proxy/wiki/wiki/Technology_and_society,1763489829942,728753,False,False
+319022687,aeb6c7bb-68f2-40f5-965e-75b9275b70bd,1485,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1766074905881,32126,True,False
+319022687,aeb6c7bb-68f2-40f5-965e-75b9275b70bd,1486,1,Social_media,Social media,/proxy/wiki/wiki/Social_media,1766074938007,185228,False,False
+319022687,aeb6c7bb-68f2-40f5-965e-75b9275b70bd,1487,2,Mental_health,Mental health,/proxy/wiki/wiki/Mental_health,1766075123235,175293,False,False
+319022687,aeb6c7bb-68f2-40f5-965e-75b9275b70bd,1488,3,Psychology,Psychology,/proxy/wiki/wiki/Psychology,1766075298528,18232,False,False
+319022687,aeb6c7bb-68f2-40f5-965e-75b9275b70bd,1489,4,Sociality,Sociality,/proxy/wiki/wiki/Sociality,1766075316760,19110,False,False
+319022687,aeb6c7bb-68f2-40f5-965e-75b9275b70bd,1490,5,Communications,Communication,/proxy/wiki/wiki/Communications,1766075335870,18435,False,False
+319022687,aeb6c7bb-68f2-40f5-965e-75b9275b70bd,1491,6,Depression,Depression,/proxy/wiki/wiki/Depression,1766075354305,15017,False,False
+319022687,aeb6c7bb-68f2-40f5-965e-75b9275b70bd,1492,7,Mental_health,Mental health,/proxy/wiki/wiki/Mental_health,1766075369322,101349,False,False
+319022687,aeb6c7bb-68f2-40f5-965e-75b9275b70bd,1493,8,Friendships,Friendship,/proxy/wiki/wiki/Friendships,1766075470671,228381,False,False
+319119632,cf9e0c57-d24c-4bb2-ae0d-52a51c7fc21d,843,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763641146750,16373,True,False
+319119632,cf9e0c57-d24c-4bb2-ae0d-52a51c7fc21d,844,1,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1763641163123,491569,False,False
+319119632,cf9e0c57-d24c-4bb2-ae0d-52a51c7fc21d,845,2,Ethics,Ethics,/proxy/wiki/wiki/Ethics,1763641654692,247771,False,False
+321771859,382a5190-e5ea-4c49-b192-7137d331ae51,875,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763736889812,12987,True,False
+321771859,382a5190-e5ea-4c49-b192-7137d331ae51,876,1,Phantom_pain,Phantom pain,/proxy/wiki/wiki/Phantom_pain,1763736902799,25789,False,False
+321771859,382a5190-e5ea-4c49-b192-7137d331ae51,877,2,Prosthesis,Prosthesis,/proxy/wiki/wiki/Prosthesis,1763736928588,60455,False,False
+321771859,382a5190-e5ea-4c49-b192-7137d331ae51,878,3,Computer-aided_design,Computer-aided design,/proxy/wiki/wiki/Computer-aided_design,1763736989043,56706,False,False
+321771859,382a5190-e5ea-4c49-b192-7137d331ae51,879,4,Prothesis,Prothesis,/proxy/wiki/wiki/Prothesis,1763737045749,18334,False,False
+321771859,382a5190-e5ea-4c49-b192-7137d331ae51,880,5,Amputation,Amputation,/proxy/wiki/wiki/Amputation,1763737064083,51724,False,False
+321771859,382a5190-e5ea-4c49-b192-7137d331ae51,881,6,Bioelectronics,Bioelectronics,/proxy/wiki/wiki/Bioelectronics,1763737115807,105478,False,False
+321771859,382a5190-e5ea-4c49-b192-7137d331ae51,882,7,Amputation,Amputation,/proxy/wiki/wiki/Amputation,1763737221285,5780,False,False
+321771859,382a5190-e5ea-4c49-b192-7137d331ae51,883,8,Prosthesis,Prosthesis,/proxy/wiki/wiki/Prosthesis,1763737227065,484103,False,False
+322376617,c9212e4c-3937-4438-94b7-8883db68eb99,1499,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1766228861729,23682,True,False
+322376617,c9212e4c-3937-4438-94b7-8883db68eb99,1500,1,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1766228885411,8768,True,False
+322376617,c9212e4c-3937-4438-94b7-8883db68eb99,1501,2,Tiktok,TikTok,/proxy/wiki/wiki/Tiktok,1766228894179,127388,False,False
+322376617,c9212e4c-3937-4438-94b7-8883db68eb99,1502,3,TikTok,TikTok,/proxy/wiki/wiki/TikTok,1766229021567,103885,False,False
+322376617,c9212e4c-3937-4438-94b7-8883db68eb99,1503,4,Tiktok,TikTok,/proxy/wiki/wiki/Tiktok,1766229125452,1596,False,False
+322376617,c9212e4c-3937-4438-94b7-8883db68eb99,1504,5,Tiktok,TikTok,/proxy/wiki/wiki/Tiktok,1766229127048,26850,False,False
+322376617,c9212e4c-3937-4438-94b7-8883db68eb99,1505,6,Tiktok,TikTok,/proxy/wiki/wiki/Tiktok,1766229153898,25382,False,False
+322376617,c9212e4c-3937-4438-94b7-8883db68eb99,1506,7,Universal_Music_Group,Universal Music Group,/proxy/wiki/wiki/Universal_Music_Group,1766229179280,107503,False,False
+322376617,c9212e4c-3937-4438-94b7-8883db68eb99,1507,8,Tiktok,TikTok,/proxy/wiki/wiki/Tiktok,1766229286783,348621,False,False
+322384371,f9e0ffaa-1008-4532-8f64-9c7e235bd493,1544,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1766842646760,10614,True,False
+322384371,f9e0ffaa-1008-4532-8f64-9c7e235bd493,1545,1,ADHD,Attention deficit hyperactivity disorder,/proxy/wiki/wiki/ADHD,1766842657374,253446,False,False
+322384371,f9e0ffaa-1008-4532-8f64-9c7e235bd493,1546,2,ADHD,Attention deficit hyperactivity disorder,/proxy/wiki/wiki/ADHD,1766842910820,15362,False,False
+322384371,f9e0ffaa-1008-4532-8f64-9c7e235bd493,1547,3,Addiction,Addiction,/proxy/wiki/wiki/Addiction,1766842926182,32334,False,False
+322384371,f9e0ffaa-1008-4532-8f64-9c7e235bd493,1548,4,Adhd,Attention deficit hyperactivity disorder,/proxy/wiki/wiki/Adhd,1766842958516,45295,False,False
+322384371,f9e0ffaa-1008-4532-8f64-9c7e235bd493,1549,5,Problematic_smartphone_use,Problematic smartphone use,/proxy/wiki/wiki/Problematic_smartphone_use,1766843003811,474342,False,False
+322468844,7810fa54-d516-411d-98ff-8a8fa47e8d33,736,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763560688664,25956,True,False
+322468844,7810fa54-d516-411d-98ff-8a8fa47e8d33,737,1,Super_AI,Superintelligence,/proxy/wiki/wiki/Super_AI,1763560714620,14915,False,False
+322468844,7810fa54-d516-411d-98ff-8a8fa47e8d33,738,2,Constitutional_AI,Claude (language model),/proxy/wiki/wiki/Constitutional_AI,1763560729535,28556,False,False
+322468844,7810fa54-d516-411d-98ff-8a8fa47e8d33,739,3,Ai,Ai,/proxy/wiki/wiki/Ai,1763560758091,1136,False,False
+322468844,7810fa54-d516-411d-98ff-8a8fa47e8d33,740,4,Ai,Ai,/proxy/wiki/wiki/Ai,1763560759227,5178,False,False
+322468844,7810fa54-d516-411d-98ff-8a8fa47e8d33,741,5,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1763560764405,11346,False,False
+322468844,7810fa54-d516-411d-98ff-8a8fa47e8d33,742,6,Superintelligence,Superintelligence,/proxy/wiki/wiki/Superintelligence,1763560775751,22771,False,False
+322468844,7810fa54-d516-411d-98ff-8a8fa47e8d33,743,7,Global_brain,Global brain,/proxy/wiki/wiki/Global_brain,1763560798522,375,False,False
+322468844,7810fa54-d516-411d-98ff-8a8fa47e8d33,744,8,Global_brain,Global brain,/proxy/wiki/wiki/Global_brain,1763560798897,84507,False,False
+322468844,7810fa54-d516-411d-98ff-8a8fa47e8d33,745,9,Nervous_system,Nervous system,/proxy/wiki/wiki/Nervous_system,1763560883404,2414,False,False
+322468844,7810fa54-d516-411d-98ff-8a8fa47e8d33,746,10,Nervous_system,Nervous system,/proxy/wiki/wiki/Nervous_system,1763560885818,34175,False,False
+322468844,7810fa54-d516-411d-98ff-8a8fa47e8d33,747,11,Ediacaran,Ediacaran,/proxy/wiki/wiki/Ediacaran,1763560919993,183839,False,False
+322468844,7810fa54-d516-411d-98ff-8a8fa47e8d33,748,12,Nervous_system,Nervous system,/proxy/wiki/wiki/Nervous_system,1763561103832,120220,False,False
+322468844,7810fa54-d516-411d-98ff-8a8fa47e8d33,749,13,Global_brain,Global brain,/proxy/wiki/wiki/Global_brain,1763561224052,16268,False,False
+322468844,7810fa54-d516-411d-98ff-8a8fa47e8d33,750,14,Information_and_communications_technology,Information and communications technology,/proxy/wiki/wiki/Information_and_communications_technology,1763561240320,374899,False,False
+322792870,bf3c14c1-5baa-48d0-8d86-325ba848b932,675,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763488050958,28162,True,False
+322792870,bf3c14c1-5baa-48d0-8d86-325ba848b932,676,1,Technology,Technology,/proxy/wiki/wiki/Technology,1763488079120,116680,False,False
+322792870,bf3c14c1-5baa-48d0-8d86-325ba848b932,677,2,Digital_communication,Data communication,/proxy/wiki/wiki/Digital_communication,1763488195800,59937,False,False
+322792870,bf3c14c1-5baa-48d0-8d86-325ba848b932,678,3,Digital_culture,Internet culture,/proxy/wiki/wiki/Digital_culture,1763488255737,91098,False,False
+322792870,bf3c14c1-5baa-48d0-8d86-325ba848b932,679,4,Relationships,Relationship,/proxy/wiki/wiki/Relationships,1763488346835,51569,False,False
+322792870,bf3c14c1-5baa-48d0-8d86-325ba848b932,680,5,Data_communication,Data communication,/proxy/wiki/wiki/Data_communication,1763488398404,86145,False,False
+322792870,bf3c14c1-5baa-48d0-8d86-325ba848b932,681,6,Internet_culture,Internet culture,/proxy/wiki/wiki/Internet_culture,1763488484549,455248,False,False
+322845827,4c3fe631-e8d4-4c0a-9bfe-a844185548cd,1574,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1767104606301,34742,True,False
+322845827,4c3fe631-e8d4-4c0a-9bfe-a844185548cd,1575,1,Moon,Moon,/proxy/wiki/wiki/Moon,1767104641043,347811,False,False
+322845827,4c3fe631-e8d4-4c0a-9bfe-a844185548cd,1576,2,Moon,Moon,/proxy/wiki/wiki/Moon,1767104988854,27974,False,False
+322845827,4c3fe631-e8d4-4c0a-9bfe-a844185548cd,1577,3,Nasa,NASA,/proxy/wiki/wiki/Nasa,1767105016828,21552,False,False
+322845827,4c3fe631-e8d4-4c0a-9bfe-a844185548cd,1578,4,Elon_musk,Elon Musk,/proxy/wiki/wiki/Elon_musk,1767105038380,652584,False,False
+323031427,8d13ab9c-1632-402a-93b7-6400bd4776ae,1378,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1765373067039,76876,True,False
+323031427,8d13ab9c-1632-402a-93b7-6400bd4776ae,1379,1,Cognitive_dissonance,Cognitive dissonance,/proxy/wiki/wiki/Cognitive_dissonance,1765373143915,64780,False,False
+323031427,8d13ab9c-1632-402a-93b7-6400bd4776ae,1380,2,Technology,Technology,/proxy/wiki/wiki/Technology,1765373208695,113860,False,False
+323031427,8d13ab9c-1632-402a-93b7-6400bd4776ae,1381,3,Human-AI_interaction,Human-AI interaction,/proxy/wiki/wiki/Human-AI_interaction,1765373322555,675791,False,False
+323049759,ee46bcc8-2c43-4fa9-b806-351349bb9aa3,1339,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1765138677915,698552,True,False
+323651281,0cdc0309-c924-4853-88e9-40603dc9f1cd,856,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763656824887,62140,True,False
+323651281,0cdc0309-c924-4853-88e9-40603dc9f1cd,857,1,Technology,Technology,/proxy/wiki/wiki/Technology,1763656887027,15619,False,False
+323651281,0cdc0309-c924-4853-88e9-40603dc9f1cd,858,2,Social_skills,Social skills,/proxy/wiki/wiki/Social_skills,1763656902646,96689,False,False
+323651281,0cdc0309-c924-4853-88e9-40603dc9f1cd,859,3,Social_skills,Social skills,/proxy/wiki/wiki/Social_skills,1763656999335,28317,False,False
+323651281,0cdc0309-c924-4853-88e9-40603dc9f1cd,860,4,Sentiment_analysis,Sentiment analysis,/proxy/wiki/wiki/Sentiment_analysis,1763657027652,65111,False,False
+323651281,0cdc0309-c924-4853-88e9-40603dc9f1cd,861,5,Technology,Technology,/proxy/wiki/wiki/Technology,1763657092763,270915,False,False
+323651281,0cdc0309-c924-4853-88e9-40603dc9f1cd,862,6,Social_skills,Social skills,/proxy/wiki/wiki/Social_skills,1763657363678,239221,False,False
+324057132,6d0a2406-4462-49b1-a3b8-0c9005760dd8,1099,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764168821747,37944,True,False
+324057132,6d0a2406-4462-49b1-a3b8-0c9005760dd8,1100,1,Mental_health,Mental health,/proxy/wiki/wiki/Mental_health,1764168859691,117660,False,False
+324057132,6d0a2406-4462-49b1-a3b8-0c9005760dd8,1101,2,Wikipedia:Contents,Wikipedia:Contents,/proxy/wiki/wiki/Wikipedia:Contents,1764168977351,39344,False,False
+324057132,6d0a2406-4462-49b1-a3b8-0c9005760dd8,1102,3,Technology,Technology,/proxy/wiki/wiki/Technology,1764169016695,56498,False,False
+324057132,6d0a2406-4462-49b1-a3b8-0c9005760dd8,1103,4,Human,Human,/proxy/wiki/wiki/Human,1764169073193,43199,False,False
+324057132,6d0a2406-4462-49b1-a3b8-0c9005760dd8,1104,5,Phycology,Phycology,/proxy/wiki/wiki/Phycology,1764169116392,550332,False,False
+324155134,9fad1f75-4ca7-4493-819a-89f88e8049af,1143,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764254109437,43033,True,False
+324155134,9fad1f75-4ca7-4493-819a-89f88e8049af,1144,1,Penicillin,Penicillin,/proxy/wiki/wiki/Penicillin,1764254152470,110817,False,False
+324155134,9fad1f75-4ca7-4493-819a-89f88e8049af,1145,2,Discovery_of_penicillin,Discovery of penicillin,/proxy/wiki/wiki/Discovery_of_penicillin,1764254263287,2397,False,False
+324155134,9fad1f75-4ca7-4493-819a-89f88e8049af,1146,3,Discovery_of_penicillin,Discovery of penicillin,/proxy/wiki/wiki/Discovery_of_penicillin,1764254265684,359,False,False
+324155134,9fad1f75-4ca7-4493-819a-89f88e8049af,1147,4,Discovery_of_penicillin,Discovery of penicillin,/proxy/wiki/wiki/Discovery_of_penicillin,1764254266043,2371,False,False
+324155134,9fad1f75-4ca7-4493-819a-89f88e8049af,1148,5,Discovery_of_penicillin,Discovery of penicillin,/proxy/wiki/wiki/Discovery_of_penicillin,1764254268414,3957,False,False
+324155134,9fad1f75-4ca7-4493-819a-89f88e8049af,1149,6,History_of_penicillin,History of penicillin,/proxy/wiki/wiki/History_of_penicillin,1764254272371,399,False,False
+324155134,9fad1f75-4ca7-4493-819a-89f88e8049af,1150,7,History_of_penicillin,History of penicillin,/proxy/wiki/wiki/History_of_penicillin,1764254272770,59687,False,False
+324155134,9fad1f75-4ca7-4493-819a-89f88e8049af,1151,8,Penicillium,Penicillium,/proxy/wiki/wiki/Penicillium,1764254332457,14241,False,False
+324155134,9fad1f75-4ca7-4493-819a-89f88e8049af,1152,9,Penicillin,Penicillin,/proxy/wiki/wiki/Penicillin,1764254346698,96371,False,False
+324155134,9fad1f75-4ca7-4493-819a-89f88e8049af,1153,10,Penicillin,Penicillin,/proxy/wiki/wiki/Penicillin,1764254443069,202750,False,False
+324155134,9fad1f75-4ca7-4493-819a-89f88e8049af,1154,11,Discovery_of_penicillin,Discovery of penicillin,/proxy/wiki/wiki/Discovery_of_penicillin,1764254645819,400637,False,False
+324930189,28df49f7-e55a-40e1-99cd-66b54dbcb7c9,1250,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764626728042,32447,True,False
+324930189,28df49f7-e55a-40e1-99cd-66b54dbcb7c9,1251,1,Future_technology,Future technology,/proxy/wiki/wiki/Future_technology,1764626760489,26625,False,False
+324930189,28df49f7-e55a-40e1-99cd-66b54dbcb7c9,1252,2,Timeline_of_the_far_future,Timeline of the far future,/proxy/wiki/wiki/Timeline_of_the_far_future,1764626787114,38118,False,False
+324930189,28df49f7-e55a-40e1-99cd-66b54dbcb7c9,1253,3,Flying_car,Flying car,/proxy/wiki/wiki/Flying_car,1764626825232,270068,False,False
+324930189,28df49f7-e55a-40e1-99cd-66b54dbcb7c9,1254,4,Back_to_the_Future_Part_II,Back to the Future Part II,/proxy/wiki/wiki/Back_to_the_Future_Part_II,1764627095300,67766,False,False
+324930189,28df49f7-e55a-40e1-99cd-66b54dbcb7c9,1255,5,Flying_car,Flying car,/proxy/wiki/wiki/Flying_car,1764627163066,79305,False,False
+324930189,28df49f7-e55a-40e1-99cd-66b54dbcb7c9,1256,6,Future_technology,Future technology,/proxy/wiki/wiki/Future_technology,1764627242371,22013,False,False
+324930189,28df49f7-e55a-40e1-99cd-66b54dbcb7c9,1257,7,Future_technology,Future technology,/proxy/wiki/wiki/Future_technology,1764627264384,29017,False,False
+324930189,28df49f7-e55a-40e1-99cd-66b54dbcb7c9,1258,8,Future_Aircraft_Technology_Enhancements,Future Aircraft Technology Enhancements,/proxy/wiki/wiki/Future_Aircraft_Technology_Enhancements,1764627293401,34036,False,False
+324930189,28df49f7-e55a-40e1-99cd-66b54dbcb7c9,1259,9,List_of_future_military_aircraft_of_the_United_States,List of future military aircraft of the United States,/proxy/wiki/wiki/List_of_future_military_aircraft_of_the_United_States,1764627327437,130364,False,False
+325138246,4bcd03fd-6fd1-4c07-9645-05d546b8c9ec,1617,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1767190437932,35051,True,False
+325138246,4bcd03fd-6fd1-4c07-9645-05d546b8c9ec,1618,1,Critical_thinking,Critical thinking,/proxy/wiki/wiki/Critical_thinking,1767190472983,24449,False,False
+325138246,4bcd03fd-6fd1-4c07-9645-05d546b8c9ec,1619,2,Critical_theory,Critical theory,/proxy/wiki/wiki/Critical_theory,1767190497432,11987,False,False
+325138246,4bcd03fd-6fd1-4c07-9645-05d546b8c9ec,1620,3,Ai,Ai,/proxy/wiki/wiki/Ai,1767190509419,12748,False,False
+325138246,4bcd03fd-6fd1-4c07-9645-05d546b8c9ec,1621,4,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1767190522167,55080,False,False
+325138246,4bcd03fd-6fd1-4c07-9645-05d546b8c9ec,1622,5,Computational_propaganda,Computational propaganda,/proxy/wiki/wiki/Computational_propaganda,1767190577247,46606,False,False
+325138246,4bcd03fd-6fd1-4c07-9645-05d546b8c9ec,1623,6,Misinformation,Misinformation,/proxy/wiki/wiki/Misinformation,1767190623853,61377,False,False
+325138246,4bcd03fd-6fd1-4c07-9645-05d546b8c9ec,1624,7,Critical_thinking,Critical thinking,/proxy/wiki/wiki/Critical_thinking,1767190685230,136713,False,False
+325138246,4bcd03fd-6fd1-4c07-9645-05d546b8c9ec,1625,8,Human_rights_education,Human rights education,/proxy/wiki/wiki/Human_rights_education,1767190821943,160096,False,False
+325138246,4bcd03fd-6fd1-4c07-9645-05d546b8c9ec,1626,9,Llm,Large language model,/proxy/wiki/wiki/Llm,1767190982039,21516,False,False
+325138246,4bcd03fd-6fd1-4c07-9645-05d546b8c9ec,1627,10,Prompt_engineering,Prompt engineering,/proxy/wiki/wiki/Prompt_engineering,1767191003555,380381,False,False
+325272938,5aa930c8-91a3-4460-9549-38f2fb20f407,1570,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1767102376258,18413,True,False
+325272938,5aa930c8-91a3-4460-9549-38f2fb20f407,1571,1,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1767102394671,541604,False,False
+325272938,5aa930c8-91a3-4460-9549-38f2fb20f407,1572,2,Talk:Artificial_intelligence,Talk:Artificial intelligence,/proxy/wiki/wiki/Talk:Artificial_intelligence,1767102936275,20070,False,False
+325272938,5aa930c8-91a3-4460-9549-38f2fb20f407,1573,3,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1767102956345,157394,False,False
+325282887,6ee00f2a-c0b2-450a-b0f5-3c287a92c2e8,1105,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764181049095,50305,True,False
+325282887,6ee00f2a-c0b2-450a-b0f5-3c287a92c2e8,1108,1,Digital_media_use_and_mental_health,Digital media use and mental health,/proxy/wiki/wiki/Digital_media_use_and_mental_health,1764181099400,16780,False,False
+325282887,6ee00f2a-c0b2-450a-b0f5-3c287a92c2e8,1109,2,Problematic_social_media_use,Problematic social media use,/proxy/wiki/wiki/Problematic_social_media_use,1764181116180,30824,False,False
+325282887,6ee00f2a-c0b2-450a-b0f5-3c287a92c2e8,1110,3,Persuasive_technology,Persuasive technology,/proxy/wiki/wiki/Persuasive_technology,1764181147004,17303,False,False
+325282887,6ee00f2a-c0b2-450a-b0f5-3c287a92c2e8,1111,4,Ethics_of_technology,Ethics of technology,/proxy/wiki/wiki/Ethics_of_technology,1764181164307,14918,False,False
+325282887,6ee00f2a-c0b2-450a-b0f5-3c287a92c2e8,1112,5,Mindfulness_and_technology,Mindfulness and technology,/proxy/wiki/wiki/Mindfulness_and_technology,1764181179225,607888,False,False
+325345635,67024e45-ca5e-4693-83d4-b4c1dbeb1a70,820,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763596141484,32856,True,False
+325345635,67024e45-ca5e-4693-83d4-b4c1dbeb1a70,821,1,Technological_unemployment,Technological unemployment,/proxy/wiki/wiki/Technological_unemployment,1763596174340,72413,False,False
+325345635,67024e45-ca5e-4693-83d4-b4c1dbeb1a70,822,2,Race_Against_the_Machine,Race Against the Machine,/proxy/wiki/wiki/Race_Against_the_Machine,1763596246753,142020,False,False
+325345635,67024e45-ca5e-4693-83d4-b4c1dbeb1a70,823,3,Impact_of_technology,Technology,/proxy/wiki/wiki/Impact_of_technology,1763596388773,116009,False,False
+325345635,67024e45-ca5e-4693-83d4-b4c1dbeb1a70,824,4,Human–computer_interaction,Human–computer interaction,/proxy/wiki/wiki/Human–computer_interaction,1763596504782,227876,False,False
+325345635,67024e45-ca5e-4693-83d4-b4c1dbeb1a70,825,5,Computer_Supported_Cooperative_Work,Computer-supported cooperative work,/proxy/wiki/wiki/Computer_Supported_Cooperative_Work,1763596732658,306340,False,False
+325857589,baac2db5-2e74-4131-a843-1c4d27caa856,1012,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763937668123,34718,True,False
+325857589,baac2db5-2e74-4131-a843-1c4d27caa856,1013,1,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1763937702841,7030,False,False
+325857589,baac2db5-2e74-4131-a843-1c4d27caa856,1014,2,Superintelligence,Superintelligence,/proxy/wiki/wiki/Superintelligence,1763937709871,46953,False,False
+325857589,baac2db5-2e74-4131-a843-1c4d27caa856,1015,3,Superintelligence,Superintelligence,/proxy/wiki/wiki/Superintelligence,1763937756824,336926,False,False
+325857589,baac2db5-2e74-4131-a843-1c4d27caa856,1016,4,AI_safety,AI safety,/proxy/wiki/wiki/AI_safety,1763938093750,45475,False,False
+325857589,baac2db5-2e74-4131-a843-1c4d27caa856,1017,5,AI_ethics,Ethics of artificial intelligence,/proxy/wiki/wiki/AI_ethics,1763938139225,413097,False,False
+325878759,77a120a6-3080-40ad-8441-caa2598f3799,696,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763542439601,28650,True,False
+325878759,77a120a6-3080-40ad-8441-caa2598f3799,697,1,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1763542468251,90154,False,False
+325878759,77a120a6-3080-40ad-8441-caa2598f3799,698,2,Studying,Learning,/proxy/wiki/wiki/Studying,1763542558405,364873,False,False
+325878759,77a120a6-3080-40ad-8441-caa2598f3799,699,3,Students,Student,/proxy/wiki/wiki/Students,1763542923278,501028,False,False
+325985497,9432eafd-715f-4a5f-9eb1-0139d34445e7,1537,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1766501939054,29526,True,False
+325985497,9432eafd-715f-4a5f-9eb1-0139d34445e7,1538,1,AI,Artificial intelligence,/proxy/wiki/wiki/AI,1766501968580,15994,False,False
+325985497,9432eafd-715f-4a5f-9eb1-0139d34445e7,1539,2,AI_safety,AI safety,/proxy/wiki/wiki/AI_safety,1766501984574,3567,False,False
+325985497,9432eafd-715f-4a5f-9eb1-0139d34445e7,1540,3,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1766501988141,87266,False,False
+325985497,9432eafd-715f-4a5f-9eb1-0139d34445e7,1541,4,Huang's_law,Huang's law,/proxy/wiki/wiki/Huang's_law,1766502075407,79891,False,False
+325985497,9432eafd-715f-4a5f-9eb1-0139d34445e7,1542,5,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1766502155298,169558,False,False
+325985497,9432eafd-715f-4a5f-9eb1-0139d34445e7,1543,6,AI_boom,AI boom,/proxy/wiki/wiki/AI_boom,1766502324856,296189,False,False
+326217403,d5d5058e-1b11-4140-b256-611ffd167186,1018,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763940259766,24690,True,False
+326217403,d5d5058e-1b11-4140-b256-611ffd167186,1019,1,Telephones,Telephone,/proxy/wiki/wiki/Telephones,1763940284456,184677,False,False
+326217403,d5d5058e-1b11-4140-b256-611ffd167186,1020,2,Smartphones,Smartphone,/proxy/wiki/wiki/Smartphones,1763940469133,166090,False,False
+326217403,d5d5058e-1b11-4140-b256-611ffd167186,1021,3,Telephone,Telephone,/proxy/wiki/wiki/Telephone,1763940635223,19357,False,False
+326217403,d5d5058e-1b11-4140-b256-611ffd167186,1022,4,Mobile_phone,Mobile phone,/proxy/wiki/wiki/Mobile_phone,1763940654580,408,False,False
+326217403,d5d5058e-1b11-4140-b256-611ffd167186,1023,5,Mobile_phone,Mobile phone,/proxy/wiki/wiki/Mobile_phone,1763940654988,598767,False,False
+326314044,86e4b99d-6916-45f9-a30a-6210fd0d46ac,1475,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1766047243535,57076,True,False
+326314044,86e4b99d-6916-45f9-a30a-6210fd0d46ac,1476,1,Human_performance_technology,Human performance technology,/proxy/wiki/wiki/Human_performance_technology,1766047300611,19394,False,False
+326314044,86e4b99d-6916-45f9-a30a-6210fd0d46ac,1477,2,Attention_Is_All_You_Need,Attention Is All You Need,/proxy/wiki/wiki/Attention_Is_All_You_Need,1766047320005,11584,False,False
+326314044,86e4b99d-6916-45f9-a30a-6210fd0d46ac,1478,3,Attention_span,Attention span,/proxy/wiki/wiki/Attention_span,1766047331589,211545,False,False
+326314044,86e4b99d-6916-45f9-a30a-6210fd0d46ac,1479,4,Center_for_Humane_Technology,Center for Humane Technology,/proxy/wiki/wiki/Center_for_Humane_Technology,1766047543134,2378,False,False
+326314044,86e4b99d-6916-45f9-a30a-6210fd0d46ac,1480,5,Center_for_Humane_Technology,Center for Humane Technology,/proxy/wiki/wiki/Center_for_Humane_Technology,1766047545512,140580,False,False
+326314044,86e4b99d-6916-45f9-a30a-6210fd0d46ac,1481,6,Human_After_All,Human After All,/proxy/wiki/wiki/Human_After_All,1766047686092,76879,False,False
+326314044,86e4b99d-6916-45f9-a30a-6210fd0d46ac,1482,7,Human,Human,/proxy/wiki/wiki/Human,1766047762971,366146,False,False
+326326808,22542611-00d3-4b8a-85b0-c50f6926e743,1239,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764540427434,10930,True,False
+326326808,22542611-00d3-4b8a-85b0-c50f6926e743,1240,1,Quantum_computing,Quantum computing,/proxy/wiki/wiki/Quantum_computing,1764540438364,206761,False,False
+326326808,22542611-00d3-4b8a-85b0-c50f6926e743,1241,2,Quantum_algorithms,Quantum algorithm,/proxy/wiki/wiki/Quantum_algorithms,1764540645125,675174,False,False
+326391885,dee214d2-00f1-47d0-9555-ed2e021ee8ac,975,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763926693150,27844,True,False
+326391885,dee214d2-00f1-47d0-9555-ed2e021ee8ac,976,1,Inventions,Invention,/proxy/wiki/wiki/Inventions,1763926720994,140663,False,False
+326391885,dee214d2-00f1-47d0-9555-ed2e021ee8ac,977,2,Inventors,Invention,/proxy/wiki/wiki/Inventors,1763926861657,7316,False,False
+326391885,dee214d2-00f1-47d0-9555-ed2e021ee8ac,979,3,Inventor_(disambiguation),Inventor (disambiguation),/proxy/wiki/wiki/Inventor_(disambiguation),1763926868973,22491,False,True
+326391885,dee214d2-00f1-47d0-9555-ed2e021ee8ac,981,4,Famous_inventors,List of inventors,/proxy/wiki/wiki/Famous_inventors,1763926891464,86293,False,False
+326391885,dee214d2-00f1-47d0-9555-ed2e021ee8ac,989,5,Cai_Lun,Cai Lun,/proxy/wiki/wiki/Cai_Lun,1763926977757,70589,False,False
+326391885,dee214d2-00f1-47d0-9555-ed2e021ee8ac,991,6,Renaissance,Renaissance,/proxy/wiki/wiki/Renaissance,1763927048346,140970,False,False
+326391885,dee214d2-00f1-47d0-9555-ed2e021ee8ac,992,7,Patent,Patent,/proxy/wiki/wiki/Patent,1763927189316,358909,False,False
+326449139,94c1a870-661c-48aa-9fe2-169182c2189a,1382,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1765408620016,46158,True,False
+326449139,94c1a870-661c-48aa-9fe2-169182c2189a,1383,1,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1765408666174,45024,True,False
+326449139,94c1a870-661c-48aa-9fe2-169182c2189a,1384,2,Digital_empathy,Digital empathy,/proxy/wiki/wiki/Digital_empathy,1765408711198,60705,False,False
+326449139,94c1a870-661c-48aa-9fe2-169182c2189a,1385,3,Online_disinhibition_effect,Online disinhibition effect,/proxy/wiki/wiki/Online_disinhibition_effect,1765408771903,106719,False,False
+326449139,94c1a870-661c-48aa-9fe2-169182c2189a,1386,4,Digital_empathy,Digital empathy,/proxy/wiki/wiki/Digital_empathy,1765408878622,90925,False,False
+326449139,94c1a870-661c-48aa-9fe2-169182c2189a,1387,5,Emotion_recognition,Emotion recognition,/proxy/wiki/wiki/Emotion_recognition,1765408969547,49599,False,False
+326449139,94c1a870-661c-48aa-9fe2-169182c2189a,1388,6,The_Empathic_Civilization,The Empathic Civilization,/proxy/wiki/wiki/The_Empathic_Civilization,1765409019146,42901,False,False
+326449139,94c1a870-661c-48aa-9fe2-169182c2189a,1389,7,Digital_empathy,Digital empathy,/proxy/wiki/wiki/Digital_empathy,1765409062047,569964,False,False
+327708400,53cffbd4-ceed-4da9-98fe-75a8d18d7d66,920,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763880554546,20292,True,False
+327708400,53cffbd4-ceed-4da9-98fe-75a8d18d7d66,921,1,Ai,Ai,/proxy/wiki/wiki/Ai,1763880574838,31679,False,False
+327708400,53cffbd4-ceed-4da9-98fe-75a8d18d7d66,922,2,Artificial_intelligence_(disambiguation),Artificial intelligence (disambiguation),/proxy/wiki/wiki/Artificial_intelligence_(disambiguation),1763880606517,17122,False,True
+327708400,53cffbd4-ceed-4da9-98fe-75a8d18d7d66,923,3,Artificial_intelligence,Artificial intelligence,/proxy/wiki/wiki/Artificial_intelligence,1763880623639,155269,False,False
+327708400,53cffbd4-ceed-4da9-98fe-75a8d18d7d66,924,4,Workplace_impact_of_artificial_intelligence,Workplace impact of artificial intelligence,/proxy/wiki/wiki/Workplace_impact_of_artificial_intelligence,1763880778908,72411,False,False
+327708400,53cffbd4-ceed-4da9-98fe-75a8d18d7d66,925,5,Technological_unemployment,Technological unemployment,/proxy/wiki/wiki/Technological_unemployment,1763880851319,272168,False,False
+327708400,53cffbd4-ceed-4da9-98fe-75a8d18d7d66,926,6,Emerging_technologies,Emerging technologies,/proxy/wiki/wiki/Emerging_technologies,1763881123487,428384,False,False
+327888665,5b738b9f-4dc5-423a-b518-62141920c9c9,1633,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1767204041906,11390,True,False
+327888665,5b738b9f-4dc5-423a-b518-62141920c9c9,1634,1,Quantum_technology,Quantum engineering,/proxy/wiki/wiki/Quantum_technology,1767204053296,37359,False,False
+327888665,5b738b9f-4dc5-423a-b518-62141920c9c9,1635,2,AGI,AGI,/proxy/wiki/wiki/AGI,1767204090655,3507,False,False
+327888665,5b738b9f-4dc5-423a-b518-62141920c9c9,1636,3,Artificial_general_intelligence,Artificial general intelligence,/proxy/wiki/wiki/Artificial_general_intelligence,1767204094162,108903,False,False
+327888665,5b738b9f-4dc5-423a-b518-62141920c9c9,1637,4,Futures_studies,Futures studies,/proxy/wiki/wiki/Futures_studies,1767204203065,2429,False,False
+327888665,5b738b9f-4dc5-423a-b518-62141920c9c9,1638,5,Futures_studies,Futures studies,/proxy/wiki/wiki/Futures_studies,1767204205494,38318,False,False
+327888665,5b738b9f-4dc5-423a-b518-62141920c9c9,1639,6,2030,2030,/proxy/wiki/wiki/2030,1767204243812,27198,False,False
+327888665,5b738b9f-4dc5-423a-b518-62141920c9c9,1640,7,Doha,Doha,/proxy/wiki/wiki/Doha,1767204271010,3154,False,False
+327888665,5b738b9f-4dc5-423a-b518-62141920c9c9,1641,8,2030,2030,/proxy/wiki/wiki/2030,1767204274164,107964,False,False
+327888665,5b738b9f-4dc5-423a-b518-62141920c9c9,1642,9,2035,2030s,/proxy/wiki/wiki/2035,1767204382128,211605,False,False
+327888665,5b738b9f-4dc5-423a-b518-62141920c9c9,1643,10,2020s,2020s,/proxy/wiki/wiki/2020s,1767204593733,18138,False,False
+327888665,5b738b9f-4dc5-423a-b518-62141920c9c9,1644,11,2027,2027,/proxy/wiki/wiki/2027,1767204611871,574,False,False
+327888665,5b738b9f-4dc5-423a-b518-62141920c9c9,1645,12,2027,2027,/proxy/wiki/wiki/2027,1767204612445,14426,False,False
+327888665,5b738b9f-4dc5-423a-b518-62141920c9c9,1646,13,AD_2029,2029,/proxy/wiki/wiki/AD_2029,1767204626871,14478,False,False
+327888665,5b738b9f-4dc5-423a-b518-62141920c9c9,1647,14,AD_2028,2028,/proxy/wiki/wiki/AD_2028,1767204641349,259105,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,940,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763911294290,9435,True,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,941,1,Survivorship_bias,Survivorship bias,/proxy/wiki/wiki/Survivorship_bias,1763911303725,102505,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,942,2,Michael_Shermer,Michael Shermer,/proxy/wiki/wiki/Michael_Shermer,1763911406230,2399,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,943,3,Michael_Shermer,Michael Shermer,/proxy/wiki/wiki/Michael_Shermer,1763911408629,390,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,944,4,Michael_Shermer,Michael Shermer,/proxy/wiki/wiki/Michael_Shermer,1763911409019,17032,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,945,5,Survivorship_bias,Survivorship bias,/proxy/wiki/wiki/Survivorship_bias,1763911426051,76225,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,946,6,Larry_Smith,Larry Smith,/proxy/wiki/wiki/Larry_Smith,1763911502276,16259,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,947,7,Survivorship_bias,Survivorship bias,/proxy/wiki/wiki/Survivorship_bias,1763911518535,18819,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,948,8,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1763911537354,26566,True,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,949,9,Survivorship_bias,Survivorship bias,/proxy/wiki/wiki/Survivorship_bias,1763911563920,15073,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,950,10,Survivorship_bias,Survivorship bias,/proxy/wiki/wiki/Survivorship_bias,1763911578993,84976,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,951,11,Fooled_by_Randomness,Fooled by Randomness,/proxy/wiki/wiki/Fooled_by_Randomness,1763911663969,7300,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,952,12,Fooled_by_Randomness,Fooled by Randomness,/proxy/wiki/wiki/Fooled_by_Randomness,1763911671269,366,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,953,13,Fooled_by_Randomness,Fooled by Randomness,/proxy/wiki/wiki/Fooled_by_Randomness,1763911671635,23728,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,954,14,Nassim_Nicholas_Taleb,Nassim Nicholas Taleb,/proxy/wiki/wiki/Nassim_Nicholas_Taleb,1763911695363,395,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,955,15,Nassim_Nicholas_Taleb,Nassim Nicholas Taleb,/proxy/wiki/wiki/Nassim_Nicholas_Taleb,1763911695758,19955,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,956,16,2008_financial_crisis,2008 financial crisis,/proxy/wiki/wiki/2008_financial_crisis,1763911715713,65387,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,957,17,Big_data,Big data,/proxy/wiki/wiki/Big_data,1763911781100,44980,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,958,18,Big_data,Big data,/proxy/wiki/wiki/Big_data,1763911826080,34093,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,959,19,Startup,Startup company,/proxy/wiki/wiki/Startup,1763911860173,61244,False,False
+329671473,56c50ffa-8a47-49ee-b6ce-5b02d62fe620,960,20,Big_data,Big data,/proxy/wiki/wiki/Big_data,1763911921417,487834,False,False
+337637698,a492535d-d907-405f-a740-acc11e006898,1268,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764667926638,15811,True,False
+337637698,a492535d-d907-405f-a740-acc11e006898,1269,1,Nuclear_energy,Nuclear energy,/proxy/wiki/wiki/Nuclear_energy,1764667942449,3751,False,False
+337637698,a492535d-d907-405f-a740-acc11e006898,1270,2,Nuclear_power,Nuclear power,/proxy/wiki/wiki/Nuclear_power,1764667946200,34293,False,False
+337637698,a492535d-d907-405f-a740-acc11e006898,1271,3,Three_Mile_Island_accident,Three Mile Island accident,/proxy/wiki/wiki/Three_Mile_Island_accident,1764667980493,46392,False,False
+337637698,a492535d-d907-405f-a740-acc11e006898,1272,4,Capacity_factor,Capacity factor,/proxy/wiki/wiki/Capacity_factor,1764668026885,18819,False,False
+337637698,a492535d-d907-405f-a740-acc11e006898,1273,5,Generation_III_reactor,Generation III reactor,/proxy/wiki/wiki/Generation_III_reactor,1764668045704,44484,False,False
+337637698,a492535d-d907-405f-a740-acc11e006898,1274,6,Anti-nuclear_movement,Anti-nuclear movement,/proxy/wiki/wiki/Anti-nuclear_movement,1764668090188,56260,False,False
+337637698,a492535d-d907-405f-a740-acc11e006898,1275,7,Nuclear_safety_and_security,Nuclear safety and security,/proxy/wiki/wiki/Nuclear_safety_and_security,1764668146448,258671,False,False
+337637698,a492535d-d907-405f-a740-acc11e006898,1276,8,Global_warming,Climate change,/proxy/wiki/wiki/Global_warming,1764668405119,94627,False,False
+337637698,a492535d-d907-405f-a740-acc11e006898,1277,9,Tropical_cyclones_and_climate_change,Tropical cyclones and climate change,/proxy/wiki/wiki/Tropical_cyclones_and_climate_change,1764668499746,327038,False,False
+337927669,2888efe6-aad5-47d2-95fe-0ef8d99d0a32,1278,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764686865949,16857,True,False
+337927669,2888efe6-aad5-47d2-95fe-0ef8d99d0a32,1279,1,Imperial_Regalia_of_Brazil,Imperial Regalia of Brazil,/proxy/wiki/wiki/Imperial_Regalia_of_Brazil,1764686882806,9113,False,False
+337927669,2888efe6-aad5-47d2-95fe-0ef8d99d0a32,1280,2,Mars,Mars,/proxy/wiki/wiki/Mars,1764686891919,15938,False,False
+337927669,2888efe6-aad5-47d2-95fe-0ef8d99d0a32,1281,3,Magnetic_field_of_Mars,Magnetic field of Mars,/proxy/wiki/wiki/Magnetic_field_of_Mars,1764686907857,2614,False,False
+337927669,2888efe6-aad5-47d2-95fe-0ef8d99d0a32,1282,4,InSight,InSight,/proxy/wiki/wiki/InSight,1764686910471,12827,False,False
+337927669,2888efe6-aad5-47d2-95fe-0ef8d99d0a32,1283,5,Jet_Propulsion_Laboratory,Jet Propulsion Laboratory,/proxy/wiki/wiki/Jet_Propulsion_Laboratory,1764686923298,212125,False,False
+337927669,2888efe6-aad5-47d2-95fe-0ef8d99d0a32,1284,6,Asteroid_Redirect_Mission,Asteroid Redirect Mission,/proxy/wiki/wiki/Asteroid_Redirect_Mission,1764687135423,402,False,False
+337927669,2888efe6-aad5-47d2-95fe-0ef8d99d0a32,1285,7,Asteroid_Redirect_Mission,Asteroid Redirect Mission,/proxy/wiki/wiki/Asteroid_Redirect_Mission,1764687135825,516,False,False
+337927669,2888efe6-aad5-47d2-95fe-0ef8d99d0a32,1286,8,Asteroid_Redirect_Mission,Asteroid Redirect Mission,/proxy/wiki/wiki/Asteroid_Redirect_Mission,1764687136341,413,False,False
+337927669,2888efe6-aad5-47d2-95fe-0ef8d99d0a32,1287,9,Asteroid_Redirect_Mission,Asteroid Redirect Mission,/proxy/wiki/wiki/Asteroid_Redirect_Mission,1764687136754,2417,False,False
+337927669,2888efe6-aad5-47d2-95fe-0ef8d99d0a32,1288,10,Asteroid_Redirect_Mission,Asteroid Redirect Mission,/proxy/wiki/wiki/Asteroid_Redirect_Mission,1764687139171,409,False,False
+337927669,2888efe6-aad5-47d2-95fe-0ef8d99d0a32,1289,11,Asteroid_Redirect_Mission,Asteroid Redirect Mission,/proxy/wiki/wiki/Asteroid_Redirect_Mission,1764687139580,467,False,False
+337927669,2888efe6-aad5-47d2-95fe-0ef8d99d0a32,1290,12,InSight,InSight,/proxy/wiki/wiki/InSight,1764687140047,564,False,False
+337927669,2888efe6-aad5-47d2-95fe-0ef8d99d0a32,1291,13,SPHEREx,SPHEREx,/proxy/wiki/wiki/SPHEREx,1764687140611,8298,False,False
+337927669,2888efe6-aad5-47d2-95fe-0ef8d99d0a32,1292,14,Spacex,SpaceX,/proxy/wiki/wiki/Spacex,1764687148909,786844,False,False
+340872084,da08d15a-6d42-4f12-8e5a-e6a2fbd98ae8,1591,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1767177381057,35087,True,False
+340872084,da08d15a-6d42-4f12-8e5a-e6a2fbd98ae8,1593,1,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1767177416144,76591,True,False
+340872084,da08d15a-6d42-4f12-8e5a-e6a2fbd98ae8,1595,2,Smartphone,Smartphone,/proxy/wiki/wiki/Smartphone,1767177492735,15473,False,False
+340872084,da08d15a-6d42-4f12-8e5a-e6a2fbd98ae8,1597,3,Tiktok,TikTok,/proxy/wiki/wiki/Tiktok,1767177508208,33543,False,False
+340872084,da08d15a-6d42-4f12-8e5a-e6a2fbd98ae8,1598,4,Cyberbullying,Cyberbullying,/proxy/wiki/wiki/Cyberbullying,1767177541751,430260,False,False
+340872084,da08d15a-6d42-4f12-8e5a-e6a2fbd98ae8,1602,5,Anti-bullying_legislation,Anti-bullying legislation,/proxy/wiki/wiki/Anti-bullying_legislation,1767177972011,10811,False,False
+340872084,da08d15a-6d42-4f12-8e5a-e6a2fbd98ae8,1603,6,Bully,Bullying,/proxy/wiki/wiki/Bully,1767177982822,149347,False,False
+341241297,d658aa1a-83f9-4159-bcbd-552e4902279c,1130,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764234795484,27682,True,False
+341241297,d658aa1a-83f9-4159-bcbd-552e4902279c,1131,1,Loneliness_epidemic,Loneliness epidemic,/proxy/wiki/wiki/Loneliness_epidemic,1764234823166,193686,False,False
+341241297,d658aa1a-83f9-4159-bcbd-552e4902279c,1132,2,Social_media_and_psychology,Social media and psychology,/proxy/wiki/wiki/Social_media_and_psychology,1764235016852,228055,False,False
+341241297,d658aa1a-83f9-4159-bcbd-552e4902279c,1133,3,Doomscrolling,Doomscrolling,/proxy/wiki/wiki/Doomscrolling,1764235244907,40366,False,False
+341241297,d658aa1a-83f9-4159-bcbd-552e4902279c,1134,4,Category:Digital_media_use_and_mental_health,Category:Digital media use and mental health,/proxy/wiki/wiki/Category:Digital_media_use_and_mental_health,1764235285273,22039,False,False
+341241297,d658aa1a-83f9-4159-bcbd-552e4902279c,1135,5,Social_media_and_psychology,Social media and psychology,/proxy/wiki/wiki/Social_media_and_psychology,1764235307312,17722,False,False
+341241297,d658aa1a-83f9-4159-bcbd-552e4902279c,1136,6,Category:Technology_in_society,Category:Technology in society,/proxy/wiki/wiki/Category:Technology_in_society,1764235325034,7772,False,False
+341241297,d658aa1a-83f9-4159-bcbd-552e4902279c,1137,7,Category:Religion_and_technology,Category:Religion and technology,/proxy/wiki/wiki/Category:Religion_and_technology,1764235332806,12912,False,False
+341241297,d658aa1a-83f9-4159-bcbd-552e4902279c,1138,8,Category:Technology_in_society,Category:Technology in society,/proxy/wiki/wiki/Category:Technology_in_society,1764235345718,4079,False,False
+341241297,d658aa1a-83f9-4159-bcbd-552e4902279c,1139,9,Category:Sociology_of_technology,Category:Sociology of technology,/proxy/wiki/wiki/Category:Sociology_of_technology,1764235349797,8647,False,False
+341241297,d658aa1a-83f9-4159-bcbd-552e4902279c,1140,10,Social_technology,Social technology,/proxy/wiki/wiki/Social_technology,1764235358444,23657,False,False
+341241297,d658aa1a-83f9-4159-bcbd-552e4902279c,1141,11,Category:Sociology_of_technology,Category:Sociology of technology,/proxy/wiki/wiki/Category:Sociology_of_technology,1764235382101,4579,False,False
+341241297,d658aa1a-83f9-4159-bcbd-552e4902279c,1142,12,Echo_chamber_(media),Echo chamber (media),/proxy/wiki/wiki/Echo_chamber_(media),1764235386680,154299,False,False
+342663358,14c6498c-4fb2-4db0-9b68-d77843166767,1508,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1766402526534,10272,True,False
+342663358,14c6498c-4fb2-4db0-9b68-d77843166767,1509,1,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1766402536806,61670,True,False
+342663358,14c6498c-4fb2-4db0-9b68-d77843166767,1510,2,Technology,Technology,/proxy/wiki/wiki/Technology,1766402598476,32779,False,False
+342663358,14c6498c-4fb2-4db0-9b68-d77843166767,1511,3,Social_construction_of_technology,Social construction of technology,/proxy/wiki/wiki/Social_construction_of_technology,1766402631255,60826,False,False
+342663358,14c6498c-4fb2-4db0-9b68-d77843166767,1512,4,Langdon_Winner,Langdon Winner,/proxy/wiki/wiki/Langdon_Winner,1766402692081,53696,False,False
+342663358,14c6498c-4fb2-4db0-9b68-d77843166767,1513,5,Psychology,Psychology,/proxy/wiki/wiki/Psychology,1766402745777,8446,False,False
+342663358,14c6498c-4fb2-4db0-9b68-d77843166767,1514,6,Technology,Technology,/proxy/wiki/wiki/Technology,1766402754223,23427,False,False
+342663358,14c6498c-4fb2-4db0-9b68-d77843166767,1515,7,Psychology_of_science,Psychology of science,/proxy/wiki/wiki/Psychology_of_science,1766402777650,38081,False,False
+342663358,14c6498c-4fb2-4db0-9b68-d77843166767,1516,8,Mental_state,Mental state,/proxy/wiki/wiki/Mental_state,1766402815731,21226,False,False
+342663358,14c6498c-4fb2-4db0-9b68-d77843166767,1517,9,Social_connections,Social connection,/proxy/wiki/wiki/Social_connections,1766402836957,38257,False,False
+342663358,14c6498c-4fb2-4db0-9b68-d77843166767,1518,10,AI_boom,AI boom,/proxy/wiki/wiki/AI_boom,1766402875214,31734,False,False
+342663358,14c6498c-4fb2-4db0-9b68-d77843166767,1519,11,Artificial_intelligence_controversies,Artificial intelligence controversies,/proxy/wiki/wiki/Artificial_intelligence_controversies,1766402906948,21595,False,False
+342663358,14c6498c-4fb2-4db0-9b68-d77843166767,1520,12,Quality_of_life,Quality of life,/proxy/wiki/wiki/Quality_of_life,1766402928543,7229,False,False
+342663358,14c6498c-4fb2-4db0-9b68-d77843166767,1521,13,Progress_in_artificial_intelligence,Progress in artificial intelligence,/proxy/wiki/wiki/Progress_in_artificial_intelligence,1766402935772,62145,False,False
+342663358,14c6498c-4fb2-4db0-9b68-d77843166767,1522,14,Satisfaction,Satisfaction,/proxy/wiki/wiki/Satisfaction,1766402997917,15664,False,False
+342663358,14c6498c-4fb2-4db0-9b68-d77843166767,1523,15,Happiness,Happiness,/proxy/wiki/wiki/Happiness,1766403013581,26685,False,False
+342663358,14c6498c-4fb2-4db0-9b68-d77843166767,1524,16,Well-being_contributing_factors,Well-being contributing factors,/proxy/wiki/wiki/Well-being_contributing_factors,1766403040266,388044,False,False
+931215248,01fc4808-5755-4bed-90e8-e7caf8e95945,1317,0,Main_Page,wiki/Main Page,/proxy/wiki/wiki/Main_Page,1764936860525,6788,True,False
+931215248,01fc4808-5755-4bed-90e8-e7caf8e95945,1318,1,Technology,Technology,/proxy/wiki/wiki/Technology,1764936867313,106741,False,False
+931215248,01fc4808-5755-4bed-90e8-e7caf8e95945,1319,2,Artificial_general_intelligence,Artificial general intelligence,/proxy/wiki/wiki/Artificial_general_intelligence,1764936974054,2447,False,False
+931215248,01fc4808-5755-4bed-90e8-e7caf8e95945,1320,3,Artificial_general_intelligence,Artificial general intelligence,/proxy/wiki/wiki/Artificial_general_intelligence,1764936976501,2428,False,False
+931215248,01fc4808-5755-4bed-90e8-e7caf8e95945,1321,4,Artificial_general_intelligence,Artificial general intelligence,/proxy/wiki/wiki/Artificial_general_intelligence,1764936978929,515,False,False
+931215248,01fc4808-5755-4bed-90e8-e7caf8e95945,1322,5,Artificial_general_intelligence,Artificial general intelligence,/proxy/wiki/wiki/Artificial_general_intelligence,1764936979444,440,False,False
+931215248,01fc4808-5755-4bed-90e8-e7caf8e95945,1323,6,Artificial_general_intelligence,Artificial general intelligence,/proxy/wiki/wiki/Artificial_general_intelligence,1764936979884,431,False,False
+931215248,01fc4808-5755-4bed-90e8-e7caf8e95945,1324,7,Artificial_general_intelligence,Artificial general intelligence,/proxy/wiki/wiki/Artificial_general_intelligence,1764936980315,11247,False,False
+931215248,01fc4808-5755-4bed-90e8-e7caf8e95945,1325,8,Humanity,Humanity,/proxy/wiki/wiki/Humanity,1764936991562,3386,False,False
+931215248,01fc4808-5755-4bed-90e8-e7caf8e95945,1326,9,Humanity_(virtue),Humanity (virtue),/proxy/wiki/wiki/Humanity_(virtue),1764936994948,1763,False,False
+931215248,01fc4808-5755-4bed-90e8-e7caf8e95945,1327,10,Humanity,Humanity,/proxy/wiki/wiki/Humanity,1764936996711,2758,False,False
+931215248,01fc4808-5755-4bed-90e8-e7caf8e95945,1328,11,Human,Human,/proxy/wiki/wiki/Human,1764936999469,77381,False,False
+931215248,01fc4808-5755-4bed-90e8-e7caf8e95945,1329,12,Early_human_migrations,Early human migrations,/proxy/wiki/wiki/Early_human_migrations,1764937076850,540606,False,False
