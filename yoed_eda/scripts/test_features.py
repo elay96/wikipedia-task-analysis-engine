@@ -31,6 +31,34 @@ def test_structural_features_counts_and_revisit():
     assert f["mean_dwell"] > 0
 
 
+def test_step_distance_series_length_and_values():
+    e1 = np.array([1.0, 0.0])
+    e2 = np.array([0.0, 1.0])
+    series = features.step_distance_series([e1, e2, e2])
+    assert len(series) == 2
+    assert abs(series[0] - 1.0) < 1e-9  # orthogonal
+    assert abs(series[1] - 0.0) < 1e-9  # identical
+
+
+def test_dynamics_too_few_steps_is_nan():
+    e1 = np.array([1.0, 0.0])
+    e2 = np.array([0.0, 1.0])
+    f = features.dynamics_features([e1, e2])  # only 1 step
+    assert np.isnan(f["dyn_slope"]) and np.isnan(f["dyn_early_late_delta"])
+    assert f["dyn_n_steps"] == 1
+
+
+def test_dynamics_converging_session_has_negative_slope():
+    # Build vectors whose consecutive cosine distance shrinks over time.
+    import math
+    angles = [0.0, 1.4, 2.4, 3.0, 3.3]  # gaps: 1.4, 1.0, 0.6, 0.3 -> shrinking
+    vecs = [np.array([math.cos(a), math.sin(a)]) for a in angles]
+    f = features.dynamics_features(vecs)
+    assert f["dyn_n_steps"] == 4
+    assert f["dyn_slope"] < 0  # exploit / converging
+    assert f["dyn_early_late_delta"] < 0  # later steps shorter
+
+
 def test_visited_subgraph_edges_only_between_visited():
     outlinks = {"A": ["B", "Z"], "B": ["A"], "C": ["A"]}
     G = features.visited_subgraph(["A", "B", "C"], outlinks)

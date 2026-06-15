@@ -2,6 +2,7 @@
 
 import base64
 import csv
+import json
 from pathlib import Path
 
 
@@ -9,6 +10,8 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT_DIR = ROOT / "output"
 FIG_DIR = OUT_DIR / "figures"
 CORR_CSV = OUT_DIR / "spearman_correlations.csv"
+DYN_CSV = OUT_DIR / "dynamics_correlations.csv"
+CCA_JSON = OUT_DIR / "cca_results.json"
 HTML_OUT = OUT_DIR / "yoed_eda_findings.html"
 
 
@@ -16,13 +19,48 @@ def img_b64(path: Path) -> str:
     return base64.b64encode(path.read_bytes()).decode("ascii")
 
 
+def read_csv_rows(path: Path) -> list[dict]:
+    with open(path, newline="", encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+
 def read_correlations() -> list[dict]:
-    rows = []
-    with open(CORR_CSV, newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            rows.append(row)
-    return rows
+    return read_csv_rows(CORR_CSV)
+
+
+def corr_table(rows: list[dict]) -> str:
+    """Compact correlation table (measure, feature, rho, p, p_FDR, n, FDR)."""
+    def p_fmt(v: str) -> str:
+        val = float(v)
+        return "&lt;0.001" if val < 0.001 else f"{val:.3f}"
+
+    def sig_badge(r: dict) -> str:
+        if r["fdr_significant"].strip().lower() == "true":
+            return '<span class="badge badge-green">FDR sig</span>'
+        return '<span class="badge badge-red">n.s.</span>'
+
+    body = "\n".join(
+        f"<tr><td>{r['measure']}</td><td><code>{r['feature']}</code></td>"
+        f"<td style='text-align:center'>{float(r['rho']):.3f}</td>"
+        f"<td style='text-align:center'>{p_fmt(r['p'])}</td>"
+        f"<td style='text-align:center'>{p_fmt(r['p_FDR'])}</td>"
+        f"<td style='text-align:center'>{r['n']}</td>"
+        f"<td style='text-align:center'>{sig_badge(r)}</td></tr>"
+        for r in rows
+    )
+    th = ("padding:8px 10px;text-align:center;border-bottom:2px solid #e8e5e1;")
+    return f"""
+<table style="width:100%;border-collapse:collapse;font-size:0.88rem;direction:ltr;">
+  <thead><tr style="background:#f4f3f1;font-family:'Rubik',sans-serif;font-weight:600;">
+    <th style="{th};text-align:right">Measure</th>
+    <th style="{th};text-align:right">Feature</th>
+    <th style="{th}">&rho;</th><th style="{th}">p</th>
+    <th style="{th}">p_FDR</th><th style="{th}">n</th><th style="{th}">FDR</th>
+  </tr></thead>
+  <tbody>
+{body}
+  </tbody>
+</table>"""
 
 
 def top15_table(rows: list[dict]) -> str:
@@ -130,6 +168,35 @@ def build_html() -> None:
     table_html = top15_table(rows)
     scatter_html = scatter_grid(scatter_figs)
 
+    # ---- Dynamics (#2) ----
+    dyn_rows = read_csv_rows(DYN_CSV)
+    dyn_rows_sorted = sorted(dyn_rows, key=lambda r: abs(float(r["rho"])), reverse=True)
+    dyn_n_sig = sum(1 for r in dyn_rows if r["fdr_significant"].strip().lower() == "true")
+    dyn_table_html = corr_table(dyn_rows_sorted)
+    dyn_hist_b64 = img_b64(FIG_DIR / "dyn_slope_hist.png")
+    dyn_scatter_html = scatter_grid([
+        (str(FIG_DIR / "scatter_dyn_AUT_Broom_-_Number_of_Answers__dyn_early_late_delta.png"),
+         "AUT Broom - #Answers vs. dyn_early_late_delta"),
+        (str(FIG_DIR / "scatter_dyn_AUT_Broom_-_Number_of_Answers__dyn_slope.png"),
+         "AUT Broom - #Answers vs. dyn_slope"),
+        (str(FIG_DIR / "scatter_dyn_AUT_Belt_-_Number_of_Answers__dyn_slope.png"),
+         "AUT Belt - #Answers vs. dyn_slope"),
+    ])
+
+    dyn_with = max(int(r["n"]) for r in dyn_rows)
+
+    # ---- CCA (#1) ----
+    cca = json.loads(CCA_JSON.read_text(encoding="utf-8"))
+    cca_loadings_b64 = img_b64(FIG_DIR / "cca_loadings.png")
+    cca_p = len(cca["x_cols"])
+    cca_qn = len(cca["y_cols"])
+    cca_q = cca_qn
+    cca_n = cca["n"]
+    cca_r = f"{cca['r_canonical']:.2f}"
+    cca_p_perm = f"{cca['p_perm']:.3f}"
+    cca_r_pls = f"{cca['r_pls']:.2f}"
+    n_perm = 2000
+
     html = f"""<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -223,6 +290,10 @@ def build_html() -> None:
     <span class="nav-sep" aria-hidden="true">&middot;</span>
     <a href="#correlations">קשר יצירתיות</a>
     <span class="nav-sep" aria-hidden="true">&middot;</span>
+    <a href="#dynamics">דינמיקה</a>
+    <span class="nav-sep" aria-hidden="true">&middot;</span>
+    <a href="#cca">CCA</a>
+    <span class="nav-sep" aria-hidden="true">&middot;</span>
     <a href="#caveats">הסתייגויות</a>
   </div>
 </nav>
@@ -232,7 +303,7 @@ def build_html() -> None:
 
 <header>
   <h1>YOED EDA &mdash; ממצאים</h1>
-  <div class="subtitle">N=107 משתתפים &middot; 195 קורלציות Spearman &middot; 0 שרדו FDR</div>
+  <div class="subtitle">N=107 משתתפים &middot; קורלציות Spearman + דינמיקה תוך-סשן + CCA &middot; null אחרי FDR, עם מגמת explore&rarr;exploit עקבית</div>
 </header>
 
 <!-- ===== SECTION 0: BOTTOM LINE ===== -->
@@ -242,13 +313,13 @@ def build_html() -> None:
     <div class="card-title">מה אפשר להסיק</div>
     <ol>
       <li><strong>תוצאת null אחרי תיקון ריבוי השוואות.</strong>
-        מבין 195 קורלציות (13 מדדי יצירתיות/קוגניציה x 15 מאפייני גלישה), {n_sig} שרדו תיקון BH-FDR (&alpha;=0.05). הדאטה אינו מספק עדות לקשר מובהק בין יצירתיות לדפוס הגלישה בויקיפדיה.</li>
-      <li><strong>המגמות הגולמיות החזקות ביותר מכוונות ל-AUT.</strong>
-        מדדי AUT (חשיבה מתבדרת - Belt/Broom) מראים את הקורלציות הגולמיות הגבוהות ביותר עם פיזור סמנטי (<code>var_step_distance</code>, <code>forward_flow</code>) ואורך מסלול ברשת (<code>char_path_length</code>). כלומר: יותר תשובות AUT = מסע גלישה מגוון ורחב יותר - אך לא מובהק לאחר תיקון.</li>
-      <li><strong>כוח סטטיסטי מוגבל.</strong>
-        N=107 עם 195 השוואות מגביל את הכוח לאיתור אפקטים קטנים. תוצאת ה-null עקבית עם גודל המדגם ולא בהכרח משקפת היעדר קשר אמיתי.</li>
-      <li><strong>הדאטה עשיר ואיכותי.</strong>
-        99.2% שחזור היסטורי, 712 ביקורים תוכניים, 469 גרסאות ייחודיות - תשתית מוצקה לניתוחים עתידיים עם N גדול יותר.</li>
+        אף קורלציה לא שרדה תיקון BH-FDR (&alpha;=0.05) - לא ב-195 הקורלציות הסטטיות (סעיף 4), לא ב-26 קורלציות הדינמיקה (סעיף 5), וגם המבחן הרב-משתני (CCA) לא היה מובהק (סעיף 6). הדאטה אינו מספק עדות לקשר מובהק בין יצירתיות לדפוס הגלישה.</li>
+      <li><strong>אבל: מגמת explore&rarr;exploit עקבית וכמעט-מובהקת.</strong>
+        כשבוחנים את <strong>הדינמיקה לאורך הסשן</strong> (ולא רק ממוצעים), מדדי שטף/חשיבה מתבדרת (AUT Broom/Belt, Verbal Fluency) הולכים עם <strong>התכנסות סמנטית חדה יותר</strong> (<code>dyn_slope</code> שלילי): יצירתיים יותר מתחילים רחב ומצטמצמים מהר יותר. p_FDR&asymp;0.06 - ממש על הסף, חזק בהרבה מ-0.42 של הניתוח הסטטי.</li>
+      <li><strong>שתי שיטות עצמאיות מתכנסות לאותו סיפור.</strong>
+        ה-loadings של הציר הקנוני ב-CCA (סעיף 6) מצביעים בדיוק על אותם משתנים - Verbal Fluency/AUT מצד אחד, <code>dyn_early_late_delta</code>/<code>dyn_slope</code> מצד שני. אות חלש אך קוהרנטי, שראוי לבדיקה ב-N גדול יותר.</li>
+      <li><strong>כוח סטטיסטי מוגבל + תשתית איכותית.</strong>
+        N=107 מגביל את הכוח לאיתור אפקטים קטנים; ה-null עקבי עם זאת. השחזור ההיסטורי (99.2%, 712 ביקורים, 469 גרסאות) מהווה בסיס מוצק לרפליקציה עתידית של מגמת ה-explore&rarr;exploit.</li>
     </ol>
   </div>
 </section>
@@ -360,9 +431,67 @@ def build_html() -> None:
   </div>
 </section>
 
-<!-- ===== SECTION 5: CAVEATS ===== -->
+<!-- ===== SECTION 5: SESSION DYNAMICS ===== -->
+<section class="section" id="dynamics">
+  <h2 class="section-heading"><span class="section-num">5</span>דינמיקה תוך-סשן (explore&rarr;exploit)</h2>
+  <div class="card">
+    <div class="card-title">הרעיון</div>
+    <p>הקורלציות בסעיף 4 צמצמו כל משתתף למספר אחד לכל מאפיין (ממוצע/שונות), מה שעלול למחוק את <strong>הדינמיקה</strong> לאורך הסשן. כאן בודקים האם המרחק הסמנטי בין דפים עוקבים <strong>משתנה</strong> ככל שהסשן מתקדם.</p>
+    <ul>
+      <li><strong><code>dyn_slope</code>:</strong> שיפוע OLS של מרחק-הצעד מול מיקום בסשן. <strong>שלילי = התכנסות</strong> (מתחילים רחב ומצטמצמים = explore&rarr;exploit); חיובי = התרחבות.</li>
+      <li><strong><code>dyn_early_late_delta</code>:</strong> ממוצע מרחקי המחצית השנייה פחות הראשונה. שלילי = הצעדים מתקצרים בהמשך.</li>
+    </ul>
+    <div class="callout info">
+      <strong>תוצאה:</strong> {dyn_n_sig} מובהקים אחרי FDR מתוך 26 קורלציות (13 מדדים &times; 2 מאפייני דינמיקה), על <strong>{dyn_with} מתוך 107</strong> משתתפים עם מספיק צעדים (&ge;3).
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">התפלגות <code>dyn_slope</code></div>
+    <p style="font-size:0.85rem;color:#5a5a5a;margin-bottom:12px;">רוב המסה משמאל ל-0: סשנים נוטים להתכנס סמנטית לאורך הזמן.</p>
+    <img src="data:image/png;base64,{dyn_hist_b64}"
+         style="max-width:480px;width:100%;border-radius:8px;border:1px solid #e8e5e1;display:block;margin:0 auto;"
+         alt="dyn_slope distribution">
+  </div>
+  <div class="card">
+    <div class="card-title">קורלציות דינמיקה (26)</div>
+    <p style="font-size:0.85rem;color:#5a5a5a;margin-bottom:12px;">המגמות הכי חזקות בכל המחקר: מדדי <strong>שטף/חשיבה מתבדרת</strong> (AUT Broom/Belt, Verbal Fluency) הולכים עם שיפוע <strong>שלילי יותר</strong> - אנשים יצירתיים יותר מתכנסים סמנטית חזק יותר לאורך הסשן (explore&rarr;exploit חד יותר). הערכים נעצרים ממש על סף ה-FDR (p_FDR&asymp;0.06) אך לא חוצים אותו.</p>
+    {dyn_table_html}
+  </div>
+  <div class="card">
+    <div class="card-title">Scatter - האפקטים החזקים ביותר</div>
+    {dyn_scatter_html}
+  </div>
+</section>
+
+<!-- ===== SECTION 6: CCA ===== -->
+<section class="section" id="cca">
+  <h2 class="section-heading"><span class="section-num">6</span>קשר רב-משתני בין הבלוקים (CCA)</h2>
+  <div class="card">
+    <div class="card-title">שיטה</div>
+    <p>במקום 195 השוואות נפרדות - שאלה אחת: האם יש <strong>מבנה משותף</strong> בין בלוק היצירתיות (13 מדדים) לבלוק הגלישה ({cca_q} מאפיינים, כולל הדינמיקה)? Canonical Correlation Analysis מוצא את הציר המשותף החזק ביותר.</p>
+    <div class="callout warn">
+      <strong>זהירות מ-overfit:</strong> עם ~{cca_p}+{cca_qn} משתנים מול n={cca_n}, המתאם הקנוני "בתוך-המדגם" מנופח. לכן נעשה <strong>permutation test</strong> ({n_perm} ערבובים) שמתקן לכך, ו-PLS כבדיקת robustness.
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">תוצאה</div>
+    <div class="stat-row"><strong>מתאם קנוני ראשון:</strong> <code>r = {cca_r}</code></div>
+    <div class="stat-row"><strong>permutation p:</strong> <code>p = {cca_p_perm}</code> &middot; <span class="badge badge-red">לא מובהק</span></div>
+    <div class="stat-row"><strong>PLS (robustness):</strong> <code>r = {cca_r_pls}</code></div>
+    <p style="margin-top:10px;">המתאם הגולמי (0.68) נראה גבוה, אך מבחן הפרמוטציות מראה ש-31% מהערבובים האקראיים מגיעים אליו - כלומר הוא תוצר של <strong>overfit</strong>, לא קשר אמיתי. <strong>אין עדות למבנה משותף מובהק בין הבלוקים.</strong></p>
+  </div>
+  <div class="card">
+    <div class="card-title">Loadings - מה מגדיר את הציר המשותף</div>
+    <p style="font-size:0.85rem;color:#5a5a5a;margin-bottom:12px;">למרות חוסר המובהקות, הציר המשותף מצביע <strong>באופן עצמאי</strong> על אותו סיפור כמו סעיף 5: צד היצירתיות נטען על Verbal Fluency ו-AUT, וצד הגלישה נטען בדיוק על <code>dyn_early_late_delta</code> ו-<code>dyn_slope</code>. שתי שיטות נפרדות מתכנסות לאותו קשר חלש: <strong>יצירתיות &harr; דינמיקת התכנסות</strong>.</p>
+    <img src="data:image/png;base64,{cca_loadings_b64}"
+         style="width:100%;border-radius:8px;border:1px solid #e8e5e1;"
+         alt="CCA loadings">
+  </div>
+</section>
+
+<!-- ===== SECTION 7: CAVEATS ===== -->
 <section class="section" id="caveats">
-  <h2 class="section-heading"><span class="section-num">5</span>הערות איכות-דאטה ומגבלות</h2>
+  <h2 class="section-heading"><span class="section-num">7</span>הערות איכות-דאטה ומגבלות</h2>
   <div class="callout warn">
     <ul style="margin-right:18px;">
       <li><strong>זמן שהייה מוערך:</strong> <code>duration_ms</code>/<code>end_time</code> היו ריקים במקור; זמן השהייה נגזר מהפרש <code>start_time</code> בין דפים עוקבים (לדף האחרון: <code>ended_at</code>). חציון ~41 שניות, ללא ערכים שליליים.</li>

@@ -8,16 +8,48 @@ import _bootstrap  # noqa: F401
 from m83_utils import forward_flow  # from repo scripts/
 
 
-def step_distances(vectors):
-    """Mean and variance of cosine distance between consecutive vectors."""
+def step_distance_series(vectors):
+    """Ordered list of cosine distances between consecutive vectors."""
     if len(vectors) < 2:
-        return float("nan"), float("nan")
+        return []
     V = np.stack([np.asarray(v, dtype=float) for v in vectors])
     norms = np.linalg.norm(V, axis=1, keepdims=True)
     norms[norms == 0] = 1.0
     U = V / norms
-    dists = [1.0 - float(U[i] @ U[i + 1]) for i in range(len(U) - 1)]
+    return [1.0 - float(U[i] @ U[i + 1]) for i in range(len(U) - 1)]
+
+
+def step_distances(vectors):
+    """Mean and variance of cosine distance between consecutive vectors."""
+    dists = step_distance_series(vectors)
+    if not dists:
+        return float("nan"), float("nan")
     return float(np.mean(dists)), float(np.var(dists))
+
+
+MIN_STEPS_FOR_DYNAMICS = 3
+
+
+def dynamics_features(vectors) -> dict:
+    """Within-session explore->exploit dynamics of semantic step distances.
+
+    dyn_slope: OLS slope of step distance vs normalized step index (0..1).
+        Negative = distances shrink over the session (converging / exploit);
+        positive = distances grow (diverging / explore).
+    dyn_early_late_delta: mean(second half of steps) - mean(first half).
+    dyn_n_steps: number of step distances the participant contributed.
+    Requires >= MIN_STEPS_FOR_DYNAMICS steps; otherwise slope/delta are nan."""
+    dists = step_distance_series(vectors)
+    n = len(dists)
+    if n < MIN_STEPS_FOR_DYNAMICS:
+        return {"dyn_slope": float("nan"), "dyn_early_late_delta": float("nan"),
+                "dyn_n_steps": n}
+    d = np.asarray(dists, dtype=float)
+    x = np.linspace(0.0, 1.0, n)
+    slope = float(np.polyfit(x, d, 1)[0])
+    half = n // 2
+    early_late = float(np.mean(d[half:]) - np.mean(d[:half]))
+    return {"dyn_slope": slope, "dyn_early_late_delta": early_late, "dyn_n_steps": n}
 
 
 def structural_features(visits: list, n_searches: int) -> dict:

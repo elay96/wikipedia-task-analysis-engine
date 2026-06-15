@@ -63,6 +63,7 @@ def main() -> None:
         row = {"participant_id": pid}
         row.update(feat.structural_features(visit_dicts, n_searches))
         row.update(feat.semantic_features(seq_vecs))
+        row.update(feat.dynamics_features(seq_vecs))
         # network_metrics adds n_unique = node count of the visited subgraph
         # (only cached slugs), distinct from structural n_unique_pages (all
         # topical visits). Downstream analysis uses n_unique_pages, not n_unique.
