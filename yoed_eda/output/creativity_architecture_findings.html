@@ -89,6 +89,7 @@
   <a href="#robustness">חוסן</a><span class="nav-sep">&middot;</span>
   <a href="#caveats">הסתייגויות</a><span class="nav-sep">&middot;</span>
   <a href="#email">אימייל ליועד</a><span class="nav-sep">&middot;</span>
+  <a href="#features">15 המאפיינים</a><span class="nav-sep">&middot;</span>
   <a href="#links">קישורים</a>
 </div></nav>
 <div class="page-body"><div class="container">
@@ -208,8 +209,47 @@
   </div>
 </section>
 
+<section class="section" id="features">
+  <h2 class="section-heading"><span class="section-num">10</span>נספח: 15 מאפייני הגלישה</h2>
+  <div class="card">
+    <p>חשוב להבהיר: 15 המאפיינים האלה <strong>אינם</strong> מהניתוח של יועד. יועד נתן את הדאטה הגולמי (יומני ביקורים, חיפושים, ועמודים). את המאפיינים <strong>הנדסנו אנחנו</strong> מתוך הדאטה הזה, בצינור <code>yoed_eda</code> (<code>s3</code> + <code>features.py</code> + <code>m83_utils</code>). מטריקות הגרף, <code>forward_flow</code> ו-<code>bh_score</code> מגיעות דרך <code>m83_utils</code> - כלומר מאותה מסגרת Zhou שכבר יושמה בעבודת ה-M83 על הדאטה המקורי.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">קבוצה 1 - סמנטיקה (fastText embeddings)</div>
+    <ul>
+      <li><code>mean_step_distance</code> - מרחק קוסינוס סמנטי ממוצע בין שני עמודים עוקבים.</li>
+      <li><code>var_step_distance</code> - שונות אותו מרחק.</li>
+      <li><code>forward_flow</code> - מרחק סמנטי ממוצע בין העמוד הנוכחי ל<strong>כל</strong> קודמיו. מדד ה-<strong>Dancer</strong> של Zhou.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-title">קבוצה 2 - מטריקות גרף (Zhou 2024, דרך <code>m83_utils</code>)</div>
+    <p>הגרף: העמודים הייחודיים כצמתים, וקשת בין שניים אם באחד יש קישור לשני. אלה הרכיבים של ציר ה-Busybody-Hunter.</p>
+    <ul>
+      <li><code>bh_score</code> - ציון Hunter-Busybody, z-score בתוך הקוהורט (מורכב מהארבעה כאן).</li>
+      <li><code>clustering</code> - מקדם clustering של הגרף.</li>
+      <li><code>global_efficiency</code> - יעילות גלובלית של הגרף.</li>
+      <li><code>char_path_length</code> - אורך מסלול אופייני.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-title">קבוצה 3 - תיאוריים / מבניים</div>
+    <ul>
+      <li><code>n_pages</code> - מספר עמודים שנצפו (כולל חזרות).</li>
+      <li><code>n_unique_pages</code> - מספר עמודים ייחודיים.</li>
+      <li><code>n_searches</code> - מספר חיפושים.</li>
+      <li><code>revisit_rate</code> - שיעור חזרות: <code>(n_pages - n_unique) / n_pages</code>.</li>
+      <li><code>search_vs_link_ratio</code> - יחס חיפוש מול קליק על קישור: <code>n_searches / n_pages</code>.</li>
+      <li><code>mean_dwell</code> - זמן שהייה ממוצע בעמוד.</li>
+      <li><code>var_dwell</code> - שונות זמן השהייה.</li>
+      <li><code>path_breadth</code> - מספר הקטגוריות הייחודיות שכל העמודים נגעו בהן.</li>
+    </ul>
+    <div class="callout warn"><code>mean_dwell</code> ו-<code>var_dwell</code> נגזרים מ-<code>start_time</code> עוקבים (לא נמדדו ישירות), ולכן רועשים יותר.</div>
+  </div>
+</section>
+
 <section class="section" id="links">
-  <h2 class="section-heading"><span class="section-num">10</span>קישורים וקבצים</h2>
+  <h2 class="section-heading"><span class="section-num">11</span>קישורים וקבצים</h2>
   <div class="card"><ul>
     <li>סקריפטים: <code>yoed_eda/scripts/s8_creativity_predicts_architecture.py</code>, <code>creativity_model.py</code></li>
     <li>תוצאות: <code>yoed_eda/output/creativity_architecture.json</code></li>
