@@ -30,6 +30,8 @@ COMPOSITES = {
     "gf": ["GF - Score"],
 }
 PREDICTORS = list(COMPOSITES)
+CI_LOW_PCT = 2.5
+CI_HIGH_PCT = 97.5
 
 
 def zscore(s: pd.Series) -> pd.Series:
@@ -73,8 +75,8 @@ def regress_with_ci(X, y, predictors, n_boot=2000, n_perm=5000, n_folds=5, seed=
     for b in range(n_boot):
         idx = rng.randint(0, n, n)
         boot[b] = LinearRegression().fit(Xs[idx], ys[idx]).coef_
-    lo = np.percentile(boot, 2.5, axis=0)
-    hi = np.percentile(boot, 97.5, axis=0)
+    lo = np.percentile(boot, CI_LOW_PCT, axis=0)
+    hi = np.percentile(boot, CI_HIGH_PCT, axis=0)
     beta_ci = [[float(a), float(c)] for a, c in zip(lo, hi)]
 
     cv = KFold(n_splits=n_folds, shuffle=True, random_state=seed)
