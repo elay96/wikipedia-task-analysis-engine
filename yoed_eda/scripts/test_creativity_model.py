@@ -110,3 +110,4 @@ def test_convergent_validity_pairwise_complete():
     y = [1.0, 2.0, np.nan, 4.0, 5.0]
     res = cm.convergent_validity(x, y)
     assert res["n"] == 3
+    assert np.isnan(res["pearson_ci"][0])

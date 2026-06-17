@@ -104,7 +104,10 @@ def convergent_validity(x, y) -> dict:
     sr = sp_stats.spearmanr(xv, yv)
     pr = sp_stats.pearsonr(xv, yv)
     r = float(pr.statistic)
-    z, se = np.arctanh(r), 1.0 / np.sqrt(n - 3)
-    ci = [float(np.tanh(z - Z_95 * se)), float(np.tanh(z + Z_95 * se))]
+    if n <= 3:
+        ci = [float("nan"), float("nan")]
+    else:
+        z, se = np.arctanh(r), 1.0 / np.sqrt(n - 3)
+        ci = [float(np.tanh(z - Z_95 * se)), float(np.tanh(z + Z_95 * se))]
     return {"n": n, "spearman_rho": float(sr.statistic), "spearman_p": float(sr.pvalue),
             "pearson_r": r, "pearson_p": float(pr.pvalue), "pearson_ci": ci}
