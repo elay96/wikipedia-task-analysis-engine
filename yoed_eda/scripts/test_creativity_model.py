@@ -111,3 +111,22 @@ def test_convergent_validity_pairwise_complete():
     res = cm.convergent_validity(x, y)
     assert res["n"] == 3
     assert np.isnan(res["pearson_ci"][0])
+
+
+def test_pca_reduce_shape_and_variance():
+    rng = np.random.RandomState(0)
+    latent = rng.randn(80, 1)
+    cols = {f"m{i}": latent[:, 0] + 0.05 * rng.randn(80) for i in range(5)}
+    df = pd.DataFrame(cols)
+    comps, evr = cm.pca_reduce(df, list(cols), n_components=3)
+    assert comps.shape == (80, 3)
+    assert evr[0] > 0.9
+
+
+def test_pca_reduce_imputes_nan():
+    rng = np.random.RandomState(1)
+    df = pd.DataFrame(rng.randn(40, 4), columns=list("abcd"))
+    df.iloc[0, 0] = np.nan
+    comps, evr = cm.pca_reduce(df, list("abcd"), n_components=2)
+    assert comps.shape == (40, 2)
+    assert not np.isnan(comps).any()

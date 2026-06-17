@@ -8,6 +8,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 from scipy import stats as sp_stats
+from sklearn.decomposition import PCA
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import KFold, cross_val_score
 from sklearn.pipeline import make_pipeline
@@ -111,3 +112,12 @@ def convergent_validity(x, y) -> dict:
         ci = [float(np.tanh(z - Z_95 * se)), float(np.tanh(z + Z_95 * se))]
     return {"n": n, "spearman_rho": float(sr.statistic), "spearman_p": float(sr.pvalue),
             "pearson_r": r, "pearson_p": float(pr.pvalue), "pearson_ci": ci}
+
+
+def pca_reduce(df, measures, n_components=3):
+    X = df[measures].apply(pd.to_numeric, errors="coerce")
+    X = X.fillna(X.median())
+    Xs = StandardScaler().fit_transform(X.to_numpy(dtype=float))
+    pca = PCA(n_components=n_components, svd_solver="full")
+    comps = pca.fit_transform(Xs)
+    return comps, [float(v) for v in pca.explained_variance_ratio_]
