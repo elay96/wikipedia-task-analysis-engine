@@ -99,18 +99,25 @@ def main() -> None:
     ff, bh = res["primary"]["forward_flow"], res["primary"]["bh_score"]
     conv = res["convergent_validity"]
 
+    dt_b = ff["betas"][0]
+    dt_ci = ff["beta_ci"][0]
     bottom = [
-        f"<li><strong>יצירתיות מול Dancer:</strong> מודל היצירתיות מנבא את "
-        f"<code>forward_flow</code> עם R&sup2;<sub>cv</sub>={ff['r2_cv']:.3f} "
-        f"(perm p={ff['p_perm']:.3f}).</li>",
-        f"<li><strong>יצירתיות מול Hunter-Busybody:</strong> אותו מודל על "
-        f"<code>bh_score</code> נותן R&sup2;<sub>cv</sub>={bh['r2_cv']:.3f} "
-        f"(perm p={bh['p_perm']:.3f}).</li>",
-        f"<li><strong>Convergent validity:</strong> forward flow מילולי מנבא forward "
-        f"flow בגלישה: r={conv['pearson_r']:.2f}, 95% CI "
+        f"<li><strong>רמז יחיד, בכיוון ההשערה:</strong> מתוך 5 מנבאי היצירתיות, רק "
+        f"אחד - שטף חשיבה מתבדרת (<code>dt_fluency</code>) - נקשר ל-<code>forward_flow</code> "
+        f"ברמה מובהקת נומינלית (&beta;={dt_b:+.2f}, 95% CI [{dt_ci[0]:+.3f}, {dt_ci[1]:+.3f}], "
+        f"לא חוצה אפס), ובכיוון שניבאנו (Dancer ולא Hunter-Busybody).</li>",
+        f"<li><strong>אבל המודל כולו ריק:</strong> R&sup2;<sub>cv</sub> שלילי לשתי המטרות "
+        f"(<code>forward_flow</code>: {ff['r2_cv']:.3f}, <code>bh_score</code>: {bh['r2_cv']:.3f}) "
+        f"- אין ערך ניבוי מחוץ למדגם - וה-permutation ברמת המודל לא מובהק "
+        f"(p={ff['p_perm']:.3f} / p={bh['p_perm']:.3f}).</li>",
+        "<li><strong>הרמז לא שורד חוסן:</strong> כשמחליפים את הקומפוזיטים ברכיבי PCA, "
+        "אותו אפקט חוצה אפס ונעלם.</li>",
+        f"<li><strong>ההשערה החדה ביותר (H2) יצאה אפס:</strong> forward flow מילולי לא "
+        f"מנבא forward flow בגלישה: r={conv['pearson_r']:.2f}, 95% CI "
         f"[{conv['pearson_ci'][0]:.3f}, {conv['pearson_ci'][1]:.3f}], n={conv['n']}.</li>",
-        "<li><strong>הסתייגות:</strong> ההשוואה בין שתי המטרות תיאורית "
-        "(רווחי סמך), לא מבחן הפרש פורמלי.</li>",
+        "<li><strong>שורה תחתונה:</strong> זה לא ניבוי אמיתי. מקדם בודד מובהק נומינלית "
+        "שלא מחזיק כשבודקים אותו ברצינות - לא ב-cross-validation, לא ב-permutation ברמת "
+        "המודל, ולא בבדיקת ה-PCA.</li>",
     ]
 
     rob = res["robustness_pca"]
@@ -131,9 +138,11 @@ def main() -> None:
   <a href="#hyp">השערות</a><span class="nav-sep">&middot;</span>
   <a href="#method">שיטה</a><span class="nav-sep">&middot;</span>
   <a href="#dissociation">דיסוציאציה</a><span class="nav-sep">&middot;</span>
+  <a href="#plain">בשפה פשוטה</a><span class="nav-sep">&middot;</span>
   <a href="#convergent">Convergent</a><span class="nav-sep">&middot;</span>
   <a href="#robustness">חוסן</a><span class="nav-sep">&middot;</span>
   <a href="#caveats">הסתייגויות</a><span class="nav-sep">&middot;</span>
+  <a href="#email">אימייל ליועד</a><span class="nav-sep">&middot;</span>
   <a href="#links">קישורים</a>
 </div></nav>
 <div class="page-body"><div class="container">
@@ -184,8 +193,24 @@ def main() -> None:
   </div>
 </section>
 
+<section class="section" id="plain">
+  <h2 class="section-heading"><span class="section-num">5</span>מה זה אומר בשפה פשוטה</h2>
+  <div class="card">
+    <div class="card-title">מצאנו מקדם אחד "מובהק" - אז למה לא להתרגש?</div>
+    <p>מתוך כל הבדיקות, יצא מקדם אחד שנראה כמו ממצא: ככל שאדם מייצר יותר רעיונות במבחני היצירתיות, כך הוא נוטה לעשות קפיצות סמנטיות גדולות יותר בגלישה (ה-<code>forward_flow</code>). רווח הסמך שלו לא חוצה אפס, אז במבט ראשון זה נראה אמיתי.</p>
+    <p>הבעיה: תכננו מראש <strong>ארבע</strong> בדיקות שתפקידן בדיוק לסנן ממצא מקרי, וכולן נכשלות:</p>
+    <ul>
+      <li><strong>ניבוי על משתתפים חדשים (cross-validation):</strong> בדקנו אם המודל מצליח לנבא משתתפים שהוא לא ראה. לא רק שלא הצליח - הוא ניבא <em>גרוע יותר</em> מסתם לנחש את הממוצע.</li>
+      <li><strong>ערבוב אקראי (permutation):</strong> ערבבנו את הנתונים אקראית אלפי פעמים. המודל ה"אמיתי" לא בלט מעל הרעש האקראי.</li>
+      <li><strong>בנייה אחרת של הפרופיל (PCA):</strong> כשבנינו את פרופיל היצירתיות בדרך אחרת, הממצא נעלם לגמרי.</li>
+      <li><strong>ריבוי השוואות:</strong> בדקנו 10 מקדמים בסך הכל. למצוא אחד שחוצה את הסף במקרה זה דבר צפוי, לא מפתיע.</li>
+    </ul>
+    <div class="callout info">אנלוגיה: זה כמו מטבע שיצא 6 פעמים "עץ" מתוך 10 הטלות. מסקרן, אבל רחוק מלהוכיח שהמטבע מוטה. צריך הרבה יותר עדויות, ובדיוק את העדויות האלה לא קיבלנו.</div>
+  </div>
+</section>
+
 <section class="section" id="convergent">
-  <h2 class="section-heading"><span class="section-num">5</span>ממצאים - Convergent validity</h2>
+  <h2 class="section-heading"><span class="section-num">6</span>ממצאים - Convergent validity</h2>
   <div class="card">
     <img src="figures/convergent_forward_flow.png" style="max-width:100%;height:auto;">
     <div class="stat-row"><code>Pearson</code>: r={conv['pearson_r']:.3f}, 95% CI [{conv['pearson_ci'][0]:.3f}, {conv['pearson_ci'][1]:.3f}], p={conv['pearson_p']:.4f}, n={conv['n']}</div>
@@ -194,7 +219,7 @@ def main() -> None:
 </section>
 
 <section class="section" id="robustness">
-  <h2 class="section-heading"><span class="section-num">6</span>בדיקת חוסן (PCA)</h2>
+  <h2 class="section-heading"><span class="section-num">7</span>בדיקת חוסן (PCA)</h2>
   <div class="card">
     <p>אותן רגרסיות עם רכיבי PCA במקום הקומפוזיטים. שונות מוסברת: {evr}.</p>
     {_outcome_stat("forward_flow (PCA)", rob["forward_flow"])}
@@ -203,7 +228,7 @@ def main() -> None:
 </section>
 
 <section class="section" id="caveats">
-  <h2 class="section-heading"><span class="section-num">7</span>הסתייגויות</h2>
+  <h2 class="section-heading"><span class="section-num">8</span>הסתייגויות</h2>
   <div class="callout warn"><ul style="margin-right:18px;">
     <li>N=107 מגביל כוח לאפקטים קטנים.</li>
     <li><code>forward_flow</code> חסר ל-7 משתתפים (פחות מ-2 עמודים נושאיים).</li>
@@ -212,8 +237,25 @@ def main() -> None:
   </ul></div>
 </section>
 
+<section class="section" id="email">
+  <h2 class="section-heading"><span class="section-num">9</span>אימייל לדוגמה ליועד</h2>
+  <div class="card">
+    <p>טיוטה קצרה לסיכום מה שעשינו על הדאטה. אפשר להעתיק ולערוך לפי הצורך.</p>
+    <div class="callout">
+      <p><strong>נושא:</strong> עדכון - ניתוח דאטה הגלישה והיצירתיות (N=107)</p>
+      <p>יועד שלום,</p>
+      <p>רציתי לעדכן על מה שעשינו עם הדאטה - הגלישה בוויקיפדיה לצד מבחני היצירתיות.</p>
+      <p>בשלב ראשון הרצנו EDA רחב: כ-195 מתאמי Spearman בין 13 מדדי יצירתיות וקוגניציה ל-15 מאפייני גלישה, עם תיקון BH-FDR. אף מתאם לא שרד את התיקון (0 מתוך 195). זה null כן, מוגבל בעיקר על ידי גודל המדגם והעונש על ריבוי ההשוואות.</p>
+      <p>בשלב שני מיקדנו לשאלה כיוונית אחת, כאימות חיצוני ל-Zhou et al. (2024): האם תכונת יצירתיות מנבאת את ממד ה-Dancer (forward_flow) ולא את ממד ה-Hunter-Busybody? היתרון של הדאטה שלך הוא בדיוק שיש בו מדדי יצירתיות חיצוניים, של-Zhou לא היו.</p>
+      <p>התוצאה: רמז חלש אחד ובכיוון הנכון - מקדם של שטף חשיבה מתבדרת מול forward_flow יצא מובהק נומינלית - אבל הוא לא שורד אף אחת מבדיקות החוסן שתכננו מראש: לא cross-validation, לא permutation ברמת המודל, ולא בדיקת PCA. בנוסף, מבחן ה-convergent validity (forward flow מילולי מול forward flow בגלישה) יצא אפס.</p>
+      <p>המסקנה הזהירה: אין במדגם הזה עדות משכנעת לכך שתכונת יצירתיות מנבאת את ארכיטקטורת הגלישה. אשמח לחשוב יחד על המשך - למשל מדגם גדול יותר, או חישוב forward_flow על מסלולי גלישה ארוכים בלבד כדי להפחית רעש.</p>
+      <p>תודה,<br>אלעי</p>
+    </div>
+  </div>
+</section>
+
 <section class="section" id="links">
-  <h2 class="section-heading"><span class="section-num">8</span>קישורים וקבצים</h2>
+  <h2 class="section-heading"><span class="section-num">10</span>קישורים וקבצים</h2>
   <div class="card"><ul>
     <li>סקריפטים: <code>yoed_eda/scripts/s8_creativity_predicts_architecture.py</code>, <code>creativity_model.py</code></li>
     <li>תוצאות: <code>yoed_eda/output/creativity_architecture.json</code></li>
