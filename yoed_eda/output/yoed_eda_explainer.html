@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yoed EDA &mdash; הלוגיקה וההסבר</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --text-secondary: #5a5a5a;
+    --border: #e8e5e1;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
+    --radius: 12px;
+    --green: #166534; --green-bg: #dcfce7; --green-border: #86efac;
+    --yellow: #854d0e; --yellow-bg: #fef9c3; --yellow-border: #fde047;
+    --red: #991b1b; --red-bg: #fee2e2; --red-border: #fca5a5;
+    --blue: #1e40af; --blue-bg: #dbeafe; --blue-border: #93c5fd;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(250,250,249,0.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 0 24px; }
+  .nav-inner { max-width: 880px; margin: 0 auto; display: flex; align-items: center; gap: 4px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-inner a { text-decoration: none; font-size: 0.82rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap; padding: 5px 12px; border-radius: 20px; transition: background 0.15s, color 0.15s; }
+  .nav-inner a:hover { background: #f0eee9; color: var(--text); }
+  .nav-sep { color: var(--border); font-size: 0.85rem; user-select: none; }
+
+  .page-body { padding: 40px 24px 80px; }
+  .container { max-width: 880px; margin: 0 auto; }
+
+  header { text-align: center; margin-bottom: 56px; padding-bottom: 40px; border-bottom: 2px solid var(--border); }
+  header h1 { font-family: 'Rubik', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--text); margin-bottom: 10px; letter-spacing: -0.5px; }
+  header .subtitle { font-size: 1rem; color: var(--text-secondary); font-weight: 300; }
+
+  .section { margin-bottom: 64px; }
+  .section-heading { font-family: 'Rubik', sans-serif; font-size: 1.45rem; font-weight: 700; color: var(--text); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .section-num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: var(--text); color: white; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px 28px; margin-bottom: 16px; border: 1px solid var(--border); }
+  .card:hover { box-shadow: var(--shadow-lg); }
+  .card-title { font-family: 'Rubik', sans-serif; font-size: 1.05rem; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+  .card p { color: var(--text-secondary); margin-bottom: 8px; font-size: 0.95rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { margin: 8px 0 0 0; padding-right: 20px; color: var(--text-secondary); font-size: 0.95rem; }
+  .card ul li { margin-bottom: 6px; }
+  .card strong { color: var(--text); }
+
+  code { direction: ltr; display: inline-block; background: #f4f3f1; border: 1px solid var(--border); border-radius: 6px; padding: 1px 7px; font-family: 'Courier New', Courier, monospace; font-size: 0.86em; color: var(--text); }
+
+  .callout { background: #f4f3f1; border-right: 4px solid var(--border); border-radius: 0 var(--radius) var(--radius) 0; padding: 14px 18px; margin: 12px 0; font-size: 0.92rem; color: var(--text-secondary); }
+  .callout strong { color: var(--text); }
+  .callout.info { background: var(--blue-bg); border-right-color: var(--blue-border); }
+  .callout.warn { background: var(--yellow-bg); border-right-color: var(--yellow-border); }
+
+  .badge { display: inline-block; font-size: 0.73rem; font-weight: 600; padding: 2px 10px; border-radius: 20px; white-space: nowrap; }
+  .badge-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .badge-red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+  .badge-blue { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+
+  .stat-row { display: flex; gap: 10px; flex-wrap: wrap; font-size: 0.93rem; color: var(--text-secondary); margin-bottom: 6px; align-items: center; }
+  .stat-row code { font-size: 0.86em; }
+  .sub-div { margin-top: 10px; padding-right: 14px; border-right: 3px solid var(--yellow-border); }
+  .sub-div strong { color: var(--text); }
+
+  .bottom-line { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid var(--blue-border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 16px; }
+  .bottom-line .card-title { color: var(--blue); }
+  .bottom-line ol { padding-right: 22px; color: var(--text); }
+  .bottom-line ol li { margin-bottom: 10px; font-size: 0.97rem; line-height: 1.65; }
+  .bottom-line strong { color: var(--text); }
+
+  @media print { nav { display: none; } .card { box-shadow: none; } body { background: white; } }
+  @media (max-width: 600px) { header h1 { font-size: 1.6rem; } .section-heading { font-size: 1.2rem; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#bottom-line">שורה תחתונה</a>
+    <span class="nav-sep" aria-hidden="true">&middot;</span>
+    <a href="#context">קונטקסט</a>
+    <span class="nav-sep" aria-hidden="true">&middot;</span>
+    <a href="#prior">הדאטה המקורי</a>
+    <span class="nav-sep" aria-hidden="true">&middot;</span>
+    <a href="#methodology">הפייפליין</a>
+    <span class="nav-sep" aria-hidden="true">&middot;</span>
+    <a href="#features">הפיצ'רים</a>
+    <span class="nav-sep" aria-hidden="true">&middot;</span>
+    <a href="#findings">הממצא</a>
+    <span class="nav-sep" aria-hidden="true">&middot;</span>
+    <a href="#advanced">s6 ו-s7</a>
+    <span class="nav-sep" aria-hidden="true">&middot;</span>
+    <a href="#caveats">הסתייגויות</a>
+    <span class="nav-sep" aria-hidden="true">&middot;</span>
+    <a href="#links">קישורים</a>
+  </div>
+</nav>
+
+<div class="page-body">
+<div class="container">
+
+<header>
+  <h1>Yoed EDA &mdash; הלוגיקה וההסבר</h1>
+  <div class="subtitle">למה, מדוע, איך וכמה: גלישה בוויקיפדיה מול יצירתיות, וההמשכיות מהדאטה המקורי שלך</div>
+</header>
+
+<section class="section" id="bottom-line">
+  <h2 class="section-heading"><span class="section-num">0</span>שורה תחתונה</h2>
+  <div class="bottom-line">
+    <div class="card-title">מה אפשר להסיק</div>
+    <ol>
+      <li><strong>השאלה אחת.</strong> האם הדרך שבה אדם גולש חופשי בוויקיפדיה (כמה רחוק הוא קופץ בין נושאים, כמה הוא מתכנס) מנבאת כמה הוא יצירתי? זה כל ה-EDA בשורה אחת.</li>
+      <li><strong>זו העברה, לא המצאה מחדש.</strong> מדדי הגלישה הסמנטיים והמבניים שכבר בנית בדאטה שלך (<code>bh_score</code>, <code>forward_flow</code>, מטריקות רשת מ-M83/Zhou) מיובאים ישירות מ-<code>m83_utils</code> ומופעלים על הדאטה של יועד.</li>
+      <li><strong>הממצא: null ישר.</strong> 0 מתוך ~195 מתאמים שרדו תיקון BH-FDR. הטרנד החזק ביותר (לא מובהק): מדדי AUT של חשיבה מתבדרת מול קפיצות סמנטיות רחוקות יותר (<code>&rho;~0.27</code>, <code>p_FDR~0.42</code>). הכיוון הגיוני, הכוח הסטטיסטי קטן.</li>
+      <li><strong>למה null.</strong> שילוב של <code>N=107</code> קטן עם ~195 השוואות שתיקון ה-FDR מעניש. אותו דפוס בדיוק שראית ב-M83 (0/60) ובעבודת ה-switch-rate.</li>
+      <li><strong>הצעד הבא כבר נעשה.</strong> <code>s6</code> (דינמיקה תוך-סשן) ו-<code>s7</code> (Block CCA) נבנו כדי לעקוף את קנס ריבוי-ההשוואות ולשאול שאלה רב-משתנית אחת במקום 195 נפרדות.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="context">
+  <h2 class="section-heading"><span class="section-num">1</span>הקונטקסט: מה זה הדאטה של יועד</h2>
+  <div class="card">
+    <p>פרופ' יועד קנת (מנחה משני) שיתף דאטהסט התנהגותי של <strong>107 משתתפים</strong>. כל משתתף בחר שאלה וגלש חופשי בראי (proxy) של ויקיפדיה. המבנה הוא שלוש שכבות:</p>
+    <ul>
+      <li><strong>מדדי יצירתיות / קוגניציה (13 מדדים)</strong> &mdash; שטף מילולי + Forward Flow, AUT (שימושים לא שגרתיים למטאטא ולחגורה: כמות + מקוריות), AQT (עיפרון/כרית: כמות + מקוריות + מורכבות), סקרנות, GF. אלה ה"תכונות של האדם".</li>
+      <li><strong>התנהגות גלישה</strong> &mdash; 836 ביקורי עמודים ו-599 חיפושים, בשני עמודות JSON. זה ה"מה האדם עשה".</li>
+      <li><strong>דיווח עצמי + פידבק של AI</strong>.</li>
+    </ul>
+    <div class="callout info"><strong>השאלה המחקרית:</strong> האם יש קשר בין דפוס הגלישה ליצירתיות? הכיוון הסיבתי הטבעי הוא <strong>יצירתיות &rarr; גלישה</strong>: היצירתיות היא תכונה יציבה שקיימת עוד לפני הסשן, ודפוס הגלישה הוא הביטוי ההתנהגותי שלה (סמן התנהגותי). זו גם המסגרת הרווחת בספרות החיפוש הסמנטי. הערה: מתאם הוא סימטרי, אז ה-EDA מודד <strong>אסוציאציה</strong> ולא סיבתיות, ולכן הניסוח המדויק הוא "האם יש קשר".</div>
+  </div>
+</section>
+
+<section class="section" id="prior">
+  <h2 class="section-heading"><span class="section-num">2</span>הקישור לדאטה המקורי שלך</h2>
+  <div class="card">
+    <div class="card-title">למה זה החלק החשוב</div>
+    <p>ה-EDA הזה הוא בעצם <strong>העברה של ארגז הכלים שבנית בדאטה שלך</strong> לדאטה חדש. את הרעיונות והפונקציות כבר פיתחת:</p>
+    <ul>
+      <li><strong>switch-rate pipeline</strong> &mdash; שם בנית מדדי מעבר (switch rate) ו-PCA כדי לקבל ציון מורכב יחיד למשתתף.</li>
+      <li><strong>M83 / Zhou</strong> &mdash; שם מימשת את הציונים הרציפים של Zhou et al.: <code>bh_score</code> (Hunter מול Busybody מתוך רשת הקישורים של ויקיפדיה) ו-<code>forward_flow</code> (סחיפה סמנטית, על בסיס embeddings של fastText).</li>
+    </ul>
+    <div class="callout"><strong>בקוד זה מפורש:</strong> <code>s3_semantic_features.py</code> מייבא <code>from m83_utils import bh_score, network_metrics, title_to_slug</code> ו-<code>features.py</code> מייבא <code>forward_flow</code>. אתה לא ממציא מחדש, אתה מפעיל את אותו ארגז כלים על דאטה אחר.</div>
+  </div>
+</section>
+
+<section class="section" id="methodology">
+  <h2 class="section-heading"><span class="section-num">3</span>הפייפליין: איך זה עובד</h2>
+  <div class="card">
+    <div class="card-title">חמישה שלבים (s1&ndash;s5), כל משתתף הופך לשורה אחת של מספרים</div>
+    <ul>
+      <li><strong>s1 &mdash; שיטוח.</strong> פירוק עמודות ה-JSON לטבלאות <code>participants</code> / <code>visits</code> / <code>searches</code>.</li>
+      <li><strong>s2 &mdash; שחזור היסטורי.</strong> כל משתתף ראה את ויקיפדיה ברגע מסוים, אז מושכים את הגרסה (revision) שהייתה חיה בזמן הביקור (<code>fetch_revision_at</code>). 706 מתוך 712 ביקורים נושאיים נפתרו, 469 revids ייחודיים נשמרו ב-cache.</li>
+      <li><strong>s3 &mdash; פיצ'רים.</strong> בניית טבלת פיצ'רים לכל משתתף (פירוט בסעיף הבא).</li>
+      <li><strong>s4 &mdash; מתאמים.</strong> Spearman בין 13 המדדים ל-15 הפיצ'רים = ~195 מתאמים, עם תיקון BH-FDR לריבוי השוואות.</li>
+      <li><strong>s5 &mdash; HTML.</strong> דף ממצאים עברי.</li>
+    </ul>
+    <div class="callout info"><strong>נקודה מתודולוגית חזקה:</strong> השחזור ההיסטורי ב-s2 אומר שאתה מודד את הטקסט ש המשתתף <strong>באמת</strong> ראה, לא את ויקיפדיה של היום. זה מחזק את תוקף ה-embeddings.</div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <h2 class="section-heading"><span class="section-num">4</span>הפיצ'רים: שלוש משפחות</h2>
+  <div class="card">
+    <div class="card-title">מה s3 מחשב לכל משתתף</div>
+    <ul>
+      <li><strong>מבניים</strong> &mdash; <code>n_pages</code>, <code>n_unique_pages</code>, <code>revisit_rate</code>, <code>search_vs_link_ratio</code>, <code>mean_dwell</code> / <code>var_dwell</code> (זמן שהייה).</li>
+      <li><strong>סמנטיים</strong> &mdash; <code>mean_step_distance</code> / <code>var_step_distance</code> (כמה רחוק קופצים בין נושאים עוקבים, מרחק קוסינוס בין embeddings), <code>forward_flow</code>, <code>bh_score</code>.</li>
+      <li><strong>רשת</strong> &mdash; <code>clustering</code>, <code>global_efficiency</code>, <code>char_path_length</code>, <code>path_breadth</code>, על תת-גרף הקישורים בין העמודים שביקר.</li>
+    </ul>
+    <div class="callout warn"><strong>הערה לגבי dwell:</strong> <code>duration_ms</code> ו-<code>end_time</code> ריקים במקור, אז זמן השהייה נגזר מהפרשי <code>start_time</code> עוקבים בתוך סשן. עמוד אחרון משתמש ב-<code>ended_at</code>. שווה לזכור כשמדברים על מהימנות מדדי הזמן.</div>
+  </div>
+</section>
+
+<section class="section" id="findings">
+  <h2 class="section-heading"><span class="section-num">5</span>הממצא המרכזי וה"כמה"</h2>
+  <div class="card">
+    <div class="card-title">0 מתוך ~195 שרדו FDR <span class="badge badge-red">n.s.</span></div>
+    <p>אף מתאם לא עבר את תיקון BH-FDR ב-<code>&alpha;=0.05</code>. הטרנד הגולמי החזק ביותר (לא מובהק):</p>
+    <div class="stat-row"><code>AUT (divergent) &harr; var_step_distance / forward_flow</code>: <code>&rho;~0.27</code>, <code>p_FDR~0.42</code></div>
+    <p>הכיוון הגיוני: אנשים יצירתיים יותר קופצים רחוק יותר סמנטית. אבל זה לא חוצה את הסף.</p>
+    <div class="sub-div">
+      <strong>למה null?</strong> שתי סיבות פשוטות:
+      <ul>
+        <li><code>N=107</code> קטן לאפקטים עדינים כאלה.</li>
+        <li>~195 השוואות &mdash; תיקון FDR מעניש כל מתאם בודד.</li>
+      </ul>
+    </div>
+    <div class="callout info"><strong>עקביות:</strong> זה אותו דפוס בדיוק שראית ב-M83 (0/60 שרדו FDR) ובעבודת ה-switch-rate. null כן, אבל null עקבי וישר, ולא תוצאה מקרית.</div>
+  </div>
+</section>
+
+<section class="section" id="advanced">
+  <h2 class="section-heading"><span class="section-num">6</span>s6 ו-s7: לעקוף את קנס ריבוי-ההשוואות</h2>
+  <div class="card">
+    <div class="card-title">s6 &mdash; דינמיקה תוך-סשן (explore &rarr; exploit)</div>
+    <p>במקום ממוצע יחיד לכל הסשן, בודקים אם המרחק הסמנטי <strong>קטֵן</strong> לאורך הזמן. <code>dyn_slope</code> שלילי = הסשן מתכנס (exploit), חיובי = מתבדר (explore). זה מוסיף את ממד הזמן שהיה חסר בפיצ'רים הממוצעים. מתאמים מול היצירתיות נשמרים ל-<code>dynamics_correlations.csv</code>.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">s7 &mdash; Block CCA (מתאם קנוני בין שני הבלוקים)</div>
+    <p>במקום 195 מבחנים נפרדים, <strong>שאלה רב-משתנית אחת</strong>: "האם יש בכלל מבנה משותף בין בלוק היצירתיות לבלוק הגלישה?". מדווחים את המתאם הקנוני הראשון עם <code>p</code>-value מבוסס פרמוטציות (2000), בדיקת-צולבת עם PLS, וה-loadings שמגדירים את הציר המשותף.</p>
+    <div class="callout"><strong>למה זה נכון סטטיסטית:</strong> CCA שואל את השאלה הגדולה פעם אחת, אז אין 195 מבחנים להעניש. אם אין מבנה משותף, גם זו תשובה לגיטימית, אבל מבלי לשלם את מחיר ריבוי-ההשוואות שמחק כל אות ב-s4.</div>
+  </div>
+</section>
+
+<section class="section" id="caveats">
+  <h2 class="section-heading"><span class="section-num">7</span>הסתייגויות</h2>
+  <div class="callout warn">
+    <ul style="margin-right:18px;">
+      <li><strong>כוח סטטיסטי</strong>: <code>N=107</code> מגביל את היכולת לזהות אפקטים בינוניים-קטנים, במיוחד תחת תיקון FDR.</li>
+      <li><strong>מהימנות זמן</strong>: dwell נגזר ולא נמדד ישירות, אז כל מסקנה על זמן שהייה זהירה יותר.</li>
+      <li><strong>כיסוי עמודים</strong>: <code>Main_Page</code> ועמודי פירושונים מסומנים ומוסרים מהפיצ'רים הסמנטיים, ועמודים בלי גרסה היסטורית בזמן הביקור מדולגים.</li>
+      <li><strong>null אינו "אין קשר"</strong>: היעדר מובהקות תחת ריבוי-השוואות שונה מהוכחה שאין קשר. בדיוק לכן s7 (CCA) שואל את השאלה אחרת.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="links">
+  <h2 class="section-heading"><span class="section-num">8</span>קישורים וקבצים</h2>
+  <div class="card">
+    <ul>
+      <li>פייפליין: <code>yoed_eda/scripts/s1_parse_flatten.py</code> &hellip; <code>s7_block_cca.py</code></li>
+      <li>פיצ'רים: <code>yoed_eda/output/participant_features.csv</code></li>
+      <li>מתאמים: <code>yoed_eda/output/spearman_correlations.csv</code>, <code>dynamics_correlations.csv</code></li>
+      <li>CCA: <code>yoed_eda/output/cca_results.json</code></li>
+      <li>דף ממצאים: <code>yoed_eda/output/yoed_eda_findings.html</code></li>
+      <li>ארגז כלים מקורי: <code>scripts/m83_utils.py</code> (<code>bh_score</code>, <code>forward_flow</code>, <code>network_metrics</code>)</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+</div>
+</body>
+</html>

@@ -11,6 +11,8 @@ measures (Spearman + BH-FDR).
 3. `python yoed_eda/scripts/s3_semantic_features.py`  # embeddings + per-participant features
 4. `python yoed_eda/scripts/s4_creativity_behavior.py`# Spearman + BH-FDR + figures
 5. `python yoed_eda/scripts/s5_build_html.py`         # findings HTML
+6. `python yoed_eda/scripts/s8_creativity_predicts_architecture.py`  # creativity -> architecture
+7. `python yoed_eda/scripts/s9_build_creativity_html.py`             # creativity findings HTML
 
 ## Tests
 `python -m pytest yoed_eda/scripts/test_*.py -v`

@@ -1,0 +1,233 @@
+"""S9: render the creativity->architecture findings page (html-findings-design)."""
+import json
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+OUTDIR = HERE.parent / "output"
+OUT = OUTDIR / "creativity_architecture_findings.html"
+
+STYLE = """<style>
+  :root {
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --text-secondary: #5a5a5a;
+    --border: #e8e5e1;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
+    --radius: 12px;
+    --green: #166534; --green-bg: #dcfce7; --green-border: #86efac;
+    --yellow: #854d0e; --yellow-bg: #fef9c3; --yellow-border: #fde047;
+    --red: #991b1b; --red-bg: #fee2e2; --red-border: #fca5a5;
+    --blue: #1e40af; --blue-bg: #dbeafe; --blue-border: #93c5fd;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(250,250,249,0.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 0 24px; }
+  .nav-inner { max-width: 880px; margin: 0 auto; display: flex; align-items: center; gap: 4px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-inner a { text-decoration: none; font-size: 0.82rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap; padding: 5px 12px; border-radius: 20px; transition: background 0.15s, color 0.15s; }
+  .nav-inner a:hover { background: #f0eee9; color: var(--text); }
+  .nav-sep { color: var(--border); font-size: 0.85rem; user-select: none; }
+
+  .page-body { padding: 40px 24px 80px; }
+  .container { max-width: 880px; margin: 0 auto; }
+
+  header { text-align: center; margin-bottom: 56px; padding-bottom: 40px; border-bottom: 2px solid var(--border); }
+  header h1 { font-family: 'Rubik', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--text); margin-bottom: 10px; letter-spacing: -0.5px; }
+  header .subtitle { font-size: 1rem; color: var(--text-secondary); font-weight: 300; }
+
+  .section { margin-bottom: 64px; }
+  .section-heading { font-family: 'Rubik', sans-serif; font-size: 1.45rem; font-weight: 700; color: var(--text); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .section-num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: var(--text); color: white; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px 28px; margin-bottom: 16px; border: 1px solid var(--border); }
+  .card:hover { box-shadow: var(--shadow-lg); }
+  .card-title { font-family: 'Rubik', sans-serif; font-size: 1.05rem; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+  .card p { color: var(--text-secondary); margin-bottom: 8px; font-size: 0.95rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { margin: 8px 0 0 0; padding-right: 20px; color: var(--text-secondary); font-size: 0.95rem; }
+  .card ul li { margin-bottom: 6px; }
+  .card strong { color: var(--text); }
+
+  code { direction: ltr; display: inline-block; background: #f4f3f1; border: 1px solid var(--border); border-radius: 6px; padding: 1px 7px; font-family: 'Courier New', Courier, monospace; font-size: 0.86em; color: var(--text); }
+
+  .callout { background: #f4f3f1; border-right: 4px solid var(--border); border-radius: 0 var(--radius) var(--radius) 0; padding: 14px 18px; margin: 12px 0; font-size: 0.92rem; color: var(--text-secondary); }
+  .callout strong { color: var(--text); }
+  .callout.info { background: var(--blue-bg); border-right-color: var(--blue-border); }
+  .callout.warn { background: var(--yellow-bg); border-right-color: var(--yellow-border); }
+
+  .badge { display: inline-block; font-size: 0.73rem; font-weight: 600; padding: 2px 10px; border-radius: 20px; white-space: nowrap; }
+  .badge-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .badge-red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+  .badge-blue { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+
+  .stat-row { display: flex; gap: 10px; flex-wrap: wrap; font-size: 0.93rem; color: var(--text-secondary); margin-bottom: 6px; align-items: center; }
+  .stat-row code { font-size: 0.86em; }
+  .sub-div { margin-top: 10px; padding-right: 14px; border-right: 3px solid var(--yellow-border); }
+  .sub-div strong { color: var(--text); }
+
+  .bottom-line { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid var(--blue-border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 16px; }
+  .bottom-line .card-title { color: var(--blue); }
+  .bottom-line ol { padding-right: 22px; color: var(--text); }
+  .bottom-line ol li { margin-bottom: 10px; font-size: 0.97rem; line-height: 1.65; }
+  .bottom-line strong { color: var(--text); }
+
+  @media print { nav { display: none; } .card { box-shadow: none; } body { background: white; } }
+  @media (max-width: 600px) { header h1 { font-size: 1.6rem; } .section-heading { font-size: 1.2rem; } }
+</style>"""
+
+
+def _outcome_stat(label: str, r: dict) -> str:
+    return (f'<div class="stat-row"><code>{label}</code>: '
+            f"R&sup2;<sub>cv</sub>={r['r2_cv']:.3f}, "
+            f"R&sup2;<sub>full</sub>={r['r2_full']:.3f}, "
+            f"perm p={r['p_perm']:.4f}, n={r['n']}</div>")
+
+
+def _beta_rows(r: dict) -> str:
+    rows = []
+    for name, b, ci in zip(r["predictors"], r["betas"], r["beta_ci"]):
+        rows.append(f'<div class="stat-row"><code>{name}</code>: '
+                    f"&beta;={b:+.3f}, 95% CI [{ci[0]:+.3f}, {ci[1]:+.3f}]</div>")
+    return "\n".join(rows)
+
+
+def main() -> None:
+    res = json.loads((OUTDIR / "creativity_architecture.json").read_text(encoding="utf-8"))
+    ff, bh = res["primary"]["forward_flow"], res["primary"]["bh_score"]
+    conv = res["convergent_validity"]
+
+    bottom = [
+        f"<li><strong>יצירתיות מול Dancer:</strong> מודל היצירתיות מנבא את "
+        f"<code>forward_flow</code> עם R&sup2;<sub>cv</sub>={ff['r2_cv']:.3f} "
+        f"(perm p={ff['p_perm']:.3f}).</li>",
+        f"<li><strong>יצירתיות מול Hunter-Busybody:</strong> אותו מודל על "
+        f"<code>bh_score</code> נותן R&sup2;<sub>cv</sub>={bh['r2_cv']:.3f} "
+        f"(perm p={bh['p_perm']:.3f}).</li>",
+        f"<li><strong>Convergent validity:</strong> forward flow מילולי מנבא forward "
+        f"flow בגלישה: r={conv['pearson_r']:.2f}, 95% CI "
+        f"[{conv['pearson_ci'][0]:.3f}, {conv['pearson_ci'][1]:.3f}], n={conv['n']}.</li>",
+        "<li><strong>הסתייגות:</strong> ההשוואה בין שתי המטרות תיאורית "
+        "(רווחי סמך), לא מבחן הפרש פורמלי.</li>",
+    ]
+
+    rob = res["robustness_pca"]
+    evr = ", ".join(f"{v:.2f}" for v in res["pca_explained_variance"])
+    html = f"""<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>יצירתיות וארכיטקטורת גלישה &mdash; ממצאים</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+{STYLE}
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a href="#bottom-line">שורה תחתונה</a><span class="nav-sep">&middot;</span>
+  <a href="#context">קונטקסט</a><span class="nav-sep">&middot;</span>
+  <a href="#hyp">השערות</a><span class="nav-sep">&middot;</span>
+  <a href="#method">שיטה</a><span class="nav-sep">&middot;</span>
+  <a href="#dissociation">דיסוציאציה</a><span class="nav-sep">&middot;</span>
+  <a href="#convergent">Convergent</a><span class="nav-sep">&middot;</span>
+  <a href="#robustness">חוסן</a><span class="nav-sep">&middot;</span>
+  <a href="#caveats">הסתייגויות</a><span class="nav-sep">&middot;</span>
+  <a href="#links">קישורים</a>
+</div></nav>
+<div class="page-body"><div class="container">
+<header>
+  <h1>יצירתיות וארכיטקטורת גלישה</h1>
+  <div class="subtitle">אימות חיצוני ל-Zhou et al. (2024): האם תכונת יצירתיות מנבאת את סגנון החיפוש בוויקיפדיה</div>
+</header>
+
+<section class="section" id="bottom-line">
+  <h2 class="section-heading"><span class="section-num">0</span>שורה תחתונה</h2>
+  <div class="bottom-line"><div class="card-title">מה אפשר להסיק</div>
+  <ol>
+    {"".join(bottom)}
+  </ol></div>
+</section>
+
+<section class="section" id="context">
+  <h2 class="section-heading"><span class="section-num">1</span>הקונטקסט</h2>
+  <div class="card"><p>Zhou et al. (2024) גזרו את כל סגנונות הסקרנות מתוך הגלישה עצמה. במאגר הזה יש מבחני יצירתיות חיצוניים (AUT, AQT, שטף מילולי), כך שאפשר לבדוק לראשונה אם <strong>תכונת</strong> יצירתיות מנבאת את <strong>ארכיטקטורת</strong> הגלישה.</p></div>
+</section>
+
+<section class="section" id="hyp">
+  <h2 class="section-heading"><span class="section-num">2</span>השערות</h2>
+  <div class="card">
+    <div class="card-title">H1 - דיסוציאציה</div>
+    <p>יצירתיות מנבאת את <code>forward_flow</code> (Dancer) אבל לא את <code>bh_score</code> (Hunter-Busybody). מבוסס על כך שבמאמר &rho;(forward_flow, bh_score)=-0.05.</p>
+    <div class="callout warn">ההשוואה תיאורית: מציגים רווחי סמך, לא מבחן הפרש. "מובהק מול לא-מובהק" אינו כשלעצמו מבחן הבדל.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">H2 - Convergent validity</div>
+    <p><code>Verbal Fluency - Forward Flow</code> (על מילים) מנבא את <code>forward_flow</code> בגלישה (על עמודים): אותו construct, שני תחומים.</p>
+  </div>
+</section>
+
+<section class="section" id="method">
+  <h2 class="section-heading"><span class="section-num">3</span>שיטה</h2>
+  <div class="card"><p>5 קומפוזיטים (z-score ואז ממוצע): חשיבה מתבדרת-כמות, חשיבה מתבדרת-איכות, Verbal Forward Flow, Curiosity, Gf (בקרה). רגרסיה מתוקננת לכל מטרה עם bootstrap CI, R&sup2; ב-cross-validation, ו-permutation ל-p. בדיקת חוסן: PCA על 13 המדדים הגולמיים.</p></div>
+</section>
+
+<section class="section" id="dissociation">
+  <h2 class="section-heading"><span class="section-num">4</span>ממצאים - דיסוציאציה</h2>
+  <div class="card">
+    <img src="figures/creativity_effects.png" style="max-width:100%;height:auto;">
+    {_outcome_stat("forward_flow (Dancer)", ff)}
+    {_outcome_stat("bh_score (Hunter-Busybody)", bh)}
+    <div class="sub-div"><strong>forward_flow betas:</strong>{_beta_rows(ff)}</div>
+    <div class="sub-div"><strong>bh_score betas:</strong>{_beta_rows(bh)}</div>
+  </div>
+</section>
+
+<section class="section" id="convergent">
+  <h2 class="section-heading"><span class="section-num">5</span>ממצאים - Convergent validity</h2>
+  <div class="card">
+    <img src="figures/convergent_forward_flow.png" style="max-width:100%;height:auto;">
+    <div class="stat-row"><code>Pearson</code>: r={conv['pearson_r']:.3f}, 95% CI [{conv['pearson_ci'][0]:.3f}, {conv['pearson_ci'][1]:.3f}], p={conv['pearson_p']:.4f}, n={conv['n']}</div>
+    <div class="stat-row"><code>Spearman</code>: &rho;={conv['spearman_rho']:.3f}, p={conv['spearman_p']:.4f}</div>
+  </div>
+</section>
+
+<section class="section" id="robustness">
+  <h2 class="section-heading"><span class="section-num">6</span>בדיקת חוסן (PCA)</h2>
+  <div class="card">
+    <p>אותן רגרסיות עם רכיבי PCA במקום הקומפוזיטים. שונות מוסברת: {evr}.</p>
+    {_outcome_stat("forward_flow (PCA)", rob["forward_flow"])}
+    {_outcome_stat("bh_score (PCA)", rob["bh_score"])}
+  </div>
+</section>
+
+<section class="section" id="caveats">
+  <h2 class="section-heading"><span class="section-num">7</span>הסתייגויות</h2>
+  <div class="callout warn"><ul style="margin-right:18px;">
+    <li>N=107 מגביל כוח לאפקטים קטנים.</li>
+    <li><code>forward_flow</code> חסר ל-7 משתתפים (פחות מ-2 עמודים נושאיים).</li>
+    <li>הדיסוציאציה תיאורית (רווחי סמך), לא מבחן הפרש פורמלי.</li>
+    <li>"מנבא" = אסוציאציה עם התכונה כמנבא, לא טענה סיבתית.</li>
+  </ul></div>
+</section>
+
+<section class="section" id="links">
+  <h2 class="section-heading"><span class="section-num">8</span>קישורים וקבצים</h2>
+  <div class="card"><ul>
+    <li>סקריפטים: <code>yoed_eda/scripts/s8_creativity_predicts_architecture.py</code>, <code>creativity_model.py</code></li>
+    <li>תוצאות: <code>yoed_eda/output/creativity_architecture.json</code></li>
+    <li>מפרט: <code>docs/superpowers/specs/2026-06-17-creativity-predicts-browsing-architecture-design.md</code></li>
+  </ul></div>
+</section>
+
+</div></div>
+</body>
+</html>
+"""
+    OUT.write_text(html, encoding="utf-8")
+    print(f"findings -> {OUT}")
+
+
+if __name__ == "__main__":
+    main()
