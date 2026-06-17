@@ -108,7 +108,7 @@ def main() -> None:
         f"(perm p={bh['p_perm']:.3f}).</li>",
         f"<li><strong>Convergent validity:</strong> forward flow מילולי מנבא forward "
         f"flow בגלישה: r={conv['pearson_r']:.2f}, 95% CI "
-        f"[{conv['pearson_ci'][0]:.2f}, {conv['pearson_ci'][1]:.2f}], n={conv['n']}.</li>",
+        f"[{conv['pearson_ci'][0]:.3f}, {conv['pearson_ci'][1]:.3f}], n={conv['n']}.</li>",
         "<li><strong>הסתייגות:</strong> ההשוואה בין שתי המטרות תיאורית "
         "(רווחי סמך), לא מבחן הפרש פורמלי.</li>",
     ]
@@ -223,7 +223,8 @@ def main() -> None:
 
 </div></div>
 </body>
-</html>"""
+</html>
+"""
     OUT.write_text(html, encoding="utf-8")
     print(f"findings -> {OUT}")
 

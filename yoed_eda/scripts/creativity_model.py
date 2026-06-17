@@ -40,6 +40,7 @@ Z_95 = 1.96
 def zscore(s: pd.Series) -> pd.Series:
     s = pd.to_numeric(s, errors="coerce")
     sd = s.std(ddof=0)
+    # Constant series -> all zeros; all-NaN series -> stays NaN (NaN * 0.0 = NaN).
     if sd == 0 or np.isnan(sd):
         return s * 0.0
     return (s - s.mean()) / sd

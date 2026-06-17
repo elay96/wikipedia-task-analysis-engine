@@ -31,7 +31,7 @@ def _plot_effects(primary: dict, path: Path) -> None:
     preds = primary[OUTCOMES[0]]["predictors"]
     y = np.arange(len(preds))
     fig, ax = plt.subplots(figsize=(7, 0.6 * len(preds) + 2))
-    for offset, oc in [(-0.15, "forward_flow"), (0.15, "bh_score")]:
+    for offset, oc in zip((-0.15, 0.15), OUTCOMES):
         r = primary[oc]
         betas = r["betas"]
         err = [[b - c[0] for b, c in zip(betas, r["beta_ci"])],
@@ -79,7 +79,7 @@ def main() -> None:
     results = {"primary": primary, "convergent_validity": conv,
                "robustness_pca": robustness, "pca_explained_variance": evr}
     (OUTDIR / "creativity_architecture.json").write_text(
-        json.dumps(results, ensure_ascii=False, indent=2), encoding="utf-8")
+        json.dumps(results, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     _plot_effects(primary, FIGDIR / "creativity_effects.png")
     _plot_convergent(df, conv, FIGDIR / "convergent_forward_flow.png")
