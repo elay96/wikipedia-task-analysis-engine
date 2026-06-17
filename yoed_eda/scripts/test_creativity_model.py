@@ -92,3 +92,21 @@ def test_regress_drops_nan_rows():
     X[1, 0] = np.nan
     res = cm.regress_with_ci(X, y, ["a", "b"], n_boot=50, n_perm=50)
     assert res["n"] == 48
+
+
+def test_convergent_validity_strong_positive():
+    rng = np.random.RandomState(0)
+    x = rng.randn(100)
+    y = x + 0.3 * rng.randn(100)
+    res = cm.convergent_validity(x, y)
+    assert res["n"] == 100
+    assert res["pearson_r"] > 0.8
+    assert res["pearson_ci"][0] > 0
+    assert res["spearman_rho"] > 0.7
+
+
+def test_convergent_validity_pairwise_complete():
+    x = [1.0, 2.0, 3.0, np.nan, 5.0]
+    y = [1.0, 2.0, np.nan, 4.0, 5.0]
+    res = cm.convergent_validity(x, y)
+    assert res["n"] == 3

@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+from scipy import stats as sp_stats
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import KFold, cross_val_score
 from sklearn.pipeline import make_pipeline
@@ -32,6 +33,7 @@ COMPOSITES = {
 PREDICTORS = list(COMPOSITES)
 CI_LOW_PCT = 2.5
 CI_HIGH_PCT = 97.5
+Z_95 = 1.96
 
 
 def zscore(s: pd.Series) -> pd.Series:
@@ -91,3 +93,18 @@ def regress_with_ci(X, y, predictors, n_boot=2000, n_perm=5000, n_folds=5, seed=
 
     return {"predictors": list(predictors), "betas": betas, "beta_ci": beta_ci,
             "r2_full": r2_full, "r2_cv": r2_cv, "p_perm": p_perm, "n": n}
+
+
+def convergent_validity(x, y) -> dict:
+    x = pd.to_numeric(pd.Series(x), errors="coerce")
+    y = pd.to_numeric(pd.Series(y), errors="coerce")
+    mask = x.notna() & y.notna()
+    xv, yv = x[mask].to_numpy(), y[mask].to_numpy()
+    n = int(len(xv))
+    sr = sp_stats.spearmanr(xv, yv)
+    pr = sp_stats.pearsonr(xv, yv)
+    r = float(pr.statistic)
+    z, se = np.arctanh(r), 1.0 / np.sqrt(n - 3)
+    ci = [float(np.tanh(z - Z_95 * se)), float(np.tanh(z + Z_95 * se))]
+    return {"n": n, "spearman_rho": float(sr.statistic), "spearman_p": float(sr.pvalue),
+            "pearson_r": r, "pearson_p": float(pr.pvalue), "pearson_ci": ci}
