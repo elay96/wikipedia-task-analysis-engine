@@ -7,6 +7,10 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import KFold, cross_val_score
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 
 import _bootstrap  # noqa: F401
 
@@ -42,3 +46,46 @@ def build_composites(df: pd.DataFrame) -> pd.DataFrame:
         z = pd.DataFrame({c: zscore(df[c]) for c in cols})
         out[name] = z.mean(axis=1, skipna=True)
     return out
+
+
+def _standardize(A: np.ndarray) -> np.ndarray:
+    A = np.asarray(A, dtype=float)
+    sd = A.std(axis=0, ddof=0)
+    sd[sd == 0] = 1.0
+    return (A - A.mean(axis=0)) / sd
+
+
+def regress_with_ci(X, y, predictors, n_boot=2000, n_perm=5000, n_folds=5, seed=0) -> dict:
+    X = np.asarray(X, dtype=float)
+    y = np.asarray(y, dtype=float)
+    mask = ~np.isnan(y) & ~np.isnan(X).any(axis=1)
+    X, y = X[mask], y[mask]
+    n = int(X.shape[0])
+    Xs = _standardize(X)
+    ys = _standardize(y.reshape(-1, 1)).ravel()
+
+    fit = LinearRegression().fit(Xs, ys)
+    betas = [float(b) for b in fit.coef_]
+    r2_full = float(fit.score(Xs, ys))
+
+    rng = np.random.RandomState(seed)
+    boot = np.empty((n_boot, Xs.shape[1]))
+    for b in range(n_boot):
+        idx = rng.randint(0, n, n)
+        boot[b] = LinearRegression().fit(Xs[idx], ys[idx]).coef_
+    lo = np.percentile(boot, 2.5, axis=0)
+    hi = np.percentile(boot, 97.5, axis=0)
+    beta_ci = [[float(a), float(c)] for a, c in zip(lo, hi)]
+
+    cv = KFold(n_splits=n_folds, shuffle=True, random_state=seed)
+    pipe = make_pipeline(StandardScaler(), LinearRegression())
+    r2_cv = float(cross_val_score(pipe, X, y, cv=cv, scoring="r2").mean())
+
+    count = sum(
+        LinearRegression().fit(Xs, yp).score(Xs, yp) >= r2_full
+        for yp in (rng.permutation(ys) for _ in range(n_perm))
+    )
+    p_perm = (1 + count) / (1 + n_perm)
+
+    return {"predictors": list(predictors), "betas": betas, "beta_ci": beta_ci,
+            "r2_full": r2_full, "r2_cv": r2_cv, "p_perm": p_perm, "n": n}

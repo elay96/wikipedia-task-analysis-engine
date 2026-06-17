@@ -60,3 +60,35 @@ def test_build_composites_fluency_is_mean_of_zscores():
     # all five fluency constituents identical after z-scoring -> mean equals that z-score
     expected = cm.zscore(df["AUT Belt - Number of Answers"])
     assert np.allclose(out["dt_fluency"].to_numpy(), expected.to_numpy())
+
+
+def test_regress_recovers_strong_predictor():
+    rng = np.random.RandomState(0)
+    n = 200
+    signal = rng.randn(n)
+    X = np.column_stack([signal, rng.randn(n), rng.randn(n)])
+    y = 2.0 * signal + 0.1 * rng.randn(n)
+    res = cm.regress_with_ci(X, y, ["a", "b", "c"], n_boot=300, n_perm=300)
+    assert res["n"] == 200
+    assert res["beta_ci"][0][0] > 0  # signal predictor CI excludes zero
+    assert res["r2_full"] > 0.9
+    assert res["r2_cv"] > 0.8
+    assert res["p_perm"] < 0.05
+
+
+def test_regress_null_when_no_signal():
+    rng = np.random.RandomState(1)
+    X = rng.randn(120, 3)
+    y = rng.randn(120)
+    res = cm.regress_with_ci(X, y, ["a", "b", "c"], n_boot=200, n_perm=300)
+    assert res["p_perm"] > 0.05
+
+
+def test_regress_drops_nan_rows():
+    rng = np.random.RandomState(2)
+    X = rng.randn(50, 2)
+    y = rng.randn(50)
+    y[0] = np.nan
+    X[1, 0] = np.nan
+    res = cm.regress_with_ci(X, y, ["a", "b"], n_boot=50, n_perm=50)
+    assert res["n"] == 48
